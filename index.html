@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Will Lambert — The Build Ledger</title>
+<meta name="description" content="Everything Will Lambert has built with AI: a personal AI operating system, live web apps, Roblox games, and research pipelines. 26 projects, all real.">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Build Ledger">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta property="og:title" content="Will Lambert — The Build Ledger">
+<meta property="og:description" content="26 real projects built by directing AI: an AI operating system, live web apps, Roblox games, and research pipelines.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#000; --bg-2:#0a0a0f;
+    --panel:rgba(255,255,255,.05); --panel-2:rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.11); --border-2:rgba(255,255,255,.2);
+    --text:#f5f5f7; --text-2:#a1a1a6; --text-3:#6e6e73;
+    --blue:#0a84ff; --cyan:#64d2ff; --purple:#bf5af2; --pink:#ff375f;
+    --green:#30d158; --orange:#ff9f0a;
+    --grad:linear-gradient(100deg,#0a84ff 0%,#64d2ff 30%,#bf5af2 62%,#ff375f 100%);
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:var(--sans); font-size:17px; line-height:1.47;
+    letter-spacing:-.011em; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:rgba(10,132,255,.35)}
+  a{color:inherit}
+
+  /* ---------- atmosphere ---------- */
+  .atmo{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+  .atmo .blob{position:absolute; border-radius:50%; opacity:.5}
+  .atmo .b1{width:56vw;height:56vw;left:-14vw;top:-22vw;background:radial-gradient(circle,#0a2f66,transparent 65%)}
+  .atmo .b2{width:44vw;height:44vw;right:-12vw;top:-8vw;background:radial-gradient(circle,#3b1257,transparent 65%)}
+  .atmo .b3{width:50vw;height:50vw;right:-16vw;top:120vh;background:radial-gradient(circle,#4a0f22,transparent 65%);opacity:.4}
+  .grain{position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.03;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  .wrap{position:relative; z-index:2; max-width:1120px; margin:0 auto; padding:0 24px}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50; height:52px;
+    display:flex; align-items:center;
+    background:rgba(8,8,10,.65);
+    -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  nav .inner{max-width:1120px; margin:0 auto; padding:0 24px; width:100%; display:flex; align-items:center; gap:22px}
+  nav .brand{font-weight:700; font-size:15px; letter-spacing:-.02em; text-decoration:none}
+  nav .brand span{color:var(--text-3); font-weight:500}
+  nav .links{margin-left:auto; display:flex; gap:20px; align-items:center}
+  nav .links a{font-size:13px; color:var(--text-2); text-decoration:none; transition:color .2s}
+  nav .links a:hover{color:var(--text)}
+  nav .gh{
+    font-size:12.5px; font-weight:600; color:var(--text); text-decoration:none;
+    padding:6px 14px; border-radius:999px; background:var(--panel-2);
+    border:1px solid var(--border); transition:all .25s var(--ease);
+  }
+  nav .gh:hover{background:rgba(255,255,255,.16); transform:translateY(-1px)}
+  @media (max-width:680px){ nav .links a:not(.gh){display:none} }
+
+  /* ---------- hero ---------- */
+  .hero{position:relative; min-height:100svh; display:flex; align-items:center; justify-content:center; text-align:center; overflow:hidden}
+  #orb{position:absolute; inset:0; width:100%; height:100%; z-index:0}
+  .hero .scrim{position:absolute; inset:0; z-index:1; background:radial-gradient(58% 46% at 50% 52%, rgba(0,0,0,.72), rgba(0,0,0,.18) 62%, transparent 78%)}
+  .hero-inner{position:relative; z-index:2; padding:110px 24px 90px; max-width:1000px; will-change:transform,opacity}
+  .pill{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-2);
+    padding:8px 16px; border-radius:999px; background:rgba(20,20,26,.6);
+    border:1px solid var(--border);
+  }
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(48,209,88,.5)}100%{box-shadow:0 0 0 10px rgba(48,209,88,0)}}
+  h1{
+    margin-top:26px;
+    font-size:clamp(46px,8.4vw,118px); font-weight:800; line-height:1.02; letter-spacing:-.035em;
+  }
+  h1 .grad{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .dek{margin:26px auto 0; max-width:62ch; font-size:clamp(16px,2vw,20px); line-height:1.55; color:var(--text-2); font-weight:400}
+  .dek strong{color:var(--text); font-weight:600}
+  .stats{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:44px}
+  .stat{
+    min-width:148px; padding:16px 20px 14px; border-radius:18px; text-align:center;
+    background:rgba(18,18,24,.55); border:1px solid var(--border);
+    transition:transform .35s var(--ease), border-color .35s;
+  }
+  .stat:hover{transform:translateY(-4px); border-color:var(--border-2)}
+  .stat .n{font-size:32px; font-weight:800; letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+  .stat .l{font-family:var(--mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--text-3); margin-top:5px}
+  .cue{position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:2; color:var(--text-3); animation:bob 2.2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  /* ---------- sections ---------- */
+  section{position:relative; padding:110px 0 10px}
+  .sec-head{display:flex; align-items:flex-end; gap:18px; margin-bottom:34px}
+  .sec-head .eyebrow{display:block; font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:12px}
+  .sec-head h2{font-size:clamp(34px,5vw,58px); font-weight:800; letter-spacing:-.03em; line-height:1.04}
+  .sec-head .count{margin-left:auto; font-family:var(--mono); font-size:11.5px; color:var(--text-3); letter-spacing:.14em; text-transform:uppercase; padding-bottom:8px; white-space:nowrap}
+
+  /* ---------- bento featured ---------- */
+  .bento{display:grid; grid-template-columns:repeat(6,1fr); gap:14px}
+  .case{
+    position:relative; overflow:hidden; border-radius:24px; padding:30px;
+    background:rgba(20,20,27,.6); border:1px solid var(--border);
+    transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transition:transform .2s ease-out, border-color .35s, box-shadow .35s;
+  }
+  .case:hover{border-color:var(--border-2); box-shadow:0 24px 70px -24px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04) inset}
+  .case::before{ /* accent glow */
+    content:""; position:absolute; inset:-40%; z-index:0; opacity:.16; pointer-events:none;
+    background:radial-gradient(46% 38% at 22% 0%, var(--tint,#0a84ff), transparent 70%);
+  }
+  .case::after{ /* cursor glare */
+    content:""; position:absolute; inset:0; z-index:0; opacity:0; pointer-events:none;
+    background:radial-gradient(460px at var(--gx,50%) var(--gy,50%), rgba(255,255,255,.09), transparent 62%);
+    transition:opacity .3s;
+  }
+  .case:hover::after{opacity:1}
+  .case>*{position:relative; z-index:1}
+  .c-bert{grid-column:span 4; --tint:#0a84ff}
+  .c-syl{grid-column:span 2; --tint:#bf5af2}
+  .c-shot{grid-column:span 2; --tint:#ff375f}
+  .c-sdsu{grid-column:span 2; --tint:#ff9f0a}
+  .c-method{grid-column:span 2; --tint:#64d2ff; background:rgba(255,255,255,.075)}
+  .case .no{font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--text-2)}
+  .case .no b{color:var(--text); font-weight:600}
+  .case h3{font-size:clamp(26px,3.2vw,42px); font-weight:800; letter-spacing:-.03em; line-height:1.05; margin:12px 0 6px}
+  .case .tag{font-size:16px; color:var(--text-2); margin-bottom:14px}
+  .case p.body{font-size:14.5px; line-height:1.6; color:var(--text-2); max-width:64ch}
+  .case p.body strong{color:var(--text)}
+  .big-stats{display:flex; gap:14px 34px; flex-wrap:wrap; margin-top:22px; border-top:1px solid var(--border); padding-top:16px}
+  .big-stats div b{display:block; font-size:24px; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .big-stats div span{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3)}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px}
+  .chip{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    padding:6px 11px 5px; border-radius:999px; color:var(--text-2);
+    background:rgba(255,255,255,.055); border:1px solid var(--border); text-decoration:none;
+    transition:all .25s var(--ease);
+  }
+  a.chip:hover{background:var(--text); color:#000; border-color:var(--text); transform:translateY(-1px)}
+  .chip.live{color:var(--green); border-color:rgba(48,209,88,.4)}
+  .chip.live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:6px;animation:pulse 2s ease-out infinite;font-style:normal}
+
+  /* ---------- ledger ---------- */
+  .panel{border-radius:24px; border:1px solid var(--border); background:rgba(18,18,24,.5); overflow:hidden}
+  .row{
+    position:relative; display:grid; grid-template-columns:64px 1fr auto; gap:20px; align-items:center;
+    padding:22px 26px; border-bottom:1px solid rgba(255,255,255,.07);
+    transition:background .25s;
+  }
+  .row:last-child{border-bottom:none}
+  .row::before{content:""; position:absolute; left:0; top:18%; bottom:18%; width:2px; background:var(--acc,#0a84ff); border-radius:2px; opacity:0; transform:scaleY(.3); transition:all .3s var(--ease)}
+  .row:hover{background:rgba(255,255,255,.035)}
+  .row:hover::before{opacity:1; transform:scaleY(1)}
+  .row .no{font-family:var(--mono); font-size:12px; color:var(--text-3)}
+  .row h3{font-size:19px; font-weight:700; letter-spacing:-.02em}
+  .row .desc{font-size:13.5px; color:var(--text-2); margin-top:4px; max-width:66ch; line-height:1.55}
+  .row .side{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+  .st{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); white-space:nowrap;
+    padding:5px 10px 4px; border-radius:999px; border:1px solid var(--border)}
+  .st::before{content:""; display:inline-block; width:6px; height:6px; margin-right:6px; border-radius:50%; border:1.5px solid var(--text-3); vertical-align:.5px}
+  .st.live{color:var(--green); border-color:rgba(48,209,88,.35)} .st.live::before{background:var(--green); border-color:var(--green); animation:pulse 2s ease-out infinite}
+  .st.ship{color:var(--text-2)} .st.ship::before{background:var(--blue); border-color:var(--blue)}
+  .st.dev::before{border-color:var(--orange)}
+  .st.dev{color:var(--orange); border-color:rgba(255,159,10,.3)}
+  .arrow{
+    font-size:12.5px; font-weight:600; text-decoration:none; white-space:nowrap;
+    padding:6px 13px; border-radius:999px; background:rgba(255,255,255,.07); border:1px solid var(--border);
+    transition:all .25s var(--ease);
+  }
+  .arrow:hover{background:var(--text); color:#000; transform:translateY(-1px)}
+
+  /* ---------- github repo index ---------- */
+  .repos{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .repo{
+    display:block; text-decoration:none; border-radius:18px; padding:18px 18px 15px;
+    background:rgba(18,18,24,.5); border:1px solid var(--border);
+    transition:transform .3s var(--ease), border-color .3s, background .3s;
+  }
+  a.repo:hover{transform:translateY(-3px); border-color:var(--border-2); background:rgba(255,255,255,.05)}
+  .repo h4{font-size:14.5px; font-weight:700; letter-spacing:-.01em; font-family:var(--mono); word-break:break-all}
+  .repo p{font-size:12.5px; color:var(--text-2); margin-top:6px; line-height:1.5; min-height:2.9em}
+  .repo .foot{display:flex; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3)}
+  .repo .lang i{display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; background:var(--lc,#6e6e73); font-style:normal; vertical-align:.5px}
+  .repo .vis{margin-left:auto; padding:3px 8px 2px; border-radius:999px; border:1px solid var(--border)}
+  .repo .vis.pub{color:var(--green); border-color:rgba(48,209,88,.3)}
+  #index .eyebrow{color:var(--green)}
+  @media (max-width:900px){ .repos{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:680px){ .repos{grid-template-columns:1fr} .repo p{min-height:0} }
+
+  /* section accent colors */
+  #systems .row{--acc:var(--blue)} #systems .eyebrow{color:var(--blue)}
+  #apps .row{--acc:var(--cyan)} #apps .eyebrow{color:var(--cyan)}
+  #games .row{--acc:var(--purple)} #games .eyebrow{color:var(--purple)}
+  #research .row{--acc:var(--orange)} #research .eyebrow{color:var(--orange)}
+  #featured .eyebrow{color:var(--pink)}
+
+  /* ---------- footer ---------- */
+  footer{margin-top:130px; border-top:1px solid var(--border); padding:44px 0 70px; position:relative; z-index:2}
+  .colophon{display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; align-items:center}
+  .colophon p{font-size:16px; color:var(--text-2); max-width:56ch}
+  .colophon p em{color:var(--text)}
+  .colophon .links{display:flex; gap:10px}
+  .stamp{margin-top:30px; font-family:var(--mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-3)}
+
+  /* ---------- motion ---------- */
+  .js .reveal{opacity:0; transform:translateY(26px) scale(.985); transition:opacity .7s var(--ease), transform .7s var(--ease)}
+  .js .reveal.in{opacity:1; transform:none}
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important; transition:none!important}
+    .js .reveal{opacity:1; transform:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- mobile ---------- */
+  @media (max-width:900px){
+    .c-bert,.c-syl,.c-shot,.c-sdsu,.c-method{grid-column:1/-1}
+  }
+  @media (max-width:680px){
+    .wrap{padding:0 16px}
+    section{padding:76px 0 6px}
+    .hero-inner{padding:96px 8px 80px}
+    .stats{gap:9px} .stat{min-width:calc(50% - 9px); padding:13px 12px 11px}
+    .row{grid-template-columns:1fr; gap:8px; padding:18px 16px}
+    .row .no{font-size:11px}
+    .row .side{justify-content:flex-start; margin-top:4px}
+    .case{padding:22px}
+    .sec-head{flex-wrap:wrap} .sec-head .count{display:none}
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+
+<div class="atmo"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grain"></div>
+
+<nav>
+  <div class="inner">
+    <a class="brand" href="#top">Will Lambert <span>— The Build Ledger</span></a>
+    <div class="links">
+      <a href="#featured">Featured</a>
+      <a href="#systems">AI Systems</a>
+      <a href="#apps">Apps</a>
+      <a href="#games">Games</a>
+      <a href="#index">Index</a>
+      <a class="gh" href="https://github.com/willywonka773202-cloud">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="orb" aria-hidden="true"></canvas>
+  <div class="scrim"></div>
+  <div class="hero-inner" id="heroInner">
+    <span class="pill"><span class="dot"></span>Incoming SDSU Freshman · Fall 2026 · San Diego</span>
+    <h1>Everything I've built <span class="grad">with AI.</span></h1>
+    <p class="dek">One student, a fleet of AI agents, and <strong>26 real projects</strong> — a self-hosted AI operating system, live web apps, original Roblox games, and paper-only trading research. The AI writes most of the code; <strong>I write the specs, review the diffs, and own what ships.</strong></p>
+    <div class="stats">
+      <div class="stat"><div class="n count" data-count="26">0</div><div class="l">Projects</div></div>
+      <div class="stat"><div class="n count" data-count="22">0</div><div class="l">GitHub repos</div></div>
+      <div class="stat"><div class="n count" data-count="5">0</div><div class="l">Live deployments</div></div>
+      <div class="stat"><div class="n count" data-count="1368">0</div><div class="l">AI memory notes</div></div>
+      <div class="stat"><div class="n count" data-count="4">0</div><div class="l">OS rebuilds</div></div>
+    </div>
+  </div>
+  <div class="cue">▾</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= FEATURED ================= -->
+  <section id="featured">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow">Sec. A — Case files</span><h2>The headliners.</h2></div>
+      <span class="count">4 featured + method</span>
+    </div>
+    <div class="bento">
+
+      <article class="case c-bert reveal" data-tilt>
+        <span class="no"><b>№ 01</b> — FLAGSHIP</span>
+        <h3>BERT AI</h3>
+        <p class="tag">A personal AI operating system, self-hosted and live at bertsai.com.</p>
+        <p class="body">Four generations of rebuilding one idea: an OS where AI agents are the workforce. Chat and voice interfaces, autonomous overnight build engines, a safety-gated paper-trading desk, and a shared memory vault every agent reads and writes — so the system remembers decisions across models and machines. Runs on my own hardware behind a Cloudflare tunnel.</p>
+        <div class="big-stats">
+          <div><b class="count" data-count="5800" data-prefix="~">0</b><span>TypeScript files</span></div>
+          <div><b class="count" data-count="1368">0</b><span>memory notes</span></div>
+          <div><b class="count" data-count="4">0</b><span>rebuilds</span></div>
+          <div><b class="count" data-count="132">0</b><span>test suites</span></div>
+        </div>
+        <div class="meta">
+          <span class="chip live"><i></i>Live · Self-hosted</span>
+          <a class="chip" href="https://bertsai.com">bertsai.com ↗</a>
+          <span class="chip">Next.js 15</span><span class="chip">Electron</span><span class="chip">MCP</span><span class="chip">Claude + Ollama</span>
+        </div>
+      </article>
+
+      <article class="case c-syl reveal" data-tilt>
+        <span class="no"><b>№ 02</b></span>
+        <h3>Sylistly</h3>
+        <p class="tag">Tell it what you want to wear — it builds the outfit from real products.</p>
+        <p class="body">Claude parses the request, a shopping search finds real Google Shopping products, and the app assembles shoppable outfits with affiliate links.</p>
+        <div class="meta">
+          <span class="chip live"><i></i>Live</span>
+          <a class="chip" href="https://sylistly.vercel.app">sylistly.vercel.app ↗</a>
+          <a class="chip" href="https://github.com/willywonka773202-cloud/sylistly">Repo ↗</a>
+          <span class="chip">Claude API</span><span class="chip">Supabase</span>
+        </div>
+      </article>
+
+      <article class="case c-shot reveal" data-tilt>
+        <span class="no"><b>№ 03</b></span>
+        <h3>Shotgun</h3>
+        <p class="tag">Carpool matching for SDSU commuter students.</p>
+        <p class="body">Verify with an @sdsu.edu email, pick your zone and weekly schedule, get matched into a recurring carpool. Built for my campus before I've even started classes.</p>
+        <div class="meta">
+          <span class="chip">In development</span><span class="chip">Private repo</span><span class="chip">Next.js</span><span class="chip">Supabase</span>
+        </div>
+      </article>
+
+      <article class="case c-sdsu reveal" data-tilt>
+        <span class="no"><b>№ 04</b></span>
+        <h3>SDSU LIFE</h3>
+        <p class="tag">My whole semester in one offline file.</p>
+        <p class="body">A single-file dashboard — schedule, Canvas due dates, grades — with zero external requests, plus a Python Canvas sync and a companion Chrome side-panel extension. The tool I open every morning.</p>
+        <div class="meta">
+          <span class="chip">Daily-use tool</span><span class="chip">Single-file HTML</span><span class="chip">Chrome extension</span>
+        </div>
+      </article>
+
+      <article class="case c-method reveal" data-tilt>
+        <span class="no"><b>THE METHOD</b></span>
+        <h3>How one student ships this much</h3>
+        <p class="body">I run Claude Code and Codex like a small engineering team. A shared memory vault means agents <strong>remember decisions</strong>; verification gates mean <strong>"done" means tested</strong>; autonomous loops build overnight and log what they learned. I write the specs, review the diffs, and take responsibility for what ships.</p>
+        <div class="meta"><span class="chip">Claude Code</span><span class="chip">Codex</span><span class="chip">Obsidian vault</span><span class="chip">launchd</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= AI SYSTEMS ================= -->
+  <section id="systems">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow">Sec. B</span><h2>AI systems &amp; agents.</h2></div>
+      <span class="count">6 entries</span>
+    </div>
+    <div class="panel reveal">
+      <div class="row"><span class="no">05</span>
+        <div><h3>BertOS v1 → v2 → merge</h3><p class="desc">The lineage behind BERT AI: v1 command-center dashboard, a stability-first v2 rebuild, then a documented consolidation merge of the strongest parts of every fork.</p></div>
+        <div class="side"><span class="st ship">superseded</span><a class="arrow" href="https://bertos-ai-os.vercel.app">v1 live ↗</a><a class="arrow" href="https://github.com/willywonka773202-cloud/bertos-ai-os">Repo ↗</a></div>
+      </div>
+      <div class="row"><span class="no">06</span>
+        <div><h3>berai — "Claude as the kernel"</h3><p class="desc">An experiment where the AI <em>is</em> the OS: semantic-memory MCP server, scheduled jobs, a watchdog — and a standing eval that removes any component that can't beat raw Claude.</p></div>
+        <div class="side"><span class="st ship">experiment</span><span class="st">private</span></div>
+      </div>
+      <div class="row"><span class="no">07</span>
+        <div><h3>BertOS Memory Vault</h3><p class="desc">The shared brain: 1,368 Obsidian markdown notes with frontmatter and wikilinks that every agent reads and writes, synced across machines automatically.</p></div>
+        <div class="side"><span class="st live">live infra</span><span class="st">private</span></div>
+      </div>
+      <div class="row"><span class="no">08</span>
+        <div><h3>Overclocking</h3><p class="desc">Prompt-optimization research for Claude Code: a findings catalog with enforced claimed-vs-realistic honesty, a dashboard, and a global hook that compiles every prompt before it runs.</p></div>
+        <div class="side"><span class="st live">active</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">09</span>
+        <div><h3>Studio — Roblox game-creation AI</h3><p class="desc">A ~115K-character research knowledge base + system prompt that turns any agent into a game director and senior Luau engineer.</p></div>
+        <div class="side"><span class="st ship">usable</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">10</span>
+        <div><h3>roblox-brain</h3><p class="desc">Data pipeline that parses 423+ Roblox place files into queryable JSON catalogs of scripts, assets, and game systems — grown by a scheduled ingest task.</p></div>
+        <div class="side"><span class="st live">active pipeline</span><span class="st">local</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WEB APPS ================= -->
+  <section id="apps">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow">Sec. C</span><h2>Web apps &amp; tools.</h2></div>
+      <span class="count">4 entries</span>
+    </div>
+    <div class="panel reveal">
+      <div class="row"><span class="no">11</span>
+        <div><h3>Carpool Optimizer</h3><p class="desc">Enter stops and riders; it solves the optimal drop-off order, maps the route, and hands off to Google Maps navigation. Leaflet + OpenRouteService.</p></div>
+        <div class="side"><span class="st live">live</span><a class="arrow" href="https://carpool-optimizer-five.vercel.app">App ↗</a><a class="arrow" href="https://github.com/willywonka773202-cloud/carpool-optimizer">Repo ↗</a></div>
+      </div>
+      <div class="row"><span class="no">12</span>
+        <div><h3>Deerfield Aquatics Schedule</h3><p class="desc">Today's pool schedule at a glance, with a GitHub Action that automatically detects when the park district's posted schedules change.</p></div>
+        <div class="side"><span class="st live">live</span><a class="arrow" href="https://deerfield-aquatics-schedule.vercel.app">App ↗</a><a class="arrow" href="https://github.com/willywonka773202-cloud/deerfield-aquatics-schedule">Repo ↗</a></div>
+      </div>
+      <div class="row"><span class="no">13</span>
+        <div><h3>Lambert Labs — Portfolio v1</h3><p class="desc">My previous portfolio: self-updating from the GitHub API with daily revalidation and a committed snapshot fallback so it never breaks. Replaced by this ledger.</p></div>
+        <div class="side"><span class="st ship">superseded</span><a class="arrow" href="https://github.com/willywonka773202-cloud/will-lambert-portfolio">Repo ↗</a></div>
+      </div>
+      <div class="row"><span class="no">14</span>
+        <div><h3>VocabHub.io</h3><p class="desc">Paste a vocab list ("el camarero = the waiter") and it powers arcade-style .io mini-games with quiz popups. Studying, gamified.</p></div>
+        <div class="side"><span class="st dev">prototype</span><span class="st">local</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GAMES ================= -->
+  <section id="games">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow">Sec. D</span><h2>Roblox &amp; games.</h2></div>
+      <span class="count">10 entries</span>
+    </div>
+    <div class="panel reveal">
+      <div class="row"><span class="no">15</span>
+        <div><h3>Roblox Flip Scout</h3><p class="desc">Hourly pipeline that scrapes public Roblox template listings (robots.txt-respecting), ranks buy-improve-republish candidates, and publishes spreadsheets + a dashboard. Committed today.</p></div>
+        <div class="side"><span class="st live">running hourly</span><span class="st">private</span></div>
+      </div>
+      <div class="row"><span class="no">16</span>
+        <div><h3>SlimeFlip</h3><p class="desc">A purchased template, reverse-engineered and upgraded: architecture docs plus original Fusion and Trading systems injected safely via Rojo, with monetization playbooks.</p></div>
+        <div class="side"><span class="st ship">shipped flip</span><span class="st">private</span></div>
+      </div>
+      <div class="row"><span class="no">17</span>
+        <div><h3>Monster Saga</h3><p class="desc">Original monster-collecting turn-based RPG — battle engine, wild encounters, catching, leveling, evolution. All original creatures and code.</p></div>
+        <div class="side"><span class="st dev">in development</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">18</span>
+        <div><h3>BrainrotBazaar</h3><p class="desc">Original idle-tycoon/collector: buy creatures that print income, mutate them in a gacha lab, steal prized ones from rivals. World and assets generated fully in code.</p></div>
+        <div class="side"><span class="st dev">in development</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">19</span>
+        <div><h3>Apollo</h3><p class="desc">A risky downloaded voxel-mining template rebuilt into a clean, publish-ready project with proper tooling (Rojo, Lune, Selene).</p></div>
+        <div class="side"><span class="st ship">publish-ready</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">20</span>
+        <div><h3>Punch Sim — launch ops</h3><p class="desc">A live monetization audit that caught every gamepass and product ID still paying the template's original seller — plus the scripts that re-created them under my universe.</p></div>
+        <div class="side"><span class="st ship">case study</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">21</span>
+        <div><h3>Orb Arena</h3><p class="desc">Agar.io-style browser arena — mouse to move, eat orbs, grow. Vanilla JS and canvas, no build step.</p></div>
+        <div class="side"><span class="st ship">playable</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">22</span>
+        <div><h3>Brainrot Dashboard</h3><p class="desc">Trend hunter that gathers evidence on rising Roblox mechanics, writes research reports into the memory vault, and feeds candidates to roblox-brain.</p></div>
+        <div class="side"><span class="st live">active</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">23</span>
+        <div><h3>Slime Workshop</h3><p class="desc">The repair line behind SlimeFlip: V4 → V19 versioned .rbxl builds with per-version patch notes, plus a corpus scan of 1,800+ local place files feeding the master build.</p></div>
+        <div class="side"><span class="st ship">archive</span><span class="st">private</span></div>
+      </div>
+      <div class="row"><span class="no">24</span>
+        <div><h3>Temple Run (canvas)</h3><p class="desc">Small endless-runner built as a BertOS toy app — plain JavaScript and canvas served by a tiny local server.</p></div>
+        <div class="side"><span class="st ship">playable</span><span class="st">local</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRADING ================= -->
+  <section id="research">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow">Sec. E — paper-only, by design</span><h2>Trading research.</h2></div>
+      <span class="count">2 entries</span>
+    </div>
+    <div class="panel reveal">
+      <div class="row"><span class="no">25</span>
+        <div><h3>polyscout</h3><p class="desc">Always-on Polymarket paper-trading advisory: scans for arbs and mispriced longshots, simulates fills against the live order book with real slippage, auto-pauses negative-EV strategies, and logs every autonomous decision. Never places a real trade.</p></div>
+        <div class="side"><span class="st live">running</span><span class="st">local</span></div>
+      </div>
+      <div class="row"><span class="no">26</span>
+        <div><h3>AI Trader</h3><p class="desc">Paper-first backtesting system for testing trading ideas, using local Ollama models as research assistants. Built to learn, not to gamble.</p></div>
+        <div class="side"><span class="st dev">research</span><span class="st">local</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GITHUB INDEX ================= -->
+  <section id="index">
+    <div class="sec-head reveal">
+      <div><span class="eyebrow">Sec. F — the whole account</span><h2>The full GitHub.</h2></div>
+      <span class="count">22 repositories</span>
+    </div>
+    <div class="repos reveal">
+      <a class="repo" href="https://github.com/willywonka773202-cloud/sylistly"><h4>sylistly</h4><p>AI outfit builder — the flagship web app, live on Vercel.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis pub">public</span></div></a>
+      <div class="repo"><h4>bert-ai</h4><p>BERT AI — the personal AI operating system, live at bertsai.com.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>shotgun</h4><p>Carpool matching for SDSU commuter students — active build.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis">private</span></div></div>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/carpool-optimizer"><h4>carpool-optimizer</h4><p>Optimal drop-off order for carpools — live on Vercel.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis pub">public</span></div></a>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/deerfield-aquatics-schedule"><h4>deerfield-aquatics-schedule</h4><p>Live pool schedule with automated change detection.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis pub">public</span></div></a>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/bertos-ai-os"><h4>bertos-ai-os</h4><p>BertOS v1 — the original AI command center, live demo up.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis pub">public</span></div></a>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/will-lambert-portfolio"><h4>Will-Lambert-Portfolio</h4><p>Portfolio v1 — self-updating from the GitHub API daily.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis pub">public</span></div></a>
+      <div class="repo"><h4>roblox-game-flipping</h4><p>Hourly scout ranking Roblox template flip candidates.</p><div class="foot"><span class="lang"><i style="--lc:#3572A5"></i>Python</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>slimeflip</h4><p>Save Slimes flip — original Fusion + Trading systems via Rojo.</p><div class="foot"><span class="lang"><i style="--lc:#00a2ff"></i>Luau</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>roblox-slimegame-archive</h4><p>V4 → V19 versioned builds of the slime game repair line.</p><div class="foot"><span class="lang"><i></i>Archive</span><span class="vis">private</span></div></div>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/unlocked-roblox"><h4>unlocked-roblox</h4><p>Luau experiments and unlocked-template studies.</p><div class="foot"><span class="lang"><i style="--lc:#00a2ff"></i>Luau</span><span class="vis pub">public</span></div></a>
+      <div class="repo"><h4>berai</h4><p>"Claude as the kernel" — the eval-gated OS experiment.</p><div class="foot"><span class="lang"><i style="--lc:#f1e05a"></i>JavaScript</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>berai-vault</h4><p>The shared memory vault — 1,368 notes every agent reads/writes.</p><div class="foot"><span class="lang"><i></i>Markdown</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>bertos-v2</h4><p>Stability-first BertOS rebuild; donor to the BERT AI merge.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis">private</span></div></div>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/bertos-body"><h4>bertos-body</h4><p>Fork of the Odysseus AI workspace, used as BertOS's "body".</p><div class="foot"><span class="lang"><i style="--lc:#3572A5"></i>Python</span><span class="vis pub">public</span></div></a>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/will-life-morning-dashboard"><h4>will-life-morning-dashboard</h4><p>Personal morning dashboard experiment.</p><div class="foot"><span class="lang"><i></i>—</span><span class="vis pub">public</span></div></a>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/accounting"><h4>accounting</h4><p>Early repo — under review for the ledger.</p><div class="foot"><span class="lang"><i></i>—</span><span class="vis pub">public</span></div></a>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/estate-cinema"><h4>estate-cinema</h4><p>HTML experiment — under review for the ledger.</p><div class="foot"><span class="lang"><i style="--lc:#e34c26"></i>HTML</span><span class="vis pub">public</span></div></a>
+      <div class="repo"><h4>strictcents</h4><p>TypeScript project — under review for the ledger.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>vibe-coding-platform</h4><p>Platform concept — name reserved, scope in progress.</p><div class="foot"><span class="lang"><i></i>—</span><span class="vis">private</span></div></div>
+      <div class="repo"><h4>sylistly-b2dc8756</h4><p>Sylistly working variant from a parallel build track.</p><div class="foot"><span class="lang"><i style="--lc:#3178c6"></i>TypeScript</span><span class="vis">private</span></div></div>
+      <a class="repo" href="https://github.com/willywonka773202-cloud/7c6c3aae8fddc47a4b70cf66c226f7bb6ca9d07a"><h4>sylistly-v1 (hash name)</h4><p>The very first Sylistly snapshot — kept as history.</p><div class="foot"><span class="lang"><i></i>—</span><span class="vis pub">public</span></div></a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="colophon reveal">
+      <p>"This ledger was inventoried, organized, and typeset by an AI fleet that Will directed — <em>which is rather the point.</em>"</p>
+      <div class="links">
+        <a class="chip" href="https://github.com/willywonka773202-cloud">GitHub ↗</a>
+        <a class="chip" href="mailto:wythin32@gmail.com">Email</a>
+      </div>
+    </div>
+    <p class="stamp">Will Lambert · The Build Ledger Vol. 1 · Compiled 2026-07-13 · San Diego, CA</p>
+  </footer>
+
+</div>
+
+<script>
+(()=>{
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 3D particle globe ---------- */
+  const cv=document.getElementById('orb'), cx=cv.getContext('2d');
+  const hero=document.querySelector('.hero');
+  let W,H,R,pts=[],pairs=[],t=0,mx=0,my=0,tx=0,ty=0,running=!reduced,raf=0;
+  const N=300, ACCENTS=['#0a84ff','#64d2ff','#bf5af2','#ff375f','#30d158','#ff9f0a'];
+  function size(){
+    const d=Math.min(devicePixelRatio||1,2);
+    W=hero.clientWidth; H=hero.clientHeight;
+    cv.width=W*d; cv.height=H*d; cx.setTransform(d,0,0,d,0,0);
+    R=Math.min(W,H)*.44;
+  }
+  function build(){
+    pts=[]; const ga=Math.PI*(3-Math.sqrt(5));
+    for(let i=0;i<N;i++){
+      const y=1-(i/(N-1))*2, r=Math.sqrt(Math.max(0,1-y*y)), th=ga*i;
+      pts.push({x:Math.cos(th)*r, y, z:Math.sin(th)*r,
+        acc:i%50===0?ACCENTS[(i/50)%ACCENTS.length|0]:null, ph:Math.random()*6.28});
+    }
+    pairs=[];
+    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+      const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,dz=a.z-b.z;
+      if(dx*dx+dy*dy+dz*dz<.062) pairs.push([i,j]);
+    }
+  }
+  function frame(){
+    t+=.0016; tx+=(mx-tx)*.045; ty+=(my-ty)*.045;
+    cx.clearRect(0,0,W,H);
+    const ry=t*2+tx, rx=.35+Math.sin(t*1.4)*.08+ty;
+    const cosY=Math.cos(ry),sinY=Math.sin(ry),cosX=Math.cos(rx),sinX=Math.sin(rx);
+    const cX=W/2, cY=H*.5, P=new Array(N);
+    for(let i=0;i<N;i++){
+      const p=pts[i];
+      let x=p.x*cosY+p.z*sinY, z=-p.x*sinY+p.z*cosY;
+      let y=p.y*cosX-z*sinX; z=p.y*sinX+z*cosX;
+      const d=(z+1)/2, s=.72+.5*d;             // depth 0..1, fake perspective
+      P[i]={sx:cX+x*R*s, sy:cY+y*R*s, d, p};
+    }
+    cx.lineWidth=1;
+    for(const [i,j] of pairs){
+      const a=P[i],b=P[j], d=(a.d+b.d)/2;
+      if(d<.35) continue;
+      cx.strokeStyle=`rgba(150,170,220,${(.13*d).toFixed(3)})`;
+      cx.beginPath(); cx.moveTo(a.sx,a.sy); cx.lineTo(b.sx,b.sy); cx.stroke();
+    }
+    for(const q of P){
+      const {sx,sy,d,p}=q;
+      if(p.acc){
+        const pu=.7+.3*Math.sin(t*40+p.ph);
+        cx.fillStyle=p.acc; cx.globalAlpha=.25*pu*(.4+.6*d);
+        cx.beginPath(); cx.arc(sx,sy,7*d*pu,0,6.29); cx.fill();
+        cx.globalAlpha=.95*(.35+.65*d);
+        cx.beginPath(); cx.arc(sx,sy,2.4*(.5+.7*d),0,6.29); cx.fill();
+        cx.globalAlpha=1;
+      }else{
+        cx.fillStyle=`rgba(235,240,255,${(.1+.5*d).toFixed(3)})`;
+        cx.beginPath(); cx.arc(sx,sy,.7+1.5*d,0,6.29); cx.fill();
+      }
+    }
+    if(running) raf=requestAnimationFrame(frame);
+  }
+  size(); build();
+  if(reduced){ frame(); }               // one static frame
+  else{
+    raf=requestAnimationFrame(frame);
+    new IntersectionObserver(([e])=>{
+      const was=running; running=e.isIntersecting;
+      if(running&&!was) raf=requestAnimationFrame(frame);
+    }).observe(hero);
+    hero.addEventListener('pointermove',e=>{
+      mx=(e.clientX/W-.5)*.9; my=(e.clientY/H-.5)*.55;
+    });
+  }
+  addEventListener('resize',()=>{size(); if(reduced){frame()}},{passive:true});
+  // hero can be 0-sized if the page loads in a hidden tab — resize the canvas when it gets real bounds
+  new ResizeObserver(()=>{const w=hero.clientWidth; if(w&&w!==W){size(); if(reduced) frame()}}).observe(hero);
+
+  /* ---------- hero parallax ---------- */
+  const inner=document.getElementById('heroInner');
+  if(!reduced){
+    let ticking=false;
+    addEventListener('scroll',()=>{
+      if(ticking) return; ticking=true;
+      requestAnimationFrame(()=>{
+        const y=scrollY;
+        inner.style.transform=`translateY(${y*.3}px)`;
+        inner.style.opacity=Math.max(0,1-y/640);
+        cv.style.transform=`translateY(${y*.16}px)`;
+        ticking=false;
+      });
+    },{passive:true});
+  }
+
+  /* ---------- smooth anchor scroll (JS so programmatic scrolls stay instant) ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(!t) return; e.preventDefault();
+    t.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+  }));
+
+  /* ---------- reveals (staggered) ---------- */
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    e.target.classList.add('in'); io.unobserve(e.target);
+  }),{rootMargin:'0px 0px -10% 0px'});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{
+    el.style.transitionDelay=(i%5)*60+'ms'; io.observe(el);
+  });
+
+  /* ---------- animated counters ---------- */
+  const ease=x=>1-Math.pow(1-x,3);
+  const io2=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return; io2.unobserve(e.target);
+    const el=e.target, target=+el.dataset.count, pre=el.dataset.prefix||'';
+    if(reduced){ el.textContent=pre+target.toLocaleString(); return; }
+    const t0=performance.now(), dur=1300;
+    (function tick(now){
+      const k=Math.min(1,(now-t0)/dur);
+      el.textContent=pre+Math.round(ease(k)*target).toLocaleString();
+      if(k<1) requestAnimationFrame(tick);
+    })(t0);
+  }),{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>io2.observe(el));
+
+  /* ---------- 3D tilt + glare on cards ---------- */
+  if(!reduced && matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('[data-tilt]').forEach(c=>{
+      c.addEventListener('pointermove',e=>{
+        const r=c.getBoundingClientRect(), px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+        c.style.setProperty('--rx',((py-.5)*-5).toFixed(2)+'deg');
+        c.style.setProperty('--ry',((px-.5)*6).toFixed(2)+'deg');
+        c.style.setProperty('--gx',(px*100).toFixed(1)+'%');
+        c.style.setProperty('--gy',(py*100).toFixed(1)+'%');
+      });
+      c.addEventListener('pointerleave',()=>{
+        c.style.setProperty('--rx','0deg'); c.style.setProperty('--ry','0deg');
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
