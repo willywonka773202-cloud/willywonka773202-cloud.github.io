@@ -1,0 +1,9 @@
+[
+  {"key":"AI systems","id":"ai-automation","label":"AI & automation","description":"Assistants, agents, and workflows that make AI useful in everyday work."},
+  {"key":"Web & commerce","id":"apps-websites","label":"Apps & websites","description":"Product ideas, shopping experiences, and things built for the web."},
+  {"key":"Games","id":"games-roblox","label":"Games & Roblox","description":"Playable worlds, game systems, and the tools behind them."},
+  {"key":"Creative tools","id":"creative-media","label":"Creative & media","description":"Experiments in video, storytelling, and AI-assisted production."},
+  {"key":"Everyday tools","id":"productivity-learning","label":"Productivity & learning","description":"Practical tools for school, commuting, and getting things done."},
+  {"key":"Research","id":"trading-research","label":"Trading & research","description":"Market research and paper-only experiments. No investment performance claimed."},
+  {"key":"Experiments","id":"experiments","label":"Experiments","description":"Small explorations and early ideas with room to evolve."}
+]

@@ -21,6 +21,8 @@ Open http://127.0.0.1:4198. Serve `dist`, which contains only public files. Proj
 
 ## Edit projects
 
+`data/categories.json` defines the seven project types, their display names, descriptions, and order. The homepage links to each type; the full collection groups entries into labeled sections. Search and stage filters hide empty sections, and sorting applies within each type. Category keys stay stable so existing shared URLs keep working.
+
 `data/projects.json` is the reviewed catalog. Each entry has a stable ID, name, category, stage, summary, role, tags, and scope-review date. Case studies add the idea, approach, outcome, next steps, and evidence boundaries. Demo links lead to previews, which may have a narrower scope than the local project.
 
 ```sh

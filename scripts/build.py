@@ -3,12 +3,16 @@
 from pathlib import Path
 from html import escape
 from datetime import date
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 import json,re
 import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://will-lambert-portfolio.vercel.app'
-VERSION='20261004'
+VERSION='20261004-types'
+C=json.loads((ROOT/'data/categories.json').read_text())
+CATEGORY={c['key']:c for c in C}
+assert len(CATEGORY)==len(C) and len({c['id'] for c in C})==len(C)
+def category_label(p):return CATEGORY[p['category']]['label']
 P=json.loads((ROOT/'data/projects.json').read_text())
 U=[u for u in json.loads((ROOT/'data/updates.json').read_text()) if u.get('published') is True]
 U.sort(key=lambda u:(u['date'],u['id']),reverse=True)
@@ -36,6 +40,7 @@ def page(title,desc,path,body,active='',prefix=''):
 for items in [P,U]:
  ids=[x['id'] for x in items];assert len(ids)==len(set(ids)) and all(valid_id(i) for i in ids)
 for p in P:
+ assert p['category'] in CATEGORY, f'Unknown project type: {p["category"]}'
  assert p['status'] in ['Built','In progress','Prototype','Research','Archived','Needs review']
  for key in ['repo','demo']:
   if p.get(key):assert p[key].startswith('https://');safe_url(p[key])
@@ -48,23 +53,30 @@ featured=[next(p for p in P if p['id']==i) for i in order]
 cards=[]
 for n,p in enumerate(featured,1):
  media=f'<figure class="feature-media"><img src="{e(p["image"])}" alt="{e(p["caption"])}" loading="lazy" width="1280" height="720"><figcaption>{e(p["caption"])}</figcaption></figure>' if p.get('image') else ''
- cards.append(f'<article class="feature"><div class="feature-copy"><div class="feature-top"><span class="eyebrow">0{n} / {e(p["category"])}</span>{badge(p)}</div><h3>{e(p["name"])}</h3><p>{e(p["summary"])}</p><a class="text-link" href="{url(p)}">Explore the case study <span aria-hidden="true">↗</span></a></div><a class="feature-picture" href="{url(p)}" aria-label="View {e(p["name"])} case study">{media}</a></article>')
-rows=[]
+ cards.append(f'<article class="feature"><div class="feature-copy"><div class="feature-top"><span class="eyebrow">0{n} / {e(category_label(p))}</span>{badge(p)}</div><h3>{e(p["name"])}</h3><p>{e(p["summary"])}</p><a class="text-link" href="{url(p)}">Explore the case study <span aria-hidden="true">↗</span></a></div><a class="feature-picture" href="{url(p)}" aria-label="View {e(p["name"])} case study">{media}</a></article>')
+rows={c['key']:[] for c in C}
 # Put the most recently reviewed work first without altering its original review date.
 for n,p in enumerate(sorted(P,key=lambda p:(p['updated'],p['name']),reverse=True),1):
- search=' '.join([p['name'],p['summary'],p['category'],*p['tags']]).lower()
+ search=' '.join([p['name'],p['summary'],p['category'],category_label(p),*p['tags']]).lower()
  media=f'<div class="project-thumb"><img src="{e(p["image"])}" alt="" width="1280" height="720" loading="lazy"></div>' if p.get('image') else ''
  access='Public preview' if p.get('demo') else 'Project notes'
- rows.append(f'<a class="project-row" href="{url(p)}" data-category="{e(p["category"])}" data-stage="{e(p["status"])}" data-search="{e(search)}" data-name="{e(p["name"].lower())}" data-updated="{e(p["updated"])}"><span class="row-number">{n:02d}</span>{media}<div class="project-description"><span class="project-category">{e(p["category"])}</span><h3>{e(p["name"])}</h3><p>{e(p["summary"])}</p></div><span class="row-category">{e(p["category"])}</span>{badge(p)}<span class="project-access">{access}</span><span class="row-arrow" aria-hidden="true">↗</span></a>')
-categories=['All projects','AI systems','Web & commerce','Games','Everyday tools','Creative tools','Research','Experiments']
-filters=''.join(f'<button type="button" data-filter="{e(c)}" aria-pressed="{str(i==0).lower()}">{e(c)}</button>' for i,c in enumerate(categories))
+ rows[p['category']].append(f'<a class="project-row" href="{url(p)}" data-category="{e(p["category"])}" data-stage="{e(p["status"])}" data-search="{e(search)}" data-name="{e(p["name"].lower())}" data-updated="{e(p["updated"])}"><span class="row-number">{len(rows[p["category"]])+1:02d}</span>{media}<div class="project-description"><span class="project-category">{e(category_label(p))}</span><h3>{e(p["name"])}</h3><p>{e(p["summary"])}</p></div><span class="row-category">{e(category_label(p))}</span>{badge(p)}<span class="project-access">{access}</span><span class="row-arrow" aria-hidden="true">↗</span></a>')
+groups=[]
+type_links=[]
+for n,c in enumerate(C,1):
+ count=len(rows[c['key']]);assert count, f"Empty project type: {c['key']}"
+ groups.append(f'<section class="project-group" data-project-group="{e(c["key"])}" aria-labelledby="{c["id"]}"><header class="project-group-heading"><div><span class="eyebrow">{n:02d} / PROJECT TYPE</span><h2 id="{c["id"]}">{e(c["label"])}</h2><p>{e(c["description"])}</p></div><span class="group-count">{count} {"project" if count==1 else "projects"}</span></header><div class="project-group-rows project-grid">{"".join(rows[c["key"]])}</div></section>')
+ target='archive.html?'+urlencode({'category':c['key']})
+ type_links.append(f'<a href="{e(target)}"><span>{e(c["label"])}</span><span class="type-link-count">{count:02d} <b aria-hidden="true">↗</b></span></a>')
+filters=f'<button type="button" data-filter="All projects" aria-pressed="true">All projects <span>{len(P)}</span></button>'
+filters+=''.join(f'<button type="button" data-filter="{e(c["key"])}" aria-pressed="false">{e(c["label"])} <span>{len(rows[c["key"]])}</span></button>' for c in C)
 gallery=[]
 for n,p in enumerate([x for x in P if x.get('image')]):
- gallery.append(f'<a class="gallery-card" href="{url(p)}" data-name="{e(p["name"])}" style="--i:{n}"><div class="gallery-card-top"><span>PROJECT / {n+1:02d}</span>{badge(p)}</div><img src="{e(p["image"])}" alt="{e(p["caption"])}" width="1280" height="720" loading="lazy"><div class="gallery-card-copy"><span>{e(p["category"])}</span><h3>{e(p["name"])}</h3><span class="gallery-case">VIEW CASE STUDY ↗</span></div></a>')
+ gallery.append(f'<a class="gallery-card" href="{url(p)}" data-name="{e(p["name"])}" style="--i:{n}"><div class="gallery-card-top"><span>PROJECT / {n+1:02d}</span>{badge(p)}</div><img src="{e(p["image"])}" alt="{e(p["caption"])}" width="1280" height="720" loading="lazy"><div class="gallery-card-copy"><span>{e(category_label(p))}</span><h3>{e(p["name"])}</h3><span class="gallery-case">VIEW CASE STUDY ↗</span></div></a>')
 def update_card(u):
  search=' '.join([u['title'],u['summary'],*u['body']]).lower()
  return f'<article class="update-card" data-update-type="{e(u["type"])}" data-update-search="{e(search)}"><div class="update-meta"><time datetime="{u["date"]}">{pretty_date(u["date"])}</time><span>{e(u["type"])}</span></div><h2><a href="updates/{u["id"]}.html">{e(u["title"])}</a></h2><p>{e(u["summary"])}</p><a class="text-link" href="updates/{u["id"]}.html" aria-label="Read {e(u["title"])}">Read update ↗</a></article>'
-values={'COUNT':str(len(P)),'GALLERY_COUNT':f'{len(gallery):02d}','FEATURED':''.join(cards),'ROWS':''.join(rows),'FILTERS':filters,'GALLERY':''.join(gallery),'UPDATES':''.join(update_card(u) for u in U),'LATEST_UPDATES':''.join(update_card(u) for u in U[:2]),'UPDATE_COUNT':str(len(U))}
+values={'COUNT':str(len(P)),'GALLERY_COUNT':f'{len(gallery):02d}','FEATURED':''.join(cards),'GROUPS':''.join(groups),'TYPE_LINKS':''.join(type_links),'FILTERS':filters,'GALLERY':''.join(gallery),'UPDATES':''.join(update_card(u) for u in U),'LATEST_UPDATES':''.join(update_card(u) for u in U[:2]),'UPDATE_COUNT':str(len(U))}
 for template,output,title,desc,active in [('home.html','index.html','Ideas into reality','Will Lambert. SDSU entrepreneurship student building AI-assisted products, useful tools, and games. Explore projects and updates.',''),('archive.html','archive.html','Projects','Explore Will Lambert’s collection of products, tools, games, prototypes, and experiments.','Projects'),('updates.html','updates.html','Updates','Build logs, check-ins, ideas, interests, and notes from Will Lambert.','Updates')]:
  h=(ROOT/'templates'/template).read_text();v=dict(values,HEADER=header(active),FOOTER=footer(),HEAD=head(title,desc,output))
  for k,value in v.items():h=h.replace('{{'+k+'}}',value)
@@ -86,7 +98,7 @@ for p in P:
  for key,label in [('demo',p.get('demo_label','Explore public preview ↗')),('repo','View source repository ↗')]:
   if p.get(key):links+=f'<a class="button dark" href="{e(p[key])}" target="_blank" rel="noopener noreferrer">{e(label)}</a>'
  demo_note=f'<p class="preview-note">{e(p.get("demo_note","Public preview. Availability and feature scope may differ from the documented local project."))}</p>' if p.get('demo') else ''
- body=f'''<main id="main" class="detail-main"><a class="back-link" href="../archive.html">← All projects</a><h1 class="detail-title">{e(p['name'])}</h1><p class="detail-summary">{e(p['summary'])}</p><div class="detail-meta">{badge(p)}<span>{e(p['category'])}</span><span>Scope reviewed {e(p['updated'])}</span></div>{media}<div class="detail-sections"><aside class="detail-sidebar"><h3>My role</h3><p>{e(p['role'])}</p><h3>Tools & focus</h3><p>{e(' · '.join(p['tags']) or p['category'])}</p></aside><div class="detail-body">{sections}<div class="detail-links">{links}<a class="button dark" href="mailto:wlambert3493@sdsu.edu?subject=Project%20enquiry%20-%20{p['id']}">Ask about this project ↗</a></div>{demo_note}</div></div><div class="detail-footer"><a class="text-link" href="../archive.html">Explore all projects ↗</a></div></main>'''
+ body=f'''<main id="main" class="detail-main"><a class="back-link" href="../archive.html">← All projects</a><h1 class="detail-title">{e(p['name'])}</h1><p class="detail-summary">{e(p['summary'])}</p><div class="detail-meta">{badge(p)}<span>{e(category_label(p))}</span><span>Scope reviewed {e(p['updated'])}</span></div>{media}<div class="detail-sections"><aside class="detail-sidebar"><h3>My role</h3><p>{e(p['role'])}</p><h3>Tools & focus</h3><p>{e(' · '.join(p['tags']) or p['category'])}</p></aside><div class="detail-body">{sections}<div class="detail-links">{links}<a class="button dark" href="mailto:wlambert3493@sdsu.edu?subject=Project%20enquiry%20-%20{p['id']}">Ask about this project ↗</a></div>{demo_note}</div></div><div class="detail-footer"><a class="text-link" href="../archive.html">Explore all projects ↗</a></div></main>'''
  (ROOT/'projects'/f'{p["id"]}.html').write_text(page(p['name'],p['summary'],url(p),body,'Projects','../'))
 for u in U:
  paras=''.join(f'<p>{e(t)}</p>' for t in u['body'])

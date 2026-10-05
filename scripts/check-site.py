@@ -33,6 +33,31 @@ for name,page in parsed.items():
   elif not target.is_file():errors.append(name+': missing '+rel)
   elif u.fragment and rel in parsed and unquote(u.fragment) not in parsed[rel].ids:errors.append(name+': missing anchor '+link)
 for name in ['feed.xml','sitemap.xml']:ET.parse(base/name)
+# Each catalog entry must appear once, under its intended project type.
+class Collection(HTMLParser):
+ def __init__(self,text):
+  super().__init__();self.sections=[];self.groups={};self.entries=[];self.feed(text)
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='section':
+   key=a.get('data-project-group');self.sections.append(key)
+   if key:
+    if key in self.groups:errors.append('Duplicate project type: '+key)
+    self.groups[key]=[]
+  if 'project-row' in a.get('class','').split():
+   group=next((x for x in reversed(self.sections) if x),None)
+   entry=(a.get('href'),a.get('data-category'));self.entries.append(entry)
+   if group!=entry[1]:errors.append('Project placed under incorrect type: '+str(entry[0]))
+   if group in self.groups:self.groups[group].append(entry)
+ def handle_endtag(self,tag):
+  if tag=='section' and self.sections:self.sections.pop()
+collection=Collection((base/'archive.html').read_text())
+projects=json.loads((ROOT/'data/projects.json').read_text())
+categories=json.loads((ROOT/'data/categories.json').read_text())
+expected=[('projects/'+p['id']+'.html',p['category']) for p in projects]
+if sorted(collection.entries)!=sorted(expected):errors.append('Project collection has missing, duplicate, or unexpected entries')
+if list(collection.groups)!=[c['key'] for c in categories]:errors.append('Project type order differs from the category index')
+if not all(collection.groups.values()):errors.append('Empty project type section')
 # Regressions for a removed company project and accidentally included private notes.
 for name in allowed:
  if any(s in name for s in ['docs/','.env','data/']):errors.append('Private/stale publication path: '+name)
@@ -48,4 +73,4 @@ if args.deployment:
   if p.is_file() and p.relative_to(base).as_posix() not in allowed|{'robots.txt'}:errors.append('Unexpected deployed file: '+p.relative_to(base).as_posix())
 if errors:
  print('\n'.join(errors));sys.exit(1)
-print(f'PASS: {len(parsed)} pages; all local links and anchors; RSS/sitemap; publication allowlist; draft and removed-project exclusions.')
+print(f'PASS: {len(parsed)} pages; {len(projects)} projects grouped into {len(categories)} types; all local links and anchors; RSS/sitemap; publication allowlist; draft and removed-project exclusions.')

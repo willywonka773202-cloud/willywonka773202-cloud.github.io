@@ -1,15 +1,21 @@
 (() => {
  const search=document.querySelector('#search'),stage=document.querySelector('#stage'),sort=document.querySelector('#sort'),list=document.querySelector('#project-list');
  if(!search||!stage||!list)return;
- const rows=[...list.querySelectorAll('.project-row')],filters=[...document.querySelectorAll('[data-filter]')],views=[...document.querySelectorAll('[data-view]')];
+ const groups=[...list.querySelectorAll('.project-group')],rows=[...list.querySelectorAll('.project-row')],filters=[...document.querySelectorAll('[data-filter]')],views=[...document.querySelectorAll('[data-view]')];
  let category='All projects',view='grid';
  function readURL(){const q=new URLSearchParams(location.search);search.value=q.get('q')||'';stage.value=[...stage.options].some(o=>o.value===q.get('stage'))?q.get('stage'):'all';category=filters.some(f=>f.dataset.filter===q.get('category'))?q.get('category'):'All projects';sort.value=q.get('sort')==='name'?'name':'recent';view=q.get('view')==='list'?'list':'grid';filter(false);}
  function filter(update=true){
   const query=search.value.trim().toLowerCase();let visible=0;
   rows.sort((a,b)=>sort.value==='name'?a.dataset.name.localeCompare(b.dataset.name):b.dataset.updated.localeCompare(a.dataset.updated)||a.dataset.name.localeCompare(b.dataset.name));
-  rows.forEach((row,index)=>{row.querySelector('.row-number').textContent=String(index+1).padStart(2,'0');list.append(row);const show=(!query||row.dataset.search.includes(query))&&(category==='All projects'||row.dataset.category===category)&&(stage.value==='all'||row.dataset.stage===stage.value);row.hidden=!show;visible+=Number(show);});
+  rows.forEach(row=>{const show=(!query||row.dataset.search.includes(query))&&(category==='All projects'||row.dataset.category===category)&&(stage.value==='all'||row.dataset.stage===stage.value);row.hidden=!show;visible+=Number(show);});
+  groups.forEach(group=>{
+   const container=group.querySelector('.project-group-rows'),items=rows.filter(row=>row.dataset.category===group.dataset.projectGroup);let count=0;
+   items.forEach(row=>{container.append(row);if(!row.hidden){count++;row.querySelector('.row-number').textContent=String(count).padStart(2,'0');}});
+   group.hidden=count===0;group.querySelector('.group-count').textContent=`${count} ${count===1?'project':'projects'}${count!==items.length?` of ${items.length}`:''}`;
+   container.classList.toggle('project-grid',view==='grid');
+  });
   document.querySelector('#result-count').textContent=`${visible} ${visible===1?'project':'projects'}${visible!==rows.length?` of ${rows.length}`:''}`;
-  document.querySelector('#empty').hidden=visible!==0;list.classList.toggle('project-grid',view==='grid');
+  document.querySelector('#empty').hidden=visible!==0;
   filters.forEach(f=>f.setAttribute('aria-pressed',String(f.dataset.filter===category)));views.forEach(f=>f.setAttribute('aria-pressed',String(f.dataset.view===view)));
   if(update){const q=new URLSearchParams();if(query)q.set('q',search.value.trim());if(stage.value!=='all')q.set('stage',stage.value);if(category!=='All projects')q.set('category',category);if(sort.value!=='recent')q.set('sort',sort.value);if(view!=='grid')q.set('view',view);history.replaceState(null,'',location.pathname+(q.size?'?'+q:'')+location.hash);}
  }
