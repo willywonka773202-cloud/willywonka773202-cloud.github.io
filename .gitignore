@@ -3,3 +3,18 @@ capture.html
 .DS_Store
 PROJECTS.md
 CLEANUP.md
+
+dist/
+docs/HANDOFF.md
+docs/INVENTORY-NOTES.md
+assets/coastal-sculpture.png
+
+# Local review material is never part of the public source.
+docs/
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.vercel/

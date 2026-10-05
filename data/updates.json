@@ -1,0 +1,44 @@
+[
+  {
+    "id": "a-home-for-the-whole-process",
+    "date": "2026-10-04",
+    "type": "Check-in",
+    "title": "A home for the whole process",
+    "summary": "Bringing my projects and the thinking behind them into one place.",
+    "body": [
+      "I want this site to be a clear picture of what I make, what I’m exploring, and how my ideas develop. That means making the full project collection easier to browse, alongside the more detailed case studies.",
+      "Updates is where I’ll share check-ins, progress, interests, and notes on why I’m pursuing an idea. The work includes finished builds and prototypes; their stages stay visible so the context is clear.",
+      "I’m also putting more care into how I present public code: useful documentation, clear credit, and a separation between personal working notes and material intended to be shared."
+    ],
+    "links": [
+      {
+        "label": "Explore the project collection",
+        "url": "archive.html"
+      }
+    ],
+    "published": true
+  },
+  {
+    "id": "a-new-visual-direction",
+    "date": "2026-09-30",
+    "type": "Build log",
+    "title": "A new visual direction for the portfolio",
+    "summary": "A quieter palette, moving wireframes, and a more visual way to explore the work.",
+    "body": [
+      "The portfolio moved to a monochrome visual direction inspired by Louis Raillé’s site: condensed display typography, fine grids, and a dimensional gallery.",
+      "The implementation uses original animated terrain and screenshots from my own projects. The gallery supports keyboard navigation and touch; motion can be paused, and the site respects reduced-motion preferences.",
+      "The aim is to give the work room to speak while keeping case studies, project stages, and my résumé easy to reach."
+    ],
+    "links": [
+      {
+        "label": "Explore selected work",
+        "url": "index.html#work"
+      },
+      {
+        "label": "Visual inspiration — Louis Raillé",
+        "url": "https://louisraille.fr/"
+      }
+    ],
+    "published": true
+  }
+]

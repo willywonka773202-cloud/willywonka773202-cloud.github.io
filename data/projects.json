@@ -1,0 +1,717 @@
+[
+  {
+    "id": "bertos-v1-v2-merge",
+    "name": "BertOS v1 → v2 → merge",
+    "category": "AI systems",
+    "status": "Archived",
+    "summary": "The lineage behind BERT AI: v1 command-center dashboard, a stability-first v2 rebuild, then a documented consolidation merge of the strongest parts of every fork.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "repo": "https://github.com/willywonka773202-cloud/bertos-ai-os",
+    "demo": "https://bertos-ai-os.vercel.app",
+    "demo_note": "Historical interface preview. The local CLI bridge is offline in the public deployment; this is not the current BERT AI workspace."
+  },
+  {
+    "id": "berai-claude-as-the-kernel",
+    "name": "berai — \"Claude as the kernel\"",
+    "category": "AI systems",
+    "status": "Prototype",
+    "summary": "An experiment where the AI is the OS: semantic-memory MCP server, scheduled jobs, a watchdog — and a standing eval that removes any component that can't beat raw Claude.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "bertos-memory-vault",
+    "name": "BertOS Memory Vault",
+    "category": "AI systems",
+    "status": "Built",
+    "summary": "A shared Obsidian knowledge base that carries project context and decisions between AI tools.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "overclocking",
+    "name": "Overclocking",
+    "category": "AI systems",
+    "status": "Built",
+    "summary": "Prompt-optimization research for Claude Code: a findings catalog with enforced claimed-vs-realistic honesty, a dashboard, and a global hook that compiles every prompt before it runs.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "studio-roblox-game-creation-ai",
+    "name": "Studio — Roblox game-creation AI",
+    "category": "AI systems",
+    "status": "Built",
+    "summary": "A Roblox development knowledge base and prompting workflow for AI-assisted game planning and Luau implementation.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "roblox-brain",
+    "name": "roblox-brain",
+    "category": "AI systems",
+    "status": "Built",
+    "summary": "Data pipeline that parses 423+ Roblox place files into queryable JSON catalogs of scripts, assets, and game systems — grown by a scheduled ingest task.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "goodturn",
+    "name": "Goodturn",
+    "category": "Web & commerce",
+    "status": "Prototype",
+    "summary": "An outing-planner prototype exploring place discovery, multi-stop journeys, and a cinematic globe.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Next.js",
+      "Cesium",
+      "MapLibre"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "repo": "https://github.com/willywonka773202-cloud/carpool-optimizer",
+    "image": "assets/goodturn-current.png",
+    "caption": "Actual public landing page · captured September 27, 2026 · early-access prototype",
+    "featured": true,
+    "problem": "Planning a group outing means juggling places, pickups, and the order of every stop.",
+    "approach": "Connect familiar place-name search to route planning, compare stop order using road times, and make navigation the natural next step.",
+    "outcome": "The local preview includes nearby search, saved plans, vector maps, route previews, and navigation handoff.",
+    "next": "Configure production search and routing services, then validate the experience with a small campus pilot.",
+    "boundary": "Current name: Goodturn. Earlier versions were Carpool Optimizer and Outnook. No live traffic, rider matching, or billing is claimed.",
+    "demo": "https://carpool-optimizer-five.vercel.app",
+    "demo_label": "Explore early-access preview ↗",
+    "demo_note": "Preview checked October 4, 2026: sample drives and route editing are available. Route generation is waiting on production configuration."
+  },
+  {
+    "id": "lambert-labs-portfolio-v1",
+    "name": "Lambert Labs — Portfolio v1",
+    "category": "Web & commerce",
+    "status": "Archived",
+    "summary": "An earlier portfolio built around GitHub discovery, curated project overrides, and a committed fallback snapshot.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "repo": "https://github.com/willywonka773202-cloud/will-lambert-portfolio"
+  },
+  {
+    "id": "vocabhub-io",
+    "name": "VocabHub.io",
+    "category": "Web & commerce",
+    "status": "Prototype",
+    "summary": "Paste a vocab list (\"el camarero = the waiter\") and it powers arcade-style .io mini-games with quiz popups. Studying, gamified.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "roblox-flip-scout",
+    "name": "Roblox Flip Scout",
+    "category": "Games",
+    "status": "Built",
+    "summary": "A research pipeline for discovering and ranking Roblox template opportunities, with spreadsheet exports and a local dashboard.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "demo": "https://roblox-flipper.vercel.app",
+    "demo_note": "An archived research snapshot, last scanned in July 2026. Estimates and template listings are historical; this is not a current buying recommendation."
+  },
+  {
+    "id": "slimeflip",
+    "name": "SlimeFlip",
+    "category": "Games",
+    "status": "Built",
+    "summary": "A template adaptation with Fusion and Trading systems, architecture notes, and monetization planning. Public-release status needs review.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "monster-saga",
+    "name": "Monster Saga",
+    "category": "Games",
+    "status": "Prototype",
+    "summary": "A monster-collecting RPG prototype with a battle engine, encounters, catching, leveling, and evolution.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "brainrotbazaar",
+    "name": "BrainrotBazaar",
+    "category": "Games",
+    "status": "Prototype",
+    "summary": "Original idle-tycoon/collector: buy creatures that print income, mutate them in a gacha lab, steal prized ones from rivals. World and assets generated fully in code.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "apollo",
+    "name": "Apollo",
+    "category": "Games",
+    "status": "Prototype",
+    "summary": "A voxel-mining template rebuilt with a cleaner project structure, gameplay changes, and Luau tooling. Publication status needs review.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "punch-sim-launch-ops",
+    "name": "Punch Sim — launch ops",
+    "category": "Games",
+    "status": "Built",
+    "summary": "A template-game monetization audit and remediation project covering inherited gamepass and product ownership.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "orb-arena",
+    "name": "Orb Arena",
+    "category": "Games",
+    "status": "Built",
+    "summary": "Agar.io-style browser arena — mouse to move, eat orbs, grow. Vanilla JS and canvas, no build step.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "brainrot-dashboard",
+    "name": "Brainrot Dashboard",
+    "category": "Games",
+    "status": "Built",
+    "summary": "Trend hunter that gathers evidence on rising Roblox mechanics, writes research reports into the memory vault, and feeds candidates to roblox-brain.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "slime-workshop",
+    "name": "Slime Workshop",
+    "category": "Games",
+    "status": "Archived",
+    "summary": "The repair line behind SlimeFlip: V4 → V19 versioned .rbxl builds with per-version patch notes, plus a corpus scan of 1,800+ local place files feeding the master build.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "temple-run-canvas",
+    "name": "Temple Run (canvas)",
+    "category": "Games",
+    "status": "Built",
+    "summary": "Small endless-runner built as a BertOS toy app — plain JavaScript and canvas served by a tiny local server.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "polyscout",
+    "name": "polyscout",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A Polymarket research and paper-simulation system with an auditable decision log. Current worker activity has not been rechecked.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "ai-trader",
+    "name": "AI Trader",
+    "category": "Research",
+    "status": "Research",
+    "summary": "Paper-first backtesting system for testing trading ideas, using local Ollama models as research assistants. Built to learn, not to gamble.",
+    "updated": "2026-07-13",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "bert-ai",
+    "name": "BERT AI",
+    "category": "AI systems",
+    "status": "In progress",
+    "summary": "A personal AI workspace that brings conversations, project files, terminals, memory, and voice into one place.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Next.js",
+      "MCP",
+      "AI orchestration"
+    ],
+    "role": "Product direction, interface decisions, and AI-assisted iteration using Claude and Codex",
+    "image": "assets/bert.png",
+    "caption": "Earlier BERT command center · saved build screenshot",
+    "featured": true,
+    "problem": "Useful work gets scattered across AI conversations, project folders, and tools that do not share context.",
+    "approach": "Design a central workspace with project context, persistent knowledge, account-based AI conversations, and deliberate handoffs between tools.",
+    "outcome": "The documented local implementation brings project files, terminals, conversations, and a school planner together. This case study shows an earlier interface; integrations require separate runtime verification.",
+    "next": "Complete remaining voice and account-integration checks and refine the daily workflow.",
+    "boundary": "Private local workspace. The screenshot shows an earlier interface; public access and every OS-control action are not implied."
+  },
+  {
+    "id": "sylistly",
+    "name": "Sylistly",
+    "category": "Web & commerce",
+    "status": "Built",
+    "summary": "An AI-assisted fashion discovery experience connecting outfit ideas to shoppable product catalogs.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Next.js",
+      "Supabase",
+      "Product discovery"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "image": "assets/sylistly.png",
+    "caption": "Sylistly browse experience · saved build screenshot",
+    "repo": "https://github.com/willywonka773202-cloud/sylistly",
+    "demo": "https://sylistly.com",
+    "demo_note": "Fashion discovery preview. The catalog and recommendation screens load; complete outfit availability depends on current catalog checks. Checkout takes place with external retailers."
+  },
+  {
+    "id": "gym-finds-forge",
+    "name": "Gym Finds / FORGE",
+    "category": "Web & commerce",
+    "status": "Prototype",
+    "summary": "A combined gym and fashion shopping experience with a Fit Lab, saved wardrobe, product discovery, and retailer handoff.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Commerce",
+      "Fit Lab",
+      "Next.js"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "featured": true,
+    "problem": "Finding gym gear and building a complete outfit takes too many disconnected shopping sessions.",
+    "approach": "Bring browsing, outfit building, saved items, and retailer links into one coherent experience while combining inherited Sylistly and Gym Finds systems.",
+    "outcome": "The combined app includes an eight-slot Fit Lab, shared saved and owned wardrobe, a bag, and local preferences.",
+    "next": "Validate catalog quality, affiliate relationships, and customer demand before a commerce launch.",
+    "boundary": "Local product prototype. Checkout, retailer inventory, affiliate acceptance, and revenue are not established.",
+    "demo": "https://forge-social-shop.vercel.app",
+    "demo_note": "Shopping-interface concept. Brand names and demonstration copy do not establish commercial partnerships or endorsements."
+  },
+  {
+    "id": "pullr",
+    "name": "PULLR",
+    "category": "Web & commerce",
+    "status": "Prototype",
+    "summary": "A collector experience built around pack discovery, a cinematic card reveal, and a practice wallet.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Full-stack",
+      "Interaction design",
+      "Practice economy"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "image": "assets/pullr.png",
+    "caption": "Earlier collector lobby (VAULT direction) · saved build screenshot",
+    "featured": true,
+    "demo": "https://pullr-rho.vercel.app",
+    "problem": "A collectible opening should feel exciting while keeping the collection and pricing information easy to understand.",
+    "approach": "Design the journey from pack browsing through reveal and collection, backed by card records, account state, and free practice funds.",
+    "outcome": "A hosted test edition supports pack browsing and opening with practice funds. Real transactions are blocked.",
+    "next": "Continue usability testing and resolve licensing, graded-price providers, and commercial requirements before any paid product.",
+    "boundary": "Unofficial collector prototype using third-party card imagery. No affiliation, real-money purchases, or physical fulfillment is claimed.",
+    "demo_note": "Free practice preview using simulated credits and catalog imagery. No real purchases, payouts, or physical-card ownership are represented."
+  },
+  {
+    "id": "after-hours",
+    "name": "After Hours",
+    "category": "Creative tools",
+    "status": "Prototype",
+    "summary": "A local AI DJ studio for mixing full tracks, shaping a live set, and recording the result.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Web Audio",
+      "AI voice",
+      "Creative direction"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "image": "assets/after-hours.png",
+    "caption": "After Hours studio · saved build screenshot",
+    "featured": true,
+    "demo": "https://after-hours-house-party.vercel.app",
+    "problem": "A house-party music experience can be more interactive than a queue of tracks.",
+    "approach": "Combine a concert-style interface with audio analysis, mixing, local voice experiments, and recording controls.",
+    "outcome": "The local studio supports full-file mixing, processing, and recording. A saved web edition provides a separate hosted experience.",
+    "next": "Improve transitions and make the distinction between browser features and local model features clearer.",
+    "boundary": "Experimental fan visuals and voice research are not endorsements. Local audio and model features are not all available in the web edition.",
+    "demo_note": "Saved web edition of a local music project. Some studio and generation features are available only in the local app; external video availability varies."
+  },
+  {
+    "id": "sdsu-life",
+    "name": "SDSU Life",
+    "category": "Everyday tools",
+    "status": "Built",
+    "summary": "A local-first school dashboard and Chrome extension that brings Canvas deadlines, coursework, and a daily plan together.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Chrome extension",
+      "Python",
+      "Student workflows"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "featured": true,
+    "problem": "Coursework is scattered across class schedules, Canvas modules, announcements, and personal tasks.",
+    "approach": "Create one daily view with submission-aware assignments and a time cap that turns a busy semester into an achievable plan.",
+    "outcome": "The extension includes Canvas synchronization, planning, course information, reminders, and backups.",
+    "next": "Keep the synchronization dependable and validate the workflow across a full semester.",
+    "boundary": "Personal productivity tool; private grades, course content, and student records are not included here."
+  },
+  {
+    "id": "shotgun",
+    "name": "Shotgun",
+    "category": "Everyday tools",
+    "status": "In progress",
+    "summary": "Recurring carpool matching for SDSU commuters, organized around campus email, zones, and weekly schedules.",
+    "updated": "2026-09-10",
+    "tags": [
+      "Next.js",
+      "Supabase",
+      "Campus mobility"
+    ],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "boundary": "In development; no active matching community or public launch is claimed."
+  },
+  {
+    "id": "shoot-a-brainrot-egg-garden",
+    "name": "Shoot A Brainrot / Egg Garden",
+    "category": "Games",
+    "status": "In progress",
+    "summary": "A Roblox game adaptation combining personal egg conveyors, pet gardens, weather mutations, original guns, and boss encounters.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "first-drop",
+    "name": "First Drop",
+    "category": "Games",
+    "status": "Prototype",
+    "summary": "An original browser battle-royale prototype with a 3D island, bots, loot, building, and a shrinking storm.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "hypershot-arena-fps",
+    "name": "HyperShot / Arena FPS",
+    "category": "Games",
+    "status": "Prototype",
+    "summary": "A Roblox arena shooter with a lobby, map selection, training bots, weapon loadouts, and a match-to-lobby loop.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "stormlings",
+    "name": "Stormlings",
+    "category": "Games",
+    "status": "Prototype",
+    "summary": "A creature-rescue game concept with a local mechanics prototype: rescue, carry, shelter, and return home during storms.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "luckydice-rng",
+    "name": "LuckyDice RNG",
+    "category": "Games",
+    "status": "In progress",
+    "summary": "An early Roblox game workspace and game specification centered on an RNG concept.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "fort-day",
+    "name": "Fort Day",
+    "category": "Games",
+    "status": "In progress",
+    "summary": "A Roblox free-for-all shooter project designed around quick rounds, respawns, and small-player-count sessions.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "brawl-stars-roblox-experiments",
+    "name": "Brawl Stars Roblox experiments",
+    "category": "Games",
+    "status": "In progress",
+    "summary": "A collection of arena-game design and build experiments with research, art direction, and a project catalog.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "bert-s-builds",
+    "name": "Bert’s Builds",
+    "category": "Web & commerce",
+    "status": "Built",
+    "summary": "A game-directory landing page with Roblox project cards and a thumbnail-fetching build script.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "demo": "https://berts-builds.vercel.app",
+    "demo_note": "A showcase linking to Roblox experiences. Linked game publication does not establish current balance, multiplayer readiness, or player metrics."
+  },
+  {
+    "id": "drop-platform",
+    "name": "Drop Platform",
+    "category": "Web & commerce",
+    "status": "Prototype",
+    "summary": "A multi-store commerce prototype with branded storefronts, an order dashboard, and a simulated checkout path.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "pacer-human-paste",
+    "name": "Pacer / Human Paste",
+    "category": "Everyday tools",
+    "status": "Prototype",
+    "summary": "A clipboard-typing experiment developed toward a Mac menu-bar app with adjustable natural timing.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "pattern-copilot-paper-lab",
+    "name": "Pattern Copilot / Paper Lab",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A TradingView strategy and separate local simulator for explainable chart signals and auditable paper-trading experiments.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "trading-observatory",
+    "name": "Trading Observatory",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A bounded trading-research dashboard for collecting evidence, monitoring data coverage, and reviewing candidate signals.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "prop-ai-desk-astra",
+    "name": "Prop AI Desk / ASTRA",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A replay and paper-trading research desk with Strategy Lab, risk gates, and a persistent evidence ledger.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "polymarket-tennis-quant",
+    "name": "Polymarket Tennis Quant",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A tennis probability research system with public market collection, chronological backtests, simulations, and a paper broker.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "meme-edge",
+    "name": "Meme Edge",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A local Solana research terminal with explainable watch/reject classifications, chronological simulations, and cost-aware evaluation.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "autotrader",
+    "name": "AutoTrader",
+    "category": "Research",
+    "status": "Research",
+    "summary": "A trading research workspace comparing cash-only strategies against benchmarks with explicit costs and delayed signals.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "bert-trade",
+    "name": "bert-trade",
+    "category": "Research",
+    "status": "Research",
+    "summary": "An early Python trading-research kit combining a scanner, backtester, strategies, and a dashboard.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "sdsu-study-lab",
+    "name": "SDSU Study Lab",
+    "category": "Everyday tools",
+    "status": "Built",
+    "summary": "Lecture-organized notes, practice quizzes, and study tools for economics, statistics, and other SDSU coursework.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "mac-breather",
+    "name": "Mac Breather",
+    "category": "Everyday tools",
+    "status": "Built",
+    "summary": "A local Mac resource-diagnostics tool focused on memory pressure, background processes, and controlled cleanup.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "bert-clips",
+    "name": "Bert Clips",
+    "category": "Creative tools",
+    "status": "In progress",
+    "summary": "A video-clipping operations project with media-processing and publishing-workflow research.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "berts-body-odysseus-integration",
+    "name": "berts-body / Odysseus integration",
+    "category": "AI systems",
+    "status": "Archived",
+    "summary": "An integration experiment using the open-source Odysseus workspace as an interface for the BertOS ecosystem. Upstream work is credited.",
+    "updated": "2026-09-10",
+    "tags": [],
+    "role": "Integration experiments on the upstream Odysseus project"
+  },
+  {
+    "id": "dopamine-maxing",
+    "name": "DOPAMINE MAXING",
+    "category": "Experiments",
+    "status": "Prototype",
+    "summary": "A tongue-in-cheek overstimulation toy: swipe TikTok, YouTube, and Instagram feeds side by side on one screen.",
+    "updated": "2026-09-24",
+    "tags": [],
+    "role": "Product direction, AI-assisted development, and iteration",
+    "repo": "https://github.com/willywonka773202-cloud/dopamine-maxing",
+    "demo": "https://dopamine-maxing.vercel.app"
+  },
+  {
+    "id": "estate-cinema",
+    "name": "Estate Cinema",
+    "category": "Creative tools",
+    "status": "Prototype",
+    "summary": "A cinematic landing-page concept for presenting real-estate listing films.",
+    "updated": "2026-10-04",
+    "tags": [],
+    "role": "AI-assisted product presentation and website iteration",
+    "repo": "https://github.com/willywonka773202-cloud/estate-cinema",
+    "boundary": "The public repository contains a marketing website and media. Client work, service fulfilment, and claimed business outcomes have not been independently verified."
+  },
+  {
+    "id": "odd-jobs-observatory",
+    "name": "Odd Jobs Observatory",
+    "category": "AI systems",
+    "status": "Prototype",
+    "summary": "A read-only work desk for an AI scout that hunts small paid jobs: current activity, opportunities worth a look, and a paper trail from lead to payment.",
+    "tags": [
+      "Dashboard",
+      "Agents"
+    ],
+    "demo": "https://odd-jobs-observatory.vercel.app",
+    "updated": "2026-09-24",
+    "role": "Product direction, AI-assisted development, and iteration",
+    "demo_note": "Read-only dashboard. The latest visible report is from September 10, 2026; no job is running and no revenue is recorded."
+  },
+  {
+    "id": "humate-ad",
+    "name": "humate — 12s spot",
+    "category": "Creative tools",
+    "status": "Built",
+    "summary": "A 12-second animated ad spot built entirely in the browser with HTML and CSS, played on click.",
+    "tags": [
+      "Motion",
+      "HTML/CSS"
+    ],
+    "demo": "https://humate-ad.vercel.app",
+    "updated": "2026-09-24",
+    "role": "Product direction, AI-assisted development, and iteration"
+  },
+  {
+    "id": "berts-batteries",
+    "name": "Bert’s Batteries",
+    "category": "Web & commerce",
+    "status": "Prototype",
+    "summary": "Pitch site for a San Diego venue phone-charging network: venues host a station at zero cost and earn a share of every rental.",
+    "tags": [
+      "Landing page",
+      "Business model"
+    ],
+    "demo": "https://berts-batteries.vercel.app",
+    "updated": "2026-09-24",
+    "role": "Product direction, AI-assisted development, and iteration",
+    "demo_note": "A venue-charging business concept and pitch-site prototype. The public page is not evidence of an operating station network."
+  },
+  {
+    "id": "sword-soul",
+    "name": "Sword Soul",
+    "category": "Games",
+    "status": "In progress",
+    "summary": "A PC-focused Roblox combat project with distinct weapons, soul progression, and a manga-inspired visual direction.",
+    "problem": "Make weapon choice, timing, and progression feel expressive in a compact combat space.",
+    "approach": "Iterate on combat choreography, weapon identities, aiming, readable effects, and the surrounding game experience with AI-assisted development.",
+    "outcome": "The documented build includes 12 selectable weapons, combos, parries, movement, techniques, soul releases, progression, and a Warden boss.",
+    "boundary": "Active development. This portfolio review used the current project documentation; it is not a fresh multiplayer, balance, or release-readiness test.",
+    "role": "Product direction, AI-assisted development, and iterative testing",
+    "updated": "2026-10-04",
+    "tags": [
+      "Roblox",
+      "Luau",
+      "Combat systems",
+      "Game design"
+    ]
+  },
+  {
+    "id": "bloomwake",
+    "name": "Bloomwake",
+    "category": "Games",
+    "status": "In progress",
+    "summary": "A colorful Roblox fishing-fleet game with explorable waters, fitted cannons, collectible fish, and a personal harbor.",
+    "problem": "Make sailing, catching fish, and upgrading a small fleet feel playful and rewarding.",
+    "approach": "Develop the fishing loop, boat handling, cannon placement, progression, and pixel-style presentation around the native Roblox place.",
+    "outcome": "The documented build includes automatic and manual sailing, cannon combat, catch delivery, an AFK crew, upgrades, and display ponds.",
+    "boundary": "An in-development Roblox build. Published multiplayer behavior, asset permissions, and real-device performance need separate validation.",
+    "role": "Product direction, AI-assisted development, and iterative testing",
+    "updated": "2026-10-04",
+    "tags": [
+      "Roblox",
+      "Luau",
+      "Game systems",
+      "Pixel art direction"
+    ]
+  },
+  {
+    "id": "cortex-studio",
+    "name": "Cortex Studio",
+    "category": "Creative tools",
+    "status": "In progress",
+    "summary": "A local creative studio for scene composition, narration, image generation, and comparing revisions through viewer feedback.",
+    "problem": "Bring creative production and the reasoning behind revisions into one workspace.",
+    "approach": "Shape a media-first editor with reusable takes, clear provider costs, editable scene structure, and traceable revision decisions.",
+    "outcome": "The documented private Mac alpha includes an FFmpeg composer, scene editor, image and voice workflows, and a film-comparison library.",
+    "boundary": "Private alpha. Cloud providers require configuration; cloud video and reference editing are not connected. The research display replays published reference data and does not infer brain activity from arbitrary videos. Third-party research and media rights are not cleared for public redistribution.",
+    "role": "Product direction, AI-assisted development, and iterative testing",
+    "updated": "2026-10-04",
+    "tags": [
+      "Creative workflows",
+      "FFmpeg",
+      "AI-assisted development",
+      "Product design"
+    ]
+  }
+]
