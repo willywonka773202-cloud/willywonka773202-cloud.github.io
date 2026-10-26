@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 ROOT=Path(__file__).resolve().parents[1]
 def public_files():
- files={'index.html','archive.html','updates.html','channel.html','404.html','feed.xml','sitemap.xml','style.css','app.js','favicon.png','apple-touch-icon.png','resume/Will-Lambert-Resume.pdf','assets/portfolio-social.png'}
+ files={'cinema.css','cinema.js','assets/studio-environment.jpg','index.html','archive.html','updates.html','channel.html','404.html','feed.xml','sitemap.xml','style.css','app.js','favicon.png','apple-touch-icon.png','resume/Will-Lambert-Resume.pdf','assets/portfolio-social.png'}
  for p in json.loads((ROOT/'data/projects.json').read_text()):
   files.add('projects/'+p['id']+'.html')
   if p.get('image'):files.add(p['image'])

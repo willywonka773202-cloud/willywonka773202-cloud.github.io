@@ -256,7 +256,7 @@
    let motionPaused=false;try{motionPaused=localStorage.getItem('wl-motion')==='paused';}catch{}
    function playState(value){playing=value;play.textContent=value?'Pause':'Play';play.setAttribute('aria-label',value?'Pause video':'Play video');}
    const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!ready)return;if(!visible)player.pauseVideo();else if(!manuallyPaused&&!reduced.matches&&!document.hidden&&!motionPaused)player.playVideo();},{threshold:.25});observer.observe(shell);
-   function userPlay(){manuallyPaused=false;playRequested=true;if(ready){player.playVideo();}else start.textContent='Opening player…';}
+   function userPlay(){manuallyPaused=false;playRequested=true;if(ready){if(player.getPlayerState()===YT.PlayerState.ENDED)player.seekTo(0,true);player.playVideo();}else start.textContent='Opening player…';}
    start.addEventListener('click',userPlay);
    play.addEventListener('click',()=>{if(!ready)return;if(playing){manuallyPaused=true;player.pauseVideo();}else userPlay();});
    sound.addEventListener('click',()=>{if(!ready)return;const enable=player.isMuted();enable?player.unMute():player.mute();sound.textContent=enable?'Sound on':'Sound off';sound.setAttribute('aria-pressed',String(enable));});

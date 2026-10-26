@@ -9,7 +9,7 @@ from project_maps import render_maps
 import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://will-lambert-portfolio.vercel.app'
-VERSION='20261026-broadcast'
+VERSION='20261026-studio'
 C=json.loads((ROOT/'data/categories.json').read_text())
 CATEGORY={c['key']:c for c in C}
 assert len(CATEGORY)==len(C) and len({c['id'] for c in C})==len(C)
@@ -84,6 +84,24 @@ def broadcast(compact=False):
  return f'''<div class="orb-broadcast {'orb-compact' if compact else ''}" data-channel-broadcast data-video="{e(ep['id'])}" data-title="{e(ep['title'])}" data-format="{e(ep['format'])}"><div class="broadcast-topline"><a href="channel.html">THE DAILY ORB <span>↗</span></a><span class="feed-state">LATEST CHECKED UPLOAD</span></div><div class="broadcast-screen"><img class="broadcast-poster" src="https://i.ytimg.com/vi/{e(ep['id'])}/hqdefault.jpg" alt="{e(ep['title'])}" width="480" height="360"><div class="broadcast-mount"></div><button class="broadcast-start" type="button">Play latest story ↗</button></div><div class="broadcast-controls"><button class="broadcast-play" type="button" aria-label="Play video">Play</button><button class="broadcast-sound" type="button" aria-pressed="false">Sound off</button><a class="broadcast-watch" href="{e(ep['url'])}" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div><div class="broadcast-caption"><span class="broadcast-date">{pretty_date(ep['published'][:10])} · {e(ep['format'])}</span><h3 class="broadcast-title">{e(ep['title'])}</h3></div></div>'''
 channel_feature=f'<section class="channel-directory section" id="channel"><div><span class="eyebrow">BEYOND THE VIDEOS</span><h2>THE DAILY ORB<br><em>directory.</em></h2><p>The companion to my AI news channel: tools, models, and resources behind the stories.</p><a class="button" href="{CH["site"]}" target="_blank" rel="noopener noreferrer">Explore The Daily Orb ↗</a></div><a class="channel-site-preview" href="{CH["site"]}" target="_blank" rel="noopener noreferrer"><img src="assets/evidence/daily-orb.jpg" alt="The Daily Orb resource directory" width="1440" height="900" loading="lazy"><span>TOOLS, MODELS & RESOURCES <b>↗</b></span></a></section>'
 values={'COUNT' :str(len(P)),'BROADCAST':broadcast(),'COMPACT_BROADCAST':broadcast(True),'CHANNEL_FEATURE':channel_feature,'EPISODES':episodes,'CHANNEL_REVIEWED':pretty_date(CH['reviewed']),'CATEGORY_COUNT':str(len(C)),'SHOWCASE':''.join(showcase),'GROUPS':''.join(groups),'TYPE_LINKS':''.join(type_links),'FILTERS':filters,'UPDATES':''.join(update_card(u) for u in U),'UPDATE_COUNT':str(len(U))}
+# The home gallery uses original project evidence; decorative scenery is separate.
+by_id={p['id']:p for p in P}
+studio_ids=['cortex-studio','bloomwake','the-daily-orb']
+studio_labels=['Creative tools · Private alpha','Roblox game · In progress','AI news & media · Published channel']
+panels=[]
+for n,(i,label) in enumerate(zip(studio_ids,studio_labels)):
+ p=by_id[i]
+ panels.append(f'<a class="studio-panel {"is-front" if n==0 else "is-next" if n==1 else "is-away"}" href="{url(p)}" data-studio-panel="{n}" data-name="{e(p["name"])}" data-category="{e(label)}" data-role="{e(p["role"])}" aria-label="Explore {e(p["name"])}" {"" if n<2 else "inert"}><img src="{e(p["image"])}" alt="{e(p["caption"])}" width="1440" height="1000" fetchpriority="{"high" if n==0 else "auto"}"><span class="studio-panel-label">{e(p["name"])} <span>View project</span></span></a>')
+case_specs=[('bloomwake','A fishing-fleet game built around sailing, combat, and progression.','Developing the fishing loop, boat handling, progression, and pixel-style presentation.','scene-ocean'),('goodturn','An outing planner that connects places, people, and the route between them.','Product direction, interface decisions, and AI-assisted iteration of the planning experience.','scene-product')]
+cases=[]
+for n,(i,summary,role,kind) in enumerate(case_specs,1):
+ p=by_id[i]
+ cases.append(f'<article class="cinematic-case {kind}"><div class="case-scene"><a class="scene-image-link" href="{url(p)}" aria-label="Explore {e(p["name"])}"><img class="scene-image" src="{e(p["image"])}" alt="{e(p["caption"])}" loading="lazy" width="1481" height="1080"></a><div class="scene-heading"><span class="studio-kicker">{n:02d} / {e(category_label(p))} / {e(p["status"])}</span><h2>{e(p["name"])}</h2><p>{e(summary)}</p></div><span class="scene-evidence">Original project screenshot</span></div><div class="case-contribution"><div><h3>My contribution</h3><p>{e(role)}</p></div><a class="studio-button studio-button-secondary" href="{url(p)}">View project details</a></div></article>')
+more=[]
+for i in ['pullr','sword-soul','bert-ai','after-hours']:
+ p=by_id[i]
+ more.append(f'<a class="studio-more-project" href="{url(p)}"><figure><img src="{e(p["image"])}" alt="{e(p["caption"])}" loading="lazy" width="1280" height="800"></figure><div><span class="studio-kicker">{e(category_label(p))} · {e(p["status"])}</span><h3>{e(p["name"])}</h3><p>{e(p["summary"])}</p><span class="studio-more-cta">Explore the project</span></div></a>')
+values.update(STUDIO_PANELS=''.join(panels),CINEMATIC_CASES=''.join(cases),STUDIO_MORE=''.join(more))
 for view in ['grid','list']:
  collection=(ROOT/'templates/collection.html').read_text()
  cv=dict(values,DEFAULT_VIEW=view,GRID_ACTIVE=str(view=='grid').lower(),LIST_ACTIVE=str(view=='list').lower())
