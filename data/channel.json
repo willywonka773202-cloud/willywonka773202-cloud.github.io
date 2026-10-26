@@ -6,8 +6,48 @@
   "x": "https://x.com/theDailyOrb_",
   "reviewed": "2026-10-26",
   "episodes": [
-    {"id":"k6tir5JtpCM","title":"AI-Assisted Attack: ConnectWise Still Recovering","format":"Episode","url":"https://www.youtube.com/watch?v=k6tir5JtpCM"},
-    {"id":"WBrTNlQij3Y","title":"Oracle Issues Urgent Patch Alert After AI-Assisted PHP Discovery","format":"Short","url":"https://www.youtube.com/shorts/WBrTNlQij3Y"},
-    {"id":"ZwMqSCyNNyI","title":"AI Exposed PHP Flaws: What the 70% Really Means","format":"Short","url":"https://www.youtube.com/shorts/ZwMqSCyNNyI"}
-  ]
+    {
+      "id": "WBrTNlQij3Y",
+      "title": "Oracle Issues Urgent Patch Alert After AI-Assisted PHP Discovery",
+      "format": "Short",
+      "url": "https://www.youtube.com/watch?v=WBrTNlQij3Y",
+      "published": "2026-10-26T05:35:31+00:00"
+    },
+    {
+      "id": "Iu3H9HZ2BY8",
+      "title": "Government Login Secrets Reached in Two Hours, Unit 42 Reports",
+      "format": "Short",
+      "url": "https://www.youtube.com/watch?v=Iu3H9HZ2BY8",
+      "published": "2026-10-25T22:55:59+00:00"
+    },
+    {
+      "id": "NmW7hkM05YE",
+      "title": "AI Exposed PHP Flaws: What the 70% Really Means",
+      "format": "Episode",
+      "url": "https://www.youtube.com/watch?v=NmW7hkM05YE",
+      "published": "2026-10-25T20:44:06+00:00"
+    },
+    {
+      "id": "ZwMqSCyNNyI",
+      "title": "AI Exposed PHP Flaws: What the 70% Really Means",
+      "format": "Short",
+      "url": "https://www.youtube.com/watch?v=ZwMqSCyNNyI",
+      "published": "2026-10-25T20:14:40+00:00"
+    },
+    {
+      "id": "k6tir5JtpCM",
+      "title": "AI-Assisted Attack: ConnectWise Still Recovering",
+      "format": "Episode",
+      "url": "https://www.youtube.com/watch?v=k6tir5JtpCM",
+      "published": "2026-10-25T19:44:05+00:00"
+    },
+    {
+      "id": "5yvVAt5cz6o",
+      "title": "AI-Assisted Attack: ConnectWise Still Recovering",
+      "format": "Short",
+      "url": "https://www.youtube.com/watch?v=5yvVAt5cz6o",
+      "published": "2026-10-25T19:18:58+00:00"
+    }
+  ],
+  "channelId": "UCAIZGfaGkblFXoQjMwPkc-A"
 }

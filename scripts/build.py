@@ -9,7 +9,7 @@ from project_maps import render_maps
 import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://will-lambert-portfolio.vercel.app'
-VERSION='20261026-evidence'
+VERSION='20261026-broadcast'
 C=json.loads((ROOT/'data/categories.json').read_text())
 CATEGORY={c['key']:c for c in C}
 assert len(CATEGORY)==len(C) and len({c['id'] for c in C})==len(C)
@@ -51,7 +51,7 @@ for u in U:
  date.fromisoformat(u['date']);assert u['type'] in ['Build log','Check-in','Notes','News']
  assert u['title'] and u['summary'] and u['body']
  for link in u.get('links',[]):safe_url(link['url'])
-showcase_ids=['the-daily-orb','goodturn','pullr','sword-soul','bloomwake','cortex-studio','sylistly','bert-ai','after-hours']
+showcase_ids=['goodturn','pullr','sword-soul','bloomwake','cortex-studio','sylistly','bert-ai','after-hours']
 showcase=[]
 for n,i in enumerate(showcase_ids,1):
  p=next(p for p in P if p['id']==i)
@@ -78,8 +78,12 @@ def update_card(u):
 def episode_card(ep):
  return f'<article class="episode-card"><a class="episode-poster" href="{e(ep["url"])}" target="_blank" rel="noopener noreferrer"><img src="https://i.ytimg.com/vi/{e(ep["id"])}/hqdefault.jpg" alt="{e(ep["title"])}" width="480" height="360" loading="lazy"><span class="play-symbol" aria-hidden="true">▶</span></a><div class="eyebrow">{e(ep["format"])} / THE DAILY ORB</div><h3><a href="{e(ep["url"])}" target="_blank" rel="noopener noreferrer">{e(ep["title"])}</a></h3><a class="text-link" href="{e(ep["url"])}" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></article>'
 episodes=''.join(episode_card(ep) for ep in CH['episodes'])
-channel_feature=f'<section class="channel-feature section" id="channel" aria-labelledby="channel-title"><div class="channel-copy"><span class="eyebrow">MY AI CHANNEL / THE DAILY ORB</span><h2 id="channel-title">AI NEWS.<br>TOOLS WORTH<br>EXPLORING.</h2><p>I also make The Daily Orb: short AI explainers and a companion directory for finding the tools, models, and resources behind the stories.</p><div class="channel-actions"><a class="button" href="channel.html">Watch the channel ↗</a><a class="text-link" href="{CH["site"]}" target="_blank" rel="noopener noreferrer">Explore the directory ↗</a></div></div><a class="channel-site-preview" href="{CH["site"]}" target="_blank" rel="noopener noreferrer"><img src="assets/evidence/daily-orb.jpg" alt="The Daily Orb website with its AI resource directory" width="1440" height="900" loading="lazy"><span>THE COMPANION WEBSITE <b aria-hidden="true">↗</b></span></a></section>'
-values={'COUNT' :str(len(P)),'CHANNEL_FEATURE':channel_feature,'EPISODES':episodes,'CHANNEL_REVIEWED':pretty_date(CH['reviewed']),'CATEGORY_COUNT':str(len(C)),'SHOWCASE':''.join(showcase),'GROUPS':''.join(groups),'TYPE_LINKS':''.join(type_links),'FILTERS':filters,'UPDATES':''.join(update_card(u) for u in U),'UPDATE_COUNT':str(len(U))}
+latest=CH['episodes'][0]
+def broadcast(compact=False):
+ ep=latest
+ return f'''<div class="orb-broadcast {'orb-compact' if compact else ''}" data-channel-broadcast data-video="{e(ep['id'])}" data-title="{e(ep['title'])}" data-format="{e(ep['format'])}"><div class="broadcast-topline"><a href="channel.html">THE DAILY ORB <span>↗</span></a><span class="feed-state">LATEST CHECKED UPLOAD</span></div><div class="broadcast-screen"><img class="broadcast-poster" src="https://i.ytimg.com/vi/{e(ep['id'])}/hqdefault.jpg" alt="{e(ep['title'])}" width="480" height="360"><div class="broadcast-mount"></div><button class="broadcast-start" type="button">Play latest story ↗</button></div><div class="broadcast-controls"><button class="broadcast-play" type="button" aria-label="Play video">Play</button><button class="broadcast-sound" type="button" aria-pressed="false">Sound off</button><a class="broadcast-watch" href="{e(ep['url'])}" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div><div class="broadcast-caption"><span class="broadcast-date">{pretty_date(ep['published'][:10])} · {e(ep['format'])}</span><h3 class="broadcast-title">{e(ep['title'])}</h3></div></div>'''
+channel_feature=f'<section class="channel-directory section" id="channel"><div><span class="eyebrow">BEYOND THE VIDEOS</span><h2>THE DAILY ORB<br><em>directory.</em></h2><p>The companion to my AI news channel: tools, models, and resources behind the stories.</p><a class="button" href="{CH["site"]}" target="_blank" rel="noopener noreferrer">Explore The Daily Orb ↗</a></div><a class="channel-site-preview" href="{CH["site"]}" target="_blank" rel="noopener noreferrer"><img src="assets/evidence/daily-orb.jpg" alt="The Daily Orb resource directory" width="1440" height="900" loading="lazy"><span>TOOLS, MODELS & RESOURCES <b>↗</b></span></a></section>'
+values={'COUNT' :str(len(P)),'BROADCAST':broadcast(),'COMPACT_BROADCAST':broadcast(True),'CHANNEL_FEATURE':channel_feature,'EPISODES':episodes,'CHANNEL_REVIEWED':pretty_date(CH['reviewed']),'CATEGORY_COUNT':str(len(C)),'SHOWCASE':''.join(showcase),'GROUPS':''.join(groups),'TYPE_LINKS':''.join(type_links),'FILTERS':filters,'UPDATES':''.join(update_card(u) for u in U),'UPDATE_COUNT':str(len(U))}
 for view in ['grid','list']:
  collection=(ROOT/'templates/collection.html').read_text()
  cv=dict(values,DEFAULT_VIEW=view,GRID_ACTIVE=str(view=='grid').lower(),LIST_ACTIVE=str(view=='list').lower())

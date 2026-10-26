@@ -4,20 +4,20 @@
 
 A personal portfolio for an SDSU entrepreneurship student building with AI. It brings together 58 documented products, tools, games, prototypes, and experiments, plus a résumé and dated updates about the work.
 
-Built with semantic HTML, CSS, vanilla JavaScript, and a Python static-site generator. No analytics, external font requests, database, or paid service is required to run the portfolio.
+Built with semantic HTML, CSS, vanilla JavaScript, and a Python static-site generator. No analytics, external font requests, database, or API key is required. A small Vercel function reads the public YouTube feed.
 
 ## Run locally
 
-Requires Python 3.9+; Node is optional for JavaScript syntax checks.
+Requires Python 3.9+ and Node 22+ for the local feed endpoint.
 
 ```sh
 python3 scripts/build.py
 python3 scripts/check-site.py
 python3 scripts/package-site.py
-python3 -m http.server 4198 --bind 127.0.0.1 --directory dist
+node scripts/preview.cjs
 ```
 
-Open http://127.0.0.1:4198. Serve `dist`, which contains only public files. Project pages and updates remain readable without JavaScript. JavaScript adds search, filters, sorting, grid/list switching, and theme preference. The homepage leads with nine visual case studies, a Daily Orb channel feature, and the complete collection. Both collections default to an image grid and support a compact list. Each project has an image: 22 have actual interface or gameplay captures, one has labeled marketing artwork, and 35 have labeled explanatory project maps. Project pages offer expandable galleries with keyboard navigation.
+Open http://127.0.0.1:4198. Serve `dist`, which contains only public files. Project pages and updates remain readable without JavaScript. JavaScript adds search, filters, sorting, grid/list switching, and theme preference. The homepage leads with an automatically refreshed Daily Orb video beside the introduction, followed by eight visual case studies and the complete collection. Both collections default to an image grid and support a compact list. Each project has an image: 22 have actual interface or gameplay captures, one has labeled marketing artwork, and 35 have labeled explanatory project maps. Project pages offer expandable galleries with keyboard navigation.
 
 ## Edit projects
 
@@ -34,7 +34,11 @@ For real captures, use `--image assets/example.jpg --caption 'What this capture 
 
 ## AI channel
 
-`data/channel.json` holds The Daily Orb destinations and selected published episodes. Update the curated review date when changing the selection; this is not an automatic upload feed. The channel page loads YouTube thumbnails and connects the embedded player only after a click. Direct YouTube watch links remain available. The portfolio links to the Daily Orb site, briefing, and directory; third-party directory entries are not claimed as Will’s projects.
+`data/channel.json` holds channel links and a reviewed fallback. `/api/channel` reads The Daily Orb's public YouTube Atom feed, orders uploads by publication time, and returns the latest six. Fresh results are cached at the CDN for 15 minutes; no scheduled task or credentials are needed. If the feed fails, the interface explicitly labels the saved fallback as “last checked.”
+
+The homepage and Channel page show the newest upload at the top. Playback starts muted when the browser permits, respects reduced-motion and the saved pause preference, and pauses offscreen or when the tab is hidden. Visible play, sound, and YouTube controls remain available. Recent story cards refresh from the same feed. The directory and social links are unchanged; third-party directory entries are not claimed as Will's projects.
+
+`node scripts/test-channel.cjs` checks feed ordering, entity decoding, invalid records, and fallback behavior. `node scripts/preview.cjs` serves only the prepared public site plus this endpoint. Vercel preparation packages the function separately from static files.
 
 The review date records when scope was documented, not a claim that every feature was tested on that date. `Built` does not automatically mean production-ready. Credit upstream work and describe AI assistance clearly.
 
@@ -67,6 +71,6 @@ Before release, verify desktop and mobile navigation, project search and stage f
 
 ## Design and credit
 
-The monochrome editorial direction was inspired by [Louis Raillé](https://louisraille.fr/). Project imagery includes documented screenshots, saved in-game views of Sword Soul and Bloomwake, explicitly labeled project maps, and SlimeFlip marketing artwork. No project image is presented as a fresh runtime test. Big Shoulders Display, Bodoni Moda, and Martian Mono are self-hosted with their SIL Open Font Licenses in `assets/fonts/`.
+The editorial foundation was inspired by [Louis Raillé](https://louisraille.fr/). The broadcast edition draws on media-first layouts by [Giordano Betti](https://giordanobetti.com/) and [Stéfano Girardelli](https://stefanobg.com/), alongside the day/night contrast of [Orbita](https://orbita.bar/). These are design references; their code and artwork are not included. Project imagery includes documented screenshots, saved in-game views of Sword Soul and Bloomwake, explicitly labeled project maps, and SlimeFlip marketing artwork. No project image is presented as a fresh runtime test. Big Shoulders Display, Bodoni Moda, and Martian Mono are self-hosted with their SIL Open Font Licenses in `assets/fonts/`.
 
 Public source visibility does not grant a new license to third-party assets or the separate projects described here. Their licenses and attribution remain their own. This repository is a presentation of the work, not a distribution of all 58 projects.

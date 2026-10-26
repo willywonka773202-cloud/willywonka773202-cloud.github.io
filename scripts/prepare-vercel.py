@@ -13,5 +13,11 @@ for name in files:
  dest=static/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(ROOT/name,dest)
 (static/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: https://will-lambert-portfolio.vercel.app/sitemap.xml\n')
 (out/'config.json').write_text(json.dumps({'version':3,'routes':[{'handle':'filesystem'},{'src':'/.*','status':404,'dest':'/404.html'}]})+'\n')
+function=out/'functions/api/channel.func'
+(function/'api').mkdir(parents=True,exist_ok=True)
+(function/'data').mkdir(exist_ok=True)
+shutil.copy2(ROOT/'api/channel.cjs',function/'api/channel.cjs')
+shutil.copy2(ROOT/'data/channel.json',function/'data/channel.json')
+(function/'.vc-config.json').write_text(json.dumps({'runtime':'nodejs22.x','handler':'api/channel.cjs','launcherType':'Nodejs','maxDuration':10})+'\n')
 assert not list(static.rglob('.env*'))
 print('Prepared Vercel output; private documentation and draft posts excluded.')
