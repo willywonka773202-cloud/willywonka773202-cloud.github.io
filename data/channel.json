@@ -1,0 +1,13 @@
+{
+  "name": "The Daily Orb",
+  "site": "https://thedailyorb.vercel.app/",
+  "youtube": "https://www.youtube.com/@thedailyorb",
+  "tiktok": "https://www.tiktok.com/@bertsbuild",
+  "x": "https://x.com/theDailyOrb_",
+  "reviewed": "2026-10-26",
+  "episodes": [
+    {"id":"k6tir5JtpCM","title":"AI-Assisted Attack: ConnectWise Still Recovering","format":"Episode","url":"https://www.youtube.com/watch?v=k6tir5JtpCM"},
+    {"id":"WBrTNlQij3Y","title":"Oracle Issues Urgent Patch Alert After AI-Assisted PHP Discovery","format":"Short","url":"https://www.youtube.com/shorts/WBrTNlQij3Y"},
+    {"id":"ZwMqSCyNNyI","title":"AI Exposed PHP Flaws: What the 70% Really Means","format":"Short","url":"https://www.youtube.com/shorts/ZwMqSCyNNyI"}
+  ]
+}

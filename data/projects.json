@@ -10,7 +10,17 @@
     "role": "Product direction, AI-assisted development, and iteration",
     "repo": "https://github.com/willywonka773202-cloud/bertos-ai-os",
     "demo": "https://bertos-ai-os.vercel.app",
-    "demo_note": "Historical interface preview. The local CLI bridge is offline in the public deployment; this is not the current BERT AI workspace."
+    "demo_note": "Historical interface preview. The local CLI bridge is offline in the public deployment; this is not the current BERT AI workspace.",
+    "image": "assets/evidence/bertos.jpg",
+    "caption": "Archived BertOS public interface, captured October 26, 2026. Local CLI providers are disconnected in this preview.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/bertos.jpg",
+        "caption": "Archived BertOS public interface, captured October 26, 2026. Local CLI providers are disconnected in this preview.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "berai-claude-as-the-kernel",
@@ -20,7 +30,22 @@
     "summary": "An experiment where the AI is the OS: semantic-memory MCP server, scheduled jobs, a watchdog — and a standing eval that removes any component that can't beat raw Claude.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Project context",
+      "Claude workflow",
+      "Review & evaluate"
+    ],
+    "image": "assets/maps/berai-claude-as-the-kernel.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/berai-claude-as-the-kernel.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "bertos-memory-vault",
@@ -30,7 +55,22 @@
     "summary": "A shared Obsidian knowledge base that carries project context and decisions between AI tools.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Project notes",
+      "Shared memory",
+      "Reusable context"
+    ],
+    "image": "assets/maps/bertos-memory-vault.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/bertos-memory-vault.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "overclocking",
@@ -40,7 +80,17 @@
     "summary": "Prompt-optimization research for Claude Code: a findings catalog with enforced claimed-vs-realistic honesty, a dashboard, and a global hook that compiles every prompt before it runs.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "gallery": [
+      {
+        "src": "assets/evidence/overclocking.jpg",
+        "caption": "Archived prompt-research dashboard capture. Displayed findings are research notes, not independently validated benchmarks.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/overclocking.jpg",
+    "caption": "Archived prompt-research dashboard capture. Displayed findings are research notes, not independently validated benchmarks.",
+    "media_kind": "Screenshot"
   },
   {
     "id": "studio-roblox-game-creation-ai",
@@ -50,7 +100,22 @@
     "summary": "A Roblox development knowledge base and prompting workflow for AI-assisted game planning and Luau implementation.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Game brief",
+      "AI planning",
+      "Luau iteration"
+    ],
+    "image": "assets/maps/studio-roblox-game-creation-ai.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/studio-roblox-game-creation-ai.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "roblox-brain",
@@ -60,7 +125,22 @@
     "summary": "Data pipeline that parses 423+ Roblox place files into queryable JSON catalogs of scripts, assets, and game systems — grown by a scheduled ingest task.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Place files",
+      "Parse & catalog",
+      "Queryable systems"
+    ],
+    "image": "assets/maps/roblox-brain.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/roblox-brain.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "goodturn",
@@ -86,7 +166,20 @@
     "boundary": "Current name: Goodturn. Earlier versions were Carpool Optimizer and Outnook. No live traffic, rider matching, or billing is claimed.",
     "demo": "https://carpool-optimizer-five.vercel.app",
     "demo_label": "Explore early-access preview ↗",
-    "demo_note": "Preview checked October 4, 2026: sample drives and route editing are available. Route generation is waiting on production configuration."
+    "demo_note": "Preview checked October 4, 2026: sample drives and route editing are available. Route generation is waiting on production configuration.",
+    "gallery": [
+      {
+        "src": "assets/goodturn-current.png",
+        "caption": "Actual public landing page · captured September 27, 2026 · early-access prototype",
+        "kind": "Screenshot"
+      },
+      {
+        "src": "assets/evidence/goodturn-route.jpg",
+        "caption": "Earlier Carpool route-planning interface in the Goodturn project’s development history.",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "lambert-labs-portfolio-v1",
@@ -97,7 +190,22 @@
     "updated": "2026-07-13",
     "tags": [],
     "role": "Product direction, AI-assisted development, and iteration",
-    "repo": "https://github.com/willywonka773202-cloud/will-lambert-portfolio"
+    "repo": "https://github.com/willywonka773202-cloud/will-lambert-portfolio",
+    "workflow": [
+      "GitHub projects",
+      "Curated catalog",
+      "Portfolio pages"
+    ],
+    "image": "assets/maps/lambert-labs-portfolio-v1.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/lambert-labs-portfolio-v1.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "vocabhub-io",
@@ -107,7 +215,22 @@
     "summary": "Paste a vocab list (\"el camarero = the waiter\") and it powers arcade-style .io mini-games with quiz popups. Studying, gamified.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Vocabulary list",
+      "Quiz prompts",
+      "Arcade practice"
+    ],
+    "image": "assets/maps/vocabhub-io.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/vocabhub-io.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "roblox-flip-scout",
@@ -119,7 +242,17 @@
     "tags": [],
     "role": "Product direction, AI-assisted development, and iteration",
     "demo": "https://roblox-flipper.vercel.app",
-    "demo_note": "An archived research snapshot, last scanned in July 2026. Estimates and template listings are historical; this is not a current buying recommendation."
+    "demo_note": "An archived research snapshot, last scanned in July 2026. Estimates and template listings are historical; this is not a current buying recommendation.",
+    "gallery": [
+      {
+        "src": "assets/evidence/flip-scout.jpg",
+        "caption": "Local Flip Scout dashboard capture, showing a saved research snapshot.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/flip-scout.jpg",
+    "caption": "Local Flip Scout dashboard capture, showing a saved research snapshot.",
+    "media_kind": "Screenshot"
   },
   {
     "id": "slimeflip",
@@ -129,7 +262,17 @@
     "summary": "A template adaptation with Fusion and Trading systems, architecture notes, and monetization planning. Public-release status needs review.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "gallery": [
+      {
+        "src": "assets/evidence/slimeflip-art.jpg",
+        "caption": "AI-assisted promotional artwork for SlimeFlip’s fusion concept. This is marketing art, not gameplay.",
+        "kind": "Marketing artwork"
+      }
+    ],
+    "image": "assets/evidence/slimeflip-art.jpg",
+    "caption": "AI-assisted promotional artwork for SlimeFlip’s fusion concept. This is marketing art, not gameplay.",
+    "media_kind": "Marketing artwork"
   },
   {
     "id": "monster-saga",
@@ -139,7 +282,22 @@
     "summary": "A monster-collecting RPG prototype with a battle engine, encounters, catching, leveling, and evolution.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Explore",
+      "Encounter & battle",
+      "Catch & evolve"
+    ],
+    "image": "assets/maps/monster-saga.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/monster-saga.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "brainrotbazaar",
@@ -149,7 +307,22 @@
     "summary": "Original idle-tycoon/collector: buy creatures that print income, mutate them in a gacha lab, steal prized ones from rivals. World and assets generated fully in code.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Collect creatures",
+      "Earn & upgrade",
+      "Mutate & compete"
+    ],
+    "image": "assets/maps/brainrotbazaar.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/brainrotbazaar.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "apollo",
@@ -159,7 +332,22 @@
     "summary": "A voxel-mining template rebuilt with a cleaner project structure, gameplay changes, and Luau tooling. Publication status needs review.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Mine blocks",
+      "Collect resources",
+      "Upgrade equipment"
+    ],
+    "image": "assets/maps/apollo.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/apollo.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "punch-sim-launch-ops",
@@ -169,7 +357,22 @@
     "summary": "A template-game monetization audit and remediation project covering inherited gamepass and product ownership.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Template audit",
+      "Ownership review",
+      "Remediation notes"
+    ],
+    "image": "assets/maps/punch-sim-launch-ops.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/punch-sim-launch-ops.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "orb-arena",
@@ -179,7 +382,22 @@
     "summary": "Agar.io-style browser arena — mouse to move, eat orbs, grow. Vanilla JS and canvas, no build step.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Move",
+      "Collect orbs",
+      "Grow"
+    ],
+    "image": "assets/maps/orb-arena.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/orb-arena.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "brainrot-dashboard",
@@ -189,7 +407,22 @@
     "summary": "Trend hunter that gathers evidence on rising Roblox mechanics, writes research reports into the memory vault, and feeds candidates to roblox-brain.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Trend signals",
+      "Evidence review",
+      "Research catalog"
+    ],
+    "image": "assets/maps/brainrot-dashboard.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/brainrot-dashboard.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "slime-workshop",
@@ -199,7 +432,22 @@
     "summary": "The repair line behind SlimeFlip: V4 → V19 versioned .rbxl builds with per-version patch notes, plus a corpus scan of 1,800+ local place files feeding the master build.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Template build",
+      "Versioned patches",
+      "Review candidate"
+    ],
+    "image": "assets/maps/slime-workshop.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/slime-workshop.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "temple-run-canvas",
@@ -209,7 +457,22 @@
     "summary": "Small endless-runner built as a BertOS toy app — plain JavaScript and canvas served by a tiny local server.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Start running",
+      "Avoid obstacles",
+      "Try again"
+    ],
+    "image": "assets/maps/temple-run-canvas.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/temple-run-canvas.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "polyscout",
@@ -219,7 +482,22 @@
     "summary": "A Polymarket research and paper-simulation system with an auditable decision log. Current worker activity has not been rechecked.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Market data",
+      "Research signals",
+      "Paper simulation"
+    ],
+    "image": "assets/maps/polyscout.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/polyscout.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "ai-trader",
@@ -229,7 +507,22 @@
     "summary": "Paper-first backtesting system for testing trading ideas, using local Ollama models as research assistants. Built to learn, not to gamble.",
     "updated": "2026-07-13",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Strategy idea",
+      "Backtest",
+      "Review evidence"
+    ],
+    "image": "assets/maps/ai-trader.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/ai-trader.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "bert-ai",
@@ -251,7 +544,15 @@
     "approach": "Design a central workspace with project context, persistent knowledge, account-based AI conversations, and deliberate handoffs between tools.",
     "outcome": "The documented local implementation brings project files, terminals, conversations, and a school planner together. This case study shows an earlier interface; integrations require separate runtime verification.",
     "next": "Complete remaining voice and account-integration checks and refine the daily workflow.",
-    "boundary": "Private local workspace. The screenshot shows an earlier interface; public access and every OS-control action are not implied."
+    "boundary": "Private local workspace. The screenshot shows an earlier interface; public access and every OS-control action are not implied.",
+    "gallery": [
+      {
+        "src": "assets/bert.png",
+        "caption": "Earlier BERT command center · saved build screenshot",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "sylistly",
@@ -267,10 +568,18 @@
     ],
     "role": "Product direction, AI-assisted development, and iteration",
     "image": "assets/sylistly.png",
-    "caption": "Sylistly browse experience · saved build screenshot",
+    "caption": "Sylistly startup screen · saved build screenshot",
     "repo": "https://github.com/willywonka773202-cloud/sylistly",
     "demo": "https://sylistly.com",
-    "demo_note": "Fashion discovery preview. The catalog and recommendation screens load; complete outfit availability depends on current catalog checks. Checkout takes place with external retailers."
+    "demo_note": "Fashion discovery preview. The catalog and recommendation screens load; complete outfit availability depends on current catalog checks. Checkout takes place with external retailers.",
+    "gallery": [
+      {
+        "src": "assets/sylistly.png",
+        "caption": "Sylistly startup screen · saved build screenshot",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "gym-finds-forge",
@@ -292,7 +601,17 @@
     "next": "Validate catalog quality, affiliate relationships, and customer demand before a commerce launch.",
     "boundary": "Local product prototype. Checkout, retailer inventory, affiliate acceptance, and revenue are not established.",
     "demo": "https://forge-social-shop.vercel.app",
-    "demo_note": "Shopping-interface concept. Brand names and demonstration copy do not establish commercial partnerships or endorsements."
+    "demo_note": "Shopping-interface concept. Brand names and demonstration copy do not establish commercial partnerships or endorsements.",
+    "image": "assets/evidence/forge.jpg",
+    "caption": "Gym Finds public storefront preview, captured October 26, 2026. Brand imagery is shown as part of the prototype; partnerships have not been verified.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/forge.jpg",
+        "caption": "Gym Finds public storefront preview, captured October 26, 2026. Brand imagery is shown as part of the prototype; partnerships have not been verified.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "pullr",
@@ -307,8 +626,8 @@
       "Practice economy"
     ],
     "role": "Product direction, AI-assisted development, and iteration",
-    "image": "assets/pullr.png",
-    "caption": "Earlier collector lobby (VAULT direction) · saved build screenshot",
+    "image": "assets/evidence/pullr-lobby.jpg",
+    "caption": "PULLR practice-mode lobby from local QA. Card imagery belongs to its respective owners.",
     "featured": true,
     "demo": "https://pullr-rho.vercel.app",
     "problem": "A collectible opening should feel exciting while keeping the collection and pricing information easy to understand.",
@@ -316,7 +635,25 @@
     "outcome": "A hosted test edition supports pack browsing and opening with practice funds. Real transactions are blocked.",
     "next": "Continue usability testing and resolve licensing, graded-price providers, and commercial requirements before any paid product.",
     "boundary": "Unofficial collector prototype using third-party card imagery. No affiliation, real-money purchases, or physical fulfillment is claimed.",
-    "demo_note": "Free practice preview using simulated credits and catalog imagery. No real purchases, payouts, or physical-card ownership are represented."
+    "demo_note": "Free practice preview using simulated credits and catalog imagery. No real purchases, payouts, or physical-card ownership are represented.",
+    "gallery": [
+      {
+        "src": "assets/evidence/pullr-lobby.jpg",
+        "caption": "PULLR practice-mode lobby from local QA. Card imagery belongs to its respective owners.",
+        "kind": "Screenshot"
+      },
+      {
+        "src": "assets/pullr.png",
+        "caption": "Earlier collector lobby (VAULT direction) · saved build screenshot",
+        "kind": "Screenshot"
+      },
+      {
+        "src": "assets/evidence/pullr-reveal.jpg",
+        "caption": "Practice-mode reveal interface from local QA. Values shown are part of the prototype, not a transaction.",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "after-hours",
@@ -340,7 +677,15 @@
     "outcome": "The local studio supports full-file mixing, processing, and recording. A saved web edition provides a separate hosted experience.",
     "next": "Improve transitions and make the distinction between browser features and local model features clearer.",
     "boundary": "Experimental fan visuals and voice research are not endorsements. Local audio and model features are not all available in the web edition.",
-    "demo_note": "Saved web edition of a local music project. Some studio and generation features are available only in the local app; external video availability varies."
+    "demo_note": "Saved web edition of a local music project. Some studio and generation features are available only in the local app; external video availability varies.",
+    "gallery": [
+      {
+        "src": "assets/after-hours.png",
+        "caption": "After Hours studio · saved build screenshot",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "sdsu-life",
@@ -360,7 +705,22 @@
     "approach": "Create one daily view with submission-aware assignments and a time cap that turns a busy semester into an achievable plan.",
     "outcome": "The extension includes Canvas synchronization, planning, course information, reminders, and backups.",
     "next": "Keep the synchronization dependable and validate the workflow across a full semester.",
-    "boundary": "Personal productivity tool; private grades, course content, and student records are not included here."
+    "boundary": "Personal productivity tool; private grades, course content, and student records are not included here.",
+    "workflow": [
+      "Course deadlines",
+      "Daily plan",
+      "Study workflow"
+    ],
+    "image": "assets/maps/sdsu-life.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/sdsu-life.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "shotgun",
@@ -375,7 +735,22 @@
       "Campus mobility"
     ],
     "role": "Product direction, AI-assisted development, and iteration",
-    "boundary": "In development; no active matching community or public launch is claimed."
+    "boundary": "In development; no active matching community or public launch is claimed.",
+    "workflow": [
+      "Weekly schedule",
+      "Matching zones",
+      "Carpool options"
+    ],
+    "image": "assets/maps/shotgun.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/shotgun.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "shoot-a-brainrot-egg-garden",
@@ -385,7 +760,17 @@
     "summary": "A Roblox game adaptation combining personal egg conveyors, pet gardens, weather mutations, original guns, and boss encounters.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "gallery": [
+      {
+        "src": "assets/evidence/egg-garden.jpg",
+        "caption": "Roblox Studio Play capture of the hatchery area. Development build; this does not establish public-release status.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/egg-garden.jpg",
+    "caption": "Roblox Studio Play capture of the hatchery area. Development build; this does not establish public-release status.",
+    "media_kind": "Screenshot"
   },
   {
     "id": "first-drop",
@@ -395,7 +780,22 @@
     "summary": "An original browser battle-royale prototype with a 3D island, bots, loot, building, and a shrinking storm.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Explore island",
+      "Loot & build",
+      "Survive the storm"
+    ],
+    "image": "assets/maps/first-drop.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/first-drop.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "hypershot-arena-fps",
@@ -405,7 +805,17 @@
     "summary": "A Roblox arena shooter with a lobby, map selection, training bots, weapon loadouts, and a match-to-lobby loop.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "gallery": [
+      {
+        "src": "assets/evidence/fps-loadout.jpg",
+        "caption": "Runtime capture of the arena shooter loadout interface, including weapon selection and equipment.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/fps-loadout.jpg",
+    "caption": "Runtime capture of the arena shooter loadout interface, including weapon selection and equipment.",
+    "media_kind": "Screenshot"
   },
   {
     "id": "stormlings",
@@ -415,7 +825,22 @@
     "summary": "A creature-rescue game concept with a local mechanics prototype: rescue, carry, shelter, and return home during storms.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Find creatures",
+      "Rescue & shelter",
+      "Return home"
+    ],
+    "image": "assets/maps/stormlings.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/stormlings.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "luckydice-rng",
@@ -425,7 +850,22 @@
     "summary": "An early Roblox game workspace and game specification centered on an RNG concept.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Game concept",
+      "RNG design",
+      "Build iteration"
+    ],
+    "image": "assets/maps/luckydice-rng.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/luckydice-rng.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "fort-day",
@@ -435,7 +875,22 @@
     "summary": "A Roblox free-for-all shooter project designed around quick rounds, respawns, and small-player-count sessions.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Join a round",
+      "Arena combat",
+      "Respawn & repeat"
+    ],
+    "image": "assets/maps/fort-day.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/fort-day.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "brawl-stars-roblox-experiments",
@@ -445,7 +900,22 @@
     "summary": "A collection of arena-game design and build experiments with research, art direction, and a project catalog.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Arena concepts",
+      "Build experiments",
+      "Review & iterate"
+    ],
+    "image": "assets/maps/brawl-stars-roblox-experiments.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/brawl-stars-roblox-experiments.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "bert-s-builds",
@@ -457,7 +927,17 @@
     "tags": [],
     "role": "Product direction, AI-assisted development, and iteration",
     "demo": "https://berts-builds.vercel.app",
-    "demo_note": "A showcase linking to Roblox experiences. Linked game publication does not establish current balance, multiplayer readiness, or player metrics."
+    "demo_note": "A showcase linking to Roblox experiences. Linked game publication does not establish current balance, multiplayer readiness, or player metrics.",
+    "image": "assets/evidence/berts-builds.jpg",
+    "caption": "Bert’s Builds public game directory, captured October 26, 2026.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/berts-builds.jpg",
+        "caption": "Bert’s Builds public game directory, captured October 26, 2026.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "drop-platform",
@@ -467,7 +947,22 @@
     "summary": "A multi-store commerce prototype with branded storefronts, an order dashboard, and a simulated checkout path.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Brand storefront",
+      "Simulated checkout",
+      "Order dashboard"
+    ],
+    "image": "assets/maps/drop-platform.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/drop-platform.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "pacer-human-paste",
@@ -477,7 +972,22 @@
     "summary": "A clipboard-typing experiment developed toward a Mac menu-bar app with adjustable natural timing.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Clipboard text",
+      "Timing controls",
+      "Typed output"
+    ],
+    "image": "assets/maps/pacer-human-paste.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/pacer-human-paste.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "pattern-copilot-paper-lab",
@@ -487,7 +997,22 @@
     "summary": "A TradingView strategy and separate local simulator for explainable chart signals and auditable paper-trading experiments.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Chart signals",
+      "Local simulation",
+      "Paper-trade log"
+    ],
+    "image": "assets/maps/pattern-copilot-paper-lab.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/pattern-copilot-paper-lab.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "trading-observatory",
@@ -497,7 +1022,22 @@
     "summary": "A bounded trading-research dashboard for collecting evidence, monitoring data coverage, and reviewing candidate signals.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Data coverage",
+      "Candidate signals",
+      "Evidence review"
+    ],
+    "image": "assets/maps/trading-observatory.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/trading-observatory.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "prop-ai-desk-astra",
@@ -507,7 +1047,22 @@
     "summary": "A replay and paper-trading research desk with Strategy Lab, risk gates, and a persistent evidence ledger.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Replay data",
+      "Strategy & risk gates",
+      "Evidence ledger"
+    ],
+    "image": "assets/maps/prop-ai-desk-astra.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/prop-ai-desk-astra.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "polymarket-tennis-quant",
@@ -517,7 +1072,17 @@
     "summary": "A tennis probability research system with public market collection, chronological backtests, simulations, and a paper broker.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "gallery": [
+      {
+        "src": "assets/evidence/tennis.jpg",
+        "caption": "Tennis Quant overview from local QA. All balances and positions shown are paper simulation.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/tennis.jpg",
+    "caption": "Tennis Quant overview from local QA. All balances and positions shown are paper simulation.",
+    "media_kind": "Screenshot"
   },
   {
     "id": "meme-edge",
@@ -527,7 +1092,17 @@
     "summary": "A local Solana research terminal with explainable watch/reject classifications, chronological simulations, and cost-aware evaluation.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "gallery": [
+      {
+        "src": "assets/evidence/meme-edge.jpg",
+        "caption": "Meme Edge research dashboard from local QA. Simulated positions; no investment performance claimed.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/meme-edge.jpg",
+    "caption": "Meme Edge research dashboard from local QA. Simulated positions; no investment performance claimed.",
+    "media_kind": "Screenshot"
   },
   {
     "id": "autotrader",
@@ -537,7 +1112,22 @@
     "summary": "A trading research workspace comparing cash-only strategies against benchmarks with explicit costs and delayed signals.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Strategy rules",
+      "Cost-aware backtest",
+      "Benchmark comparison"
+    ],
+    "image": "assets/maps/autotrader.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/autotrader.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "bert-trade",
@@ -547,7 +1137,22 @@
     "summary": "An early Python trading-research kit combining a scanner, backtester, strategies, and a dashboard.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Market scanner",
+      "Strategy backtest",
+      "Research dashboard"
+    ],
+    "image": "assets/maps/bert-trade.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/bert-trade.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "sdsu-study-lab",
@@ -557,7 +1162,22 @@
     "summary": "Lecture-organized notes, practice quizzes, and study tools for economics, statistics, and other SDSU coursework.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Lecture notes",
+      "Practice questions",
+      "Review & learn"
+    ],
+    "image": "assets/maps/sdsu-study-lab.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/sdsu-study-lab.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "mac-breather",
@@ -567,7 +1187,22 @@
     "summary": "A local Mac resource-diagnostics tool focused on memory pressure, background processes, and controlled cleanup.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Resource readings",
+      "Process diagnosis",
+      "Controlled cleanup"
+    ],
+    "image": "assets/maps/mac-breather.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/mac-breather.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "bert-clips",
@@ -577,7 +1212,22 @@
     "summary": "A video-clipping operations project with media-processing and publishing-workflow research.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "workflow": [
+      "Source video",
+      "Clip workflow",
+      "Publishing research"
+    ],
+    "image": "assets/maps/bert-clips.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/bert-clips.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "berts-body-odysseus-integration",
@@ -587,7 +1237,22 @@
     "summary": "An integration experiment using the open-source Odysseus workspace as an interface for the BertOS ecosystem. Upstream work is credited.",
     "updated": "2026-09-10",
     "tags": [],
-    "role": "Integration experiments on the upstream Odysseus project"
+    "role": "Integration experiments on the upstream Odysseus project",
+    "workflow": [
+      "Odysseus interface",
+      "BertOS integration",
+      "Workspace experiment"
+    ],
+    "image": "assets/maps/berts-body-odysseus-integration.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/berts-body-odysseus-integration.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "dopamine-maxing",
@@ -599,7 +1264,17 @@
     "tags": [],
     "role": "Product direction, AI-assisted development, and iteration",
     "repo": "https://github.com/willywonka773202-cloud/dopamine-maxing",
-    "demo": "https://dopamine-maxing.vercel.app"
+    "demo": "https://dopamine-maxing.vercel.app",
+    "image": "assets/evidence/dopamine.jpg",
+    "caption": "Public experiment entry screen, captured October 26, 2026.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/dopamine.jpg",
+        "caption": "Public experiment entry screen, captured October 26, 2026.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "estate-cinema",
@@ -611,7 +1286,22 @@
     "tags": [],
     "role": "AI-assisted product presentation and website iteration",
     "repo": "https://github.com/willywonka773202-cloud/estate-cinema",
-    "boundary": "The public repository contains a marketing website and media. Client work, service fulfilment, and claimed business outcomes have not been independently verified."
+    "boundary": "The public repository contains a marketing website and media. Client work, service fulfilment, and claimed business outcomes have not been independently verified.",
+    "workflow": [
+      "Listing film",
+      "Cinematic page",
+      "Property presentation"
+    ],
+    "image": "assets/maps/estate-cinema.svg",
+    "media_kind": "Project map",
+    "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+    "gallery": [
+      {
+        "src": "assets/maps/estate-cinema.svg",
+        "caption": "Project map of the documented idea and intended workflow. This is an explanatory diagram, not a screenshot of the product.",
+        "kind": "Project map"
+      }
+    ]
   },
   {
     "id": "odd-jobs-observatory",
@@ -626,7 +1316,17 @@
     "demo": "https://odd-jobs-observatory.vercel.app",
     "updated": "2026-09-24",
     "role": "Product direction, AI-assisted development, and iteration",
-    "demo_note": "Read-only dashboard. The latest visible report is from September 10, 2026; no job is running and no revenue is recorded."
+    "demo_note": "Read-only dashboard. The latest visible report is from September 10, 2026; no job is running and no revenue is recorded.",
+    "image": "assets/evidence/odd-jobs.jpg",
+    "caption": "Public read-only dashboard, captured October 26, 2026. Its activity snapshot is dated September 10, not current task execution.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/odd-jobs.jpg",
+        "caption": "Public read-only dashboard, captured October 26, 2026. Its activity snapshot is dated September 10, not current task execution.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "humate-ad",
@@ -640,7 +1340,17 @@
     ],
     "demo": "https://humate-ad.vercel.app",
     "updated": "2026-09-24",
-    "role": "Product direction, AI-assisted development, and iteration"
+    "role": "Product direction, AI-assisted development, and iteration",
+    "image": "assets/evidence/humate.jpg",
+    "caption": "Frame from the browser-based 12-second Humate animation, captured during playback on October 26, 2026.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/humate.jpg",
+        "caption": "Frame from the browser-based 12-second Humate animation, captured during playback on October 26, 2026.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "berts-batteries",
@@ -655,7 +1365,17 @@
     "demo": "https://berts-batteries.vercel.app",
     "updated": "2026-09-24",
     "role": "Product direction, AI-assisted development, and iteration",
-    "demo_note": "A venue-charging business concept and pitch-site prototype. The public page is not evidence of an operating station network."
+    "demo_note": "A venue-charging business concept and pitch-site prototype. The public page is not evidence of an operating station network.",
+    "image": "assets/evidence/batteries.jpg",
+    "caption": "Public charging-station pitch site, captured October 26, 2026. This shows the proposal, not proof of a deployed charging network.",
+    "media_kind": "Screenshot",
+    "gallery": [
+      {
+        "src": "assets/evidence/batteries.jpg",
+        "caption": "Public charging-station pitch site, captured October 26, 2026. This shows the proposal, not proof of a deployed charging network.",
+        "kind": "Screenshot"
+      }
+    ]
   },
   {
     "id": "sword-soul",
@@ -674,7 +1394,17 @@
       "Luau",
       "Combat systems",
       "Game design"
-    ]
+    ],
+    "image": "assets/sword-soul.jpg",
+    "caption": "Sword Soul courtyard · saved in-game screenshot",
+    "gallery": [
+      {
+        "src": "assets/sword-soul.jpg",
+        "caption": "Sword Soul courtyard · saved in-game screenshot",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "bloomwake",
@@ -693,7 +1423,17 @@
       "Luau",
       "Game systems",
       "Pixel art direction"
-    ]
+    ],
+    "image": "assets/bloomwake.jpg",
+    "caption": "Bloomwake harbor and fitted boat · saved gameplay screenshot",
+    "gallery": [
+      {
+        "src": "assets/bloomwake.jpg",
+        "caption": "Bloomwake harbor and fitted boat · saved gameplay screenshot",
+        "kind": "Screenshot"
+      }
+    ],
+    "media_kind": "Screenshot"
   },
   {
     "id": "cortex-studio",
@@ -712,6 +1452,64 @@
       "FFmpeg",
       "AI-assisted development",
       "Product design"
+    ],
+    "gallery": [
+      {
+        "src": "assets/evidence/cortex-editor.jpg",
+        "caption": "Cortex Studio scene editor with a local test composition. Interface capture; sample media is part of the test.",
+        "kind": "Screenshot"
+      },
+      {
+        "src": "assets/evidence/cortex-compare.jpg",
+        "caption": "Revision comparison screen with test feedback. These scores are QA examples, not a user-study result.",
+        "kind": "Screenshot"
+      }
+    ],
+    "image": "assets/evidence/cortex-editor.jpg",
+    "caption": "Cortex Studio scene editor with a local test composition. Interface capture; sample media is part of the test.",
+    "media_kind": "Screenshot"
+  },
+  {
+    "id": "the-daily-orb",
+    "name": "The Daily Orb",
+    "category": "Creative tools",
+    "status": "Built",
+    "summary": "My AI news channel and companion directory: short explainers, episodes, and a searchable collection of AI tools, models, and resources.",
+    "updated": "2026-10-26",
+    "tags": [
+      "AI media",
+      "Video",
+      "Curation",
+      "Web product"
+    ],
+    "role": "Creator of The Daily Orb channel and companion website; AI-assisted research, presentation, and product development.",
+    "problem": "Connect short AI news explainers with a useful place to explore the tools and sources behind them.",
+    "approach": "Pair a YouTube channel with a web directory organized by tools, agents, repositories, models, guides, use cases, and news.",
+    "outcome": "The public website includes the directory, channel links, episode previews, search, and daily briefings. This portfolio links directly to the website and channel.",
+    "next": "Keep improving the episodes, source notes, and the connection between a story and the resources behind it.",
+    "boundary": "The directory describes third-party projects; it does not claim I built them. Published episodes and site pages are the work shown here.",
+    "demo": "https://thedailyorb.vercel.app/",
+    "demo_label": "Explore The Daily Orb ↗",
+    "demo_note": "Visit the companion site for its current directory, briefings, and episode list.",
+    "image": "assets/evidence/daily-orb.jpg",
+    "caption": "The Daily Orb public homepage, captured October 26, 2026. Directory totals are a snapshot.",
+    "media_kind": "Screenshot",
+    "links": [
+      {
+        "label": "Watch on YouTube ↗",
+        "url": "https://www.youtube.com/@thedailyorb"
+      },
+      {
+        "label": "Today’s briefing ↗",
+        "url": "https://thedailyorb.vercel.app/today"
+      }
+    ],
+    "gallery": [
+      {
+        "src": "assets/evidence/daily-orb.jpg",
+        "caption": "The Daily Orb public homepage, captured October 26, 2026. Directory totals are a snapshot.",
+        "kind": "Screenshot"
+      }
     ]
   }
 ]

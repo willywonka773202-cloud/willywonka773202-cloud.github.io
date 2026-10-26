@@ -3,7 +3,7 @@
 from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit,unquote
-import argparse,json,sys,xml.etree.ElementTree as ET
+import argparse,json,re,sys,xml.etree.ElementTree as ET
 from site_files import ROOT,public_files
 parser=argparse.ArgumentParser();parser.add_argument('--deployment',action='store_true');args=parser.parse_args()
 base=ROOT/'dist/.vercel/output/static' if args.deployment else ROOT
@@ -51,13 +51,26 @@ class Collection(HTMLParser):
    if group in self.groups:self.groups[group].append(entry)
  def handle_endtag(self,tag):
   if tag=='section' and self.sections:self.sections.pop()
-collection=Collection((base/'archive.html').read_text())
 projects=json.loads((ROOT/'data/projects.json').read_text())
 categories=json.loads((ROOT/'data/categories.json').read_text())
+for p in projects:
+ if p.get('media_kind') not in ['Screenshot','Marketing artwork','Project map']:errors.append(p['id']+': missing media classification')
+ if not p.get('gallery') or p['image']!=p['gallery'][0]['src']:errors.append(p['id']+': gallery must start with cover image')
+ for media in p.get('gallery',[]):
+  if media['src'] not in allowed or not media.get('caption'):errors.append(p['id']+': missing gallery asset or caption')
+ if p.get('media_kind')=='Project map':
+  svg=ET.parse(base/p['image'])
+  if 'NOT A PRODUCT SCREENSHOT' not in ''.join(svg.getroot().itertext()):errors.append(p['id']+': missing diagram disclosure')
+channel=json.loads((ROOT/'data/channel.json').read_text())
+for episode in channel['episodes']:
+ if not re.fullmatch(r'[A-Za-z0-9_-]{11}',episode['id']):errors.append('Invalid episode ID')
+ if not episode['url'].startswith('https://www.youtube.com/') or episode['id'] not in episode['url']:errors.append('Episode watch link does not match video')
 expected=[('projects/'+p['id']+'.html',p['category']) for p in projects]
-if sorted(collection.entries)!=sorted(expected):errors.append('Project collection has missing, duplicate, or unexpected entries')
-if list(collection.groups)!=[c['key'] for c in categories]:errors.append('Project type order differs from the category index')
-if not all(collection.groups.values()):errors.append('Empty project type section')
+for name in ['index.html','archive.html']:
+ collection=Collection((base/name).read_text())
+ if sorted(collection.entries)!=sorted(expected):errors.append(name+': Project collection has missing, duplicate, or unexpected entries')
+ if list(collection.groups)!=[c['key'] for c in categories]:errors.append(name+': Project type order differs from the category index')
+ if not all(collection.groups.values()):errors.append(name+': Empty project type section')
 # Regressions for a removed company project and accidentally included private notes.
 for name in allowed:
  if any(s in name for s in ['docs/','.env','data/']):errors.append('Private/stale publication path: '+name)

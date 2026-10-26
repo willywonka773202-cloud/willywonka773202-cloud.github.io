@@ -1,0 +1,10 @@
+<div class="archive-controls">
+  <label class="search-label"><span>Search projects</span><input id="search" type="search" placeholder="Search by name, idea, or tool" autocomplete="off"></label>
+  <label class="media-label"><span>Show me</span><select id="media"><option value="all">All project visuals</option><option value="Screenshot">Screenshots</option><option value="Marketing artwork">Marketing artwork</option><option value="Project map">Project maps</option></select></label>
+  <label class="stage-label"><span>Stage</span><select id="stage"><option value="all">Every stage</option><option>Built</option><option>In progress</option><option>Prototype</option><option>Research</option><option>Archived</option><option>Needs review</option></select></label>
+  <label class="sort-label"><span>Sort within each type</span><select id="sort"><option value="visual">Visual work first</option><option value="recent">Recently reviewed</option><option value="name">Name, A–Z</option></select></label>
+</div>
+<div class="filters" aria-label="Project types">{{FILTERS}}</div>
+<div class="archive-topline"><span id="result-count" aria-live="polite">{{COUNT}} projects</span><div class="view-controls" aria-label="Project layout"><button type="button" data-view="grid" aria-pressed="{{GRID_ACTIVE}}">Grid</button><button type="button" data-view="list" aria-pressed="{{LIST_ACTIVE}}">List</button></div></div>
+<div id="project-list" data-default-view="{{DEFAULT_VIEW}}">{{GROUPS}}</div>
+<div id="empty" hidden><h2>No projects found.</h2><p>Try another phrase or reset the filters.</p><button id="reset" class="button" type="button">Reset filters</button></div>
