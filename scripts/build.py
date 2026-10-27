@@ -2,14 +2,15 @@
 """Build the public portfolio from reviewed data. Python standard library only."""
 from pathlib import Path
 from html import escape
-from datetime import date
+from datetime import date,datetime
+from zoneinfo import ZoneInfo
 from urllib.parse import urlparse, urlencode
 import json,re
 from project_maps import render_maps
 import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://will-lambert-portfolio.vercel.app'
-VERSION='20261026-studio'
+VERSION='20261026-channel'
 C=json.loads((ROOT/'data/categories.json').read_text())
 CATEGORY={c['key']:c for c in C}
 assert len(CATEGORY)==len(C) and len({c['id'] for c in C})==len(C)
@@ -17,6 +18,7 @@ def category_label(p):return CATEGORY[p['category']]['label']
 P=json.loads((ROOT/'data/projects.json').read_text())
 render_maps(P,ROOT)
 CH=json.loads((ROOT/'data/channel.json').read_text())
+METRICS=json.loads((ROOT/'data/social-metrics.json').read_text())
 U=[u for u in json.loads((ROOT/'data/updates.json').read_text()) if u.get('published') is True]
 U.sort(key=lambda u:(u['date'],u['id']),reverse=True)
 def e(x):return escape(str(x),quote=True)
@@ -35,7 +37,7 @@ def header(active='',prefix=''):
  nav=''.join(f'<a href="{prefix}{href}"'+(' aria-current="page"' if name==active or (name=='All projects' and active=='Projects') else '')+f'>{name}</a>' for name,href in links)
  return f'''<header class="site-header"><a class="monogram" href="{prefix}index.html" aria-label="Will Lambert home">WL<span class="logo-dot"></span></a><div class="header-practice">WILL LAMBERT<br>PRODUCTS, TOOLS & GAMES</div><nav aria-label="Main navigation">{nav}</nav><button class="theme-toggle" type="button" aria-label="Switch to light theme" aria-pressed="false"><span aria-hidden="true">◐</span></button><a class="header-availability" href="{prefix}index.html#contact"><span><i class="status-dot"></i> OPEN TO OPPORTUNITIES</span><strong>San Diego / Remote <span aria-hidden="true">↗</span></strong></a></header>'''
 def footer(prefix=''):
- return f'<footer><span>© 2026 WILL LAMBERT</span><a href="{prefix}updates.html">Updates</a><a href="{prefix}channel.html">The Daily Orb</a><a href="{prefix}feed.xml">RSS</a><a href="https://github.com/willywonka773202-cloud" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="{prefix}index.html#contact">Contact ↗</a></footer>'
+ return f'<footer><span>© 2026 WILL LAMBERT</span><a href="{prefix}updates.html">Updates</a><a href="{prefix}channel.html">The Daily Orb</a><a href="{prefix}feed.xml">RSS</a><a href="https://github.com/willywonka773202-cloud" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="{e(CH["linkedin"])}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="{prefix}index.html#contact">Contact ↗</a></footer>'
 def head(title,description,path,prefix=''):
  return f'''<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)} — Will Lambert</title><meta name="description" content="{e(description)}"><meta name="theme-color" content="#090909"><link rel="canonical" href="{SITE}/{path}"><meta property="og:type" content="website"><meta property="og:title" content="{e(title)} — Will Lambert"><meta property="og:description" content="{e(description)}"><meta property="og:url" content="{SITE}/{path}"><meta property="og:image" content="{SITE}/assets/portfolio-social.png"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="{prefix}favicon.png"><link rel="alternate" type="application/rss+xml" title="Will Lambert — Updates" href="{prefix}feed.xml"><link rel="stylesheet" href="{prefix}style.css?v={VERSION}"><script src="{prefix}app.js?v={VERSION}" defer></script>'''
 def page(title,desc,path,body,active='',prefix=''):
@@ -102,6 +104,29 @@ for i in ['pullr','sword-soul','bert-ai','after-hours']:
  p=by_id[i]
  more.append(f'<a class="studio-more-project" href="{url(p)}"><figure><img src="{e(p["image"])}" alt="{e(p["caption"])}" loading="lazy" width="1280" height="800"></figure><div><span class="studio-kicker">{e(category_label(p))} · {e(p["status"])}</span><h3>{e(p["name"])}</h3><p>{e(p["summary"])}</p><span class="studio-more-cta">Explore the project</span></div></a>')
 values.update(STUDIO_PANELS=''.join(panels),CINEMATIC_CASES=''.join(cases),STUDIO_MORE=''.join(more))
+# Public social evidence. These are observed snapshots, never simulated counters.
+snapshots=METRICS['snapshots'];snapshot=snapshots[-1]
+def metric_date(value):return pretty_date(datetime.fromisoformat(value.replace('Z','+00:00')).astimezone(ZoneInfo('America/Los_Angeles')).date().isoformat())
+checked=metric_date(snapshot['checkedAt'])
+metric_cards=[]
+specs=[('youtube','YouTube','@thedailyorb','subscribers','Subscribers', [('views','Total views'),('videos','Public videos')]),('tiktok','TikTok','@bertsbuild','followers','Followers',[('likes','Total likes')]),('x','X','@theDailyOrb_','followers','Followers',[('posts','Public posts')])]
+for key,name,handle,primary,label,secondary in specs:
+ data=snapshot[key]
+ for field in [primary,*[f for f,_ in secondary]]:assert type(data[field]) is int and data[field]>=0
+ details=''.join(f'<span><b>{e(data.get(field+"Display",format(data[field],",")))}</b> {e(title.lower())}{" (rounded)" if data.get(field+"Approximate") else ""}</span>' for field,title in secondary)
+ growth=''
+ if len(snapshots)>1:
+  prior=snapshots[-2];delta=data[primary]-prior[key][primary]
+  growth=f'<p class="metric-change">{delta:+,} since {metric_date(prior["checkedAt"])}</p>'
+ metric_cards.append(f'<article class="social-metric"><a class="metric-account" href="{e(CH[key])}" target="_blank" rel="noopener noreferrer"><span>{name} <small>{handle}</small></span><span aria-hidden="true">↗</span></a><p class="metric-total">{data[primary]:,}<span>{label}</span></p><div class="metric-details">{details}</div>{growth}</article>')
+metrics_html=f'<section class="social-proof" aria-label="The Daily Orb public audience statistics"><div class="social-proof-label"><span>THE CHANNEL IN NUMBERS</span><span>Public snapshot · <time datetime="{e(snapshot["checkedAt"])}">{checked}</time></span></div><div class="social-metrics-grid">{"".join(metric_cards)}</div><p class="metrics-note">Public profile totals, checked weekly. Each platform reports its own audience; counts may overlap. TikTok rounds its likes total. <a href="channel.html#metrics">Sources &amp; update history ↗</a></p></section>'
+history_rows=''.join(f'<tr><th scope="row">{metric_date(s["checkedAt"])}</th><td>{s["youtube"]["subscribers"]:,}</td><td>{s["youtube"]["views"]:,}</td><td>{s["tiktok"]["followers"]:,}</td><td>{s["x"]["followers"]:,}</td></tr>' for s in reversed(snapshots[-12:]))
+history=f'<details class="metrics-history"><summary>Sources &amp; snapshot history</summary><p>Counts are read from the linked public YouTube, TikTok, and X profiles. The latest video updates automatically from YouTube’s public feed. Audience totals are dated snapshots, not real-time analytics. Private watch time, impressions, and revenue are not included.</p><div class="metrics-table-scroll"><table><caption>Public audience snapshots</caption><thead><tr><th>Date</th><th>YouTube subscribers</th><th>YouTube views</th><th>TikTok followers</th><th>X followers</th></tr></thead><tbody>{history_rows}</tbody></table></div></details>'
+roadmap=[]
+for n,i in enumerate(['goodturn','bert-ai','the-daily-orb'],1):
+ p=by_id[i]
+ roadmap.append(f'<a class="roadmap-card" href="{url(p)}"><span class="studio-kicker">0{n} / {e(p["status"])} → NEXT</span><h3>{e(p["name"])}</h3><p>{e(p["next"])}</p><span class="roadmap-link">See what exists today ↗</span></a>')
+values.update(SOCIAL_METRICS=metrics_html,METRIC_HISTORY=history,LINKEDIN=e(CH['linkedin']),ROADMAP=''.join(roadmap),HOME_EPISODES=''.join(episode_card(ep) for ep in CH['episodes'][:3]),RECENT_UPDATES=''.join(update_card(u) for u in U[:3]))
 for view in ['grid','list']:
  collection=(ROOT/'templates/collection.html').read_text()
  cv=dict(values,DEFAULT_VIEW=view,GRID_ACTIVE=str(view=='grid').lower(),LIST_ACTIVE=str(view=='list').lower())

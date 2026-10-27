@@ -1,5 +1,28 @@
 [
   {
+    "id": "channel-and-project-evidence",
+    "date": "2026-10-26",
+    "type": "Build log",
+    "title": "Making the work easier to see",
+    "summary": "A larger Daily Orb player, public channel figures, and a clearer path through my projects and next steps.",
+    "body": [
+      "The Daily Orb now has a larger place in this portfolio, with the latest YouTube upload, recent stories, and links to the channel’s three public accounts.",
+      "The audience figures are dated snapshots from YouTube, TikTok, and X. I’m keeping them separate by platform so they don’t imply a combined or unique audience.",
+      "The project collection still includes 58 documented builds, prototypes, and experiments across seven categories. The next-step section connects the ideas I want to develop to the work that already exists."
+    ],
+    "links": [
+      {
+        "label": "Explore The Daily Orb",
+        "url": "channel.html"
+      },
+      {
+        "label": "Browse all projects",
+        "url": "archive.html"
+      }
+    ],
+    "published": true
+  },
+  {
     "id": "a-home-for-the-whole-process",
     "date": "2026-10-04",
     "type": "Check-in",

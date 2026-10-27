@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "method": "Public profile snapshot",
+  "snapshots": [
+    {
+      "checkedAt": "2026-10-27T01:03:33.285629+00:00",
+      "youtube": {
+        "subscribers": 109,
+        "videos": 110,
+        "views": 10336
+      },
+      "tiktok": {
+        "followers": 3248,
+        "likes": 15200,
+        "likesDisplay": "15.2K",
+        "likesApproximate": true
+      },
+      "x": {
+        "followers": 4,
+        "posts": 6
+      }
+    }
+  ]
+}

@@ -233,7 +233,7 @@
  }
  function updateStories(episodes){
   const grid=document.querySelector('.episode-grid');if(!grid)return;
-  grid.replaceChildren(...episodes.map(e=>{
+  grid.replaceChildren(...episodes.slice(0, Number(grid.dataset.episodeLimit) || 6).map(e=>{
    const article=document.createElement('article');article.className='episode-card';
    const link=document.createElement('a');link.className='episode-poster';link.href=`https://www.youtube.com/watch?v=${e.id}`;link.target='_blank';link.rel='noopener noreferrer';
    const img=new Image();img.src=`https://i.ytimg.com/vi/${e.id}/hqdefault.jpg`;img.alt=e.title;img.width=480;img.height=360;img.loading='lazy';link.append(img);
@@ -269,7 +269,7 @@
     const mount=shell.querySelector('.broadcast-mount');
     player=new YT.Player(mount,{host:'https://www.youtube-nocookie.com',videoId:shell.dataset.video,playerVars:{autoplay:0,playsinline:1,rel:0,origin:location.origin},events:{
      onReady:()=>{ready=true;play.disabled=false;sound.disabled=false;start.textContent="Play latest story ↗";const iframe=player.getIframe();iframe.title=shell.dataset.title;iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen');iframe.setAttribute('referrerpolicy','strict-origin-when-cross-origin');player.mute();if(playRequested||(!reduced.matches&&!motionPaused&&visible&&!document.hidden))player.playVideo();},
-     onStateChange:event=>{playState(event.data===YT.PlayerState.PLAYING);if(event.data===YT.PlayerState.PLAYING){shell.classList.add('video-started');start.hidden=true;}if(event.data===YT.PlayerState.ENDED){manuallyPaused=true;start.hidden=false;start.textContent='Replay story ↗';}},
+     onStateChange:event=>{playState(event.data===YT.PlayerState.PLAYING);if(event.data===YT.PlayerState.PLAYING){shell.classList.add('video-started');start.hidden=true;}if(event.data===YT.PlayerState.ENDED){if(!manuallyPaused&&!reduced.matches&&!motionPaused&&visible&&!document.hidden&&player.isMuted()){player.seekTo(0,true);player.playVideo();}else{manuallyPaused=true;shell.classList.remove('video-started');start.hidden=false;start.textContent='Replay story ↗';}}},
      onAutoplayBlocked:()=>{start.hidden=false;start.textContent='Play latest story ↗';},
      onError:()=>{start.hidden=true;play.disabled=true;sound.disabled=true;shell.querySelector('.feed-state').textContent='WATCH ON YOUTUBE';}
     }});
