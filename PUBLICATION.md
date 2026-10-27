@@ -24,4 +24,6 @@ A weekly Codex follow-up checks these three public profiles. It needs this Mac a
 
 To record a verified snapshot, create a private JSON file matching the most recent snapshot schema and run `python3 scripts/record-social-metrics.py /absolute/path/to/observation.json`. Preserve TikTok's displayed rounded number and `likesApproximate` flag. History is retained; changes appear only after a second observation. Public audience counts are not unique across platforms and must never be summed into a unique-audience claim.
 
+Before building, run `node scripts/refresh-channel-snapshot.cjs` to refresh the reviewed video fallback from the public YouTube feed. If it is unavailable, keep the existing fallback and its date.
+
 Run `python3 scripts/prepare-vercel.py`, `python3 scripts/check-site.py --deployment`, and `node scripts/test-channel.cjs` sequentially. Use `python3 scripts/export-public.py` to update the dedicated clean public checkout; inspect its diff and run Gitleaks before committing. Never stage the canonical root wholesale. Deploy the prepared `dist` output with the existing Vercel project and verify the production metrics and observation date. The latest-video endpoint refreshes independently from the public YouTube feed.
