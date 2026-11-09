@@ -37,6 +37,24 @@
         "followers": 4,
         "posts": 6
       }
+    },
+    {
+      "checkedAt": "2026-11-09T17:18:03.164102+00:00",
+      "youtube": {
+        "subscribers": 112,
+        "videos": 231,
+        "views": 15318
+      },
+      "tiktok": {
+        "followers": 3245,
+        "likes": 15200,
+        "likesDisplay": "15.2K",
+        "likesApproximate": true
+      },
+      "x": {
+        "followers": 4,
+        "posts": 6
+      }
     }
   ]
 }
