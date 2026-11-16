@@ -1,0 +1,2946 @@
+<roblox version="4">
+<Item class="Workspace" referent="RBX1"><Properties><string name="Name">Workspace</string></Properties></Item>
+<Item class="Lighting" referent="RBX2"><Properties><string name="Name">Lighting</string><token name="Technology">4</token></Properties></Item>
+<Item class="ReplicatedFirst" referent="RBX4"><Properties><string name="Name">ReplicatedFirst</string></Properties><Item class="LocalScript" referent="RBX3"><Properties><string name="Name">Loading</string><ProtectedString name="Source"><![CDATA[-- Custom loading screen. Runs before anything else, replaces the default
+-- Roblox loading screen, and plays the game's one joke: the count goes wrong.
+local Players = game:GetService("Players")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local ContentProvider = game:GetService("ContentProvider")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+ReplicatedFirst:RemoveDefaultLoadingScreen()
+
+local INK = Color3.fromRGB(5, 6, 7)
+local BONE = Color3.fromRGB(222, 214, 196)
+local DIM = Color3.fromRGB(110, 106, 98)
+local BLOOD = Color3.fromRGB(176, 28, 28)
+
+local TIPS = {
+	"It walks where you walked.",
+	"It makes no footsteps. Listen for who does.",
+	"When the hum stops, it is close.",
+	"A light pointed at it holds it still.",
+	"Alone is when it closes the gap.",
+	"Accuse the wrong person and your light dies.",
+	"Count before you leave. Count again when you get back.",
+}
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "Loading"
+gui.IgnoreGuiInset = true
+gui.ResetOnSpawn = false
+gui.DisplayOrder = 1000
+gui.Parent = playerGui
+
+local back = Instance.new("Frame")
+back.Size = UDim2.fromScale(1, 1)
+back.BackgroundColor3 = INK
+back.BorderSizePixel = 0
+back.Parent = gui
+
+local function label(text, font, size, color, position, anchor)
+	local l = Instance.new("TextLabel")
+	l.BackgroundTransparency = 1
+	l.Font = font
+	l.TextSize = size
+	l.TextColor3 = color
+	l.Text = text
+	l.AnchorPoint = anchor or Vector2.new(0.5, 0.5)
+	l.Position = position
+	l.Size = UDim2.new(0.9, 0, 0, size + 12)
+	l.Parent = back
+	return l
+end
+
+local title = label("", Enum.Font.SpecialElite, 84, BONE, UDim2.fromScale(0.5, 0.4))
+local count = label("", Enum.Font.RobotoMono, 22, DIM, UDim2.fromScale(0.5, 0.52))
+local tip = label("", Enum.Font.SpecialElite, 20, DIM, UDim2.fromScale(0.5, 0.86))
+
+local scale = Instance.new("UIScale")
+scale.Parent = back
+local camera = workspace.CurrentCamera
+if camera then
+	scale.Scale = math.clamp(camera.ViewportSize.Y / 800, 0.55, 1.4)
+end
+
+local barBack = Instance.new("Frame")
+barBack.AnchorPoint = Vector2.new(0.5, 0.5)
+barBack.Position = UDim2.fromScale(0.5, 0.6)
+barBack.Size = UDim2.new(0, 360, 0, 2)
+barBack.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+barBack.BorderSizePixel = 0
+barBack.Parent = back
+local bar = Instance.new("Frame")
+bar.Size = UDim2.fromScale(0, 1)
+bar.BackgroundColor3 = BONE
+bar.BorderSizePixel = 0
+bar.Parent = barBack
+
+local running = true
+
+-- Type the title out one letter at a time.
+task.spawn(function()
+	local word = "HEADCOUNT"
+	for i = 1, #word do
+		title.Text = string.sub(word, 1, i)
+		task.wait(0.09)
+	end
+end)
+
+-- The count: 1, 2, 3, 4 ... then one too many.
+task.spawn(function()
+	while running do
+		for n = 1, 4 do
+			count.TextColor3 = DIM
+			count.Text = "CREW ACCOUNTED FOR: " .. n
+			task.wait(0.55)
+			if not running then
+				return
+			end
+		end
+		task.wait(0.7)
+		count.TextColor3 = BLOOD
+		count.Text = "CREW ACCOUNTED FOR: 5"
+		title.TextTransparency = 0.6
+		task.wait(0.08)
+		title.TextTransparency = 0
+		task.wait(1.1)
+	end
+end)
+
+task.spawn(function()
+	local index = math.random(1, #TIPS)
+	while running do
+		tip.Text = TIPS[index]
+		tip.TextTransparency = 1
+		TweenService:Create(tip, TweenInfo.new(0.6), { TextTransparency = 0 }):Play()
+		task.wait(3.2)
+		TweenService:Create(tip, TweenInfo.new(0.5), { TextTransparency = 1 }):Play()
+		task.wait(0.6)
+		index = index % #TIPS + 1
+	end
+end)
+
+local started = os.clock()
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+local total = math.max(ContentProvider.RequestQueueSize, 1)
+while os.clock() - started < 5 or ContentProvider.RequestQueueSize > 0 do
+	local done = 1 - math.clamp(ContentProvider.RequestQueueSize / total, 0, 1)
+	local timed = math.clamp((os.clock() - started) / 5, 0, 1)
+	bar.Size = UDim2.fromScale(math.min(done, timed), 1)
+	if os.clock() - started > 20 then
+		break
+	end
+	task.wait(0.05)
+end
+bar.Size = UDim2.fromScale(1, 1)
+task.wait(0.4)
+
+running = false
+local fade = TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+for _, inst in ipairs(back:GetDescendants()) do
+	if inst:IsA("TextLabel") then
+		TweenService:Create(inst, fade, { TextTransparency = 1 }):Play()
+	elseif inst:IsA("Frame") then
+		TweenService:Create(inst, fade, { BackgroundTransparency = 1 }):Play()
+	end
+end
+TweenService:Create(back, fade, { BackgroundTransparency = 1 }):Play()
+task.wait(1.3)
+gui:Destroy()
+]]></ProtectedString></Properties></Item>
+</Item>
+<Item class="ReplicatedStorage" referent="RBX12"><Properties><string name="Name">ReplicatedStorage</string></Properties><Item class="Folder" referent="RBX9"><Properties><string name="Name">Client</string></Properties><Item class="ModuleScript" referent="RBX5"><Properties><string name="Name">AudioDirector</string><ProtectedString name="Source"><![CDATA[-- Sound is a game mechanic here, not decoration:
+--   * the facility hum is always there, and it FADES OUT as a copy gets near.
+--     Silence is the warning.
+--   * a low layer and a heartbeat rise with dread.
+-- Sound ids come from Config.Sounds so they can be swapped without code.
+local SoundService = game:GetService("SoundService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+
+local AudioDirector = {}
+
+local sounds = {}
+local heartbeatTimer = 0
+local started = false
+
+local function make(name, looped)
+	local def = Config.Sounds[name]
+	local sound = Instance.new("Sound")
+	sound.Name = "Headcount_" .. name
+	sound.SoundId = def.Id
+	sound.PlaybackSpeed = def.Speed
+	sound.Volume = looped and 0 or def.Volume
+	sound.Looped = looped
+	sound.Parent = SoundService
+
+	-- Everything is pushed through reverb and has its top end rolled off, so
+	-- even placeholder sounds feel like they are coming down a long corridor.
+	local reverb = Instance.new("ReverbSoundEffect")
+	reverb.DecayTime = 6
+	reverb.Density = 1
+	reverb.Diffusion = 1
+	reverb.DryLevel = -4
+	reverb.WetLevel = -2
+	reverb.Parent = sound
+
+	local eq = Instance.new("EqualizerSoundEffect")
+	eq.HighGain = -18
+	eq.MidGain = -4
+	eq.LowGain = 4
+	eq.Parent = sound
+
+	sounds[name] = sound
+	return sound
+end
+
+function AudioDirector.init()
+	if started then
+		return
+	end
+	started = true
+	for name in pairs(Config.Sounds) do
+		make(name, name == "Ambience" or name == "Dread")
+	end
+	sounds.Ambience:Play()
+	sounds.Dread:Play()
+end
+
+-- One-shot sound by Config name.
+function AudioDirector.play(name)
+	local sound = sounds[name]
+	if sound then
+		SoundService:PlayLocalSound(sound)
+	end
+end
+
+-- Call every frame. dread is 0..1, inFacility is false in the staging room.
+function AudioDirector.update(dt, dread, inFacility)
+	if not started then
+		return
+	end
+	local ambience = sounds.Ambience
+	local layer = sounds.Dread
+	local blend = math.min(1, dt * 2.5)
+
+	local ambienceTarget = Config.Sounds.Ambience.Volume
+	if inFacility then
+		-- The hum dies as it gets close.
+		ambienceTarget = ambienceTarget * math.clamp(1 - dread * 1.6, 0, 1)
+	else
+		ambienceTarget = ambienceTarget * 0.35
+	end
+	ambience.Volume = ambience.Volume + (ambienceTarget - ambience.Volume) * blend
+
+	local layerTarget = inFacility and (Config.Sounds.Dread.Volume * math.clamp((dread - 0.25) / 0.75, 0, 1)) or 0
+	layer.Volume = layer.Volume + (layerTarget - layer.Volume) * blend
+	layer.PlaybackSpeed = Config.Sounds.Dread.Speed * (1 + dread * 0.25)
+
+	if inFacility and dread > 0.3 then
+		heartbeatTimer = heartbeatTimer - dt
+		if heartbeatTimer <= 0 then
+			-- Faster the closer it is: about 50 bpm rising to about 170.
+			heartbeatTimer = 1.2 - dread * 0.85
+			local beat = sounds.Heartbeat
+			beat.Volume = Config.Sounds.Heartbeat.Volume * dread
+			SoundService:PlayLocalSound(beat)
+			task.delay(0.16, function()
+				SoundService:PlayLocalSound(beat)
+			end)
+		end
+	else
+		heartbeatTimer = 0
+	end
+end
+
+return AudioDirector
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX6"><Properties><string name="Name">Effects</string><ProtectedString name="Source"><![CDATA[-- Screen and camera effects driven by one number, dread (0..1):
+-- colour drains, the view narrows and shakes, and broken lights stutter faster.
+-- Also owns the player's own flashlight beam, which sways behind the camera.
+local Lighting = game:GetService("Lighting")
+local CollectionService = game:GetService("CollectionService")
+local TweenService = game:GetService("TweenService")
+
+local Effects = {}
+
+local camera = workspace.CurrentCamera
+local grade, blur
+local beamPart, beam
+local smoothDread = 0
+local punch = 0
+local flicker = {} -- tube -> next toggle time
+local BASE_FOV = 70
+
+function Effects.init()
+	grade = Instance.new("ColorCorrectionEffect")
+	grade.Name = "DreadGrade"
+	grade.Parent = Lighting
+
+	blur = Instance.new("BlurEffect")
+	blur.Name = "DreadBlur"
+	blur.Size = 0
+	blur.Parent = Lighting
+
+	beamPart = Instance.new("Part")
+	beamPart.Name = "LocalBeam"
+	beamPart.Anchored = true
+	beamPart.CanCollide = false
+	beamPart.CanQuery = false
+	beamPart.CanTouch = false
+	beamPart.Transparency = 1
+	beamPart.Size = Vector3.new(0.2, 0.2, 0.2)
+	beamPart.Parent = camera
+
+	beam = Instance.new("SpotLight")
+	beam.Face = Enum.NormalId.Front
+	beam.Angle = 52
+	beam.Range = 60
+	beam.Brightness = 2.6
+	beam.Color = Color3.fromRGB(255, 244, 224)
+	beam.Shadows = true
+	beam.Enabled = false
+	beam.Parent = beamPart
+end
+
+-- A hit to the view: used for the jumpscare and bad news.
+function Effects.punch(amount)
+	punch = math.max(punch, amount)
+end
+
+function Effects.deathBlur()
+	blur.Size = 30
+	TweenService:Create(blur, TweenInfo.new(4), { Size = 0 }):Play()
+end
+
+-- flashlightOn: is the beam lit. battery: 0..100.
+function Effects.update(dt, dread, humanoid, flashlightOn, battery)
+	camera = workspace.CurrentCamera
+	smoothDread = smoothDread + (dread - smoothDread) * math.min(1, dt * 3)
+	punch = math.max(0, punch - dt * 1.8)
+	local d = smoothDread
+	local now = os.clock()
+
+	grade.Saturation = -0.75 * d
+	grade.Contrast = 0.12 * d + punch * 0.3
+	grade.TintColor = Color3.new(1, 1 - 0.14 * d - punch * 0.3, 1 - 0.14 * d - punch * 0.3)
+
+	camera.FieldOfView = BASE_FOV - 9 * d - punch * 14
+
+	if humanoid then
+		local shake = d * d * 0.16 + punch * 0.6
+		humanoid.CameraOffset = Vector3.new(
+			(math.noise(now * 9, 0) * 2) * shake,
+			(math.noise(0, now * 9) * 2) * shake,
+			0
+		)
+	end
+
+	-- Flashlight beam: follows the camera a beat late so it feels hand-held.
+	local goal = camera.CFrame * CFrame.new(0.9, -0.7, 0.4)
+	beamPart.CFrame = beamPart.CFrame:Lerp(goal, math.min(1, dt * 14))
+	local lit = flashlightOn
+	if lit and battery < 15 then
+		lit = math.noise(now * 18) > -0.15 -- dying battery stutters
+	end
+	if lit and d > 0.75 then
+		lit = math.noise(now * 30, 5) > -0.25 -- and it stutters when it is right there
+	end
+	beam.Enabled = lit
+	beam.Brightness = 1.4 + 1.2 * math.clamp(battery / 40, 0, 1)
+
+	-- Broken ceiling lights. They stutter faster as dread climbs.
+	for _, tube in ipairs(CollectionService:GetTagged("FlickerLight")) do
+		local nextAt = flicker[tube]
+		if not nextAt or now >= nextAt then
+			local lamp = tube:FindFirstChild("Lamp")
+			if lamp then
+				local on = math.random() > (0.3 + d * 0.4)
+				lamp.Enabled = on
+				tube.Material = on and Enum.Material.Neon or Enum.Material.SmoothPlastic
+			end
+			flicker[tube] = now + math.random() * (0.9 - d * 0.7) + 0.04
+		end
+	end
+	for tube in pairs(flicker) do
+		if not tube.Parent then
+			flicker[tube] = nil
+		end
+	end
+end
+
+return Effects
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX7"><Properties><string name="Name">HUD</string><ProtectedString name="Source"><![CDATA[-- All on-screen UI: status readouts, toasts, the headcount result, the
+-- upgrade shop, the results card, the death card, and the vignette.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+local Theme = require(script.Parent.Theme)
+
+local HUD = {}
+
+local player = Players.LocalPlayer
+local state, remotes
+local gui, root, scale
+local phaseLabel, timerLabel, crewLabel, sampleLabel, creditLabel, hintLabel
+local batteryFill, staminaFill, countFill
+local toastHolder, bigLabel, bigSub
+local shop, shopRows, results, death
+local vignette = {}
+local onSound = function() end
+
+local function formatTime(seconds)
+	seconds = math.max(0, math.floor(seconds))
+	return string.format("%02d:%02d", math.floor(seconds / 60), seconds % 60)
+end
+
+local function buildVignette(parent)
+	-- Four soft black gradients, one per screen edge. They grow with dread.
+	local edges = {
+		{ anchor = Vector2.new(0, 0), pos = UDim2.fromScale(0, 0), rotation = 0, horizontal = true },
+		{ anchor = Vector2.new(1, 0), pos = UDim2.fromScale(1, 0), rotation = 180, horizontal = true },
+		{ anchor = Vector2.new(0, 0), pos = UDim2.fromScale(0, 0), rotation = 90, horizontal = false },
+		{ anchor = Vector2.new(0, 1), pos = UDim2.fromScale(0, 1), rotation = 270, horizontal = false },
+	}
+	for _, edge in ipairs(edges) do
+		local frame = Theme.new("Frame", {
+			AnchorPoint = edge.anchor,
+			Position = edge.pos,
+			BackgroundColor3 = Color3.new(0, 0, 0),
+			BorderSizePixel = 0,
+			ZIndex = 0,
+		}, parent)
+		Theme.new("UIGradient", {
+			Rotation = edge.rotation,
+			Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0.05),
+				NumberSequenceKeypoint.new(0.5, 0.6),
+				NumberSequenceKeypoint.new(1, 1),
+			}),
+		}, frame)
+		vignette[#vignette + 1] = { frame = frame, horizontal = edge.horizontal }
+	end
+end
+
+local function setVignette(amount)
+	local reach = 0.16 + amount * 0.3
+	for _, edge in ipairs(vignette) do
+		if edge.horizontal then
+			edge.frame.Size = UDim2.fromScale(reach, 1)
+		else
+			edge.frame.Size = UDim2.fromScale(1, reach)
+		end
+	end
+end
+
+local function buildShop()
+	shop = Theme.panel(root, {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(460, 300),
+		BackgroundTransparency = 0.05,
+		Visible = false,
+		ZIndex = 20,
+	})
+	Theme.new("UIPadding", {
+		PaddingTop = UDim.new(0, 20),
+		PaddingLeft = UDim.new(0, 24),
+		PaddingRight = UDim.new(0, 24),
+	}, shop)
+	Theme.label(shop, { Text = "REQUISITIONS", TextSize = 30, Size = UDim2.new(1, 0, 0, 34), ZIndex = 21 })
+	Theme.label(shop, {
+		Text = "Spend what you brought back. It comes down with you.",
+		TextColor3 = Theme.Dim,
+		TextSize = 15,
+		Position = UDim2.fromOffset(0, 38),
+		ZIndex = 21,
+	})
+	shopRows = {}
+	local order = { "Battery", "Stamina", "Scanner" }
+	for index, name in ipairs(order) do
+		local def = Config.Upgrades[name]
+		local y = 76 + (index - 1) * 64
+		local title = Theme.label(shop, {
+			Font = Theme.Numbers,
+			TextSize = 17,
+			Position = UDim2.fromOffset(0, y),
+			Size = UDim2.new(0.6, 0, 0, 22),
+			ZIndex = 21,
+		})
+		Theme.label(shop, {
+			Text = def.Blurb,
+			TextColor3 = Theme.Dim,
+			TextSize = 14,
+			Position = UDim2.fromOffset(0, y + 22),
+			Size = UDim2.new(0.6, 0, 0, 20),
+			ZIndex = 21,
+		})
+		local button = Theme.button(shop, {
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.new(1, 0, 0, y),
+			Size = UDim2.fromOffset(140, 40),
+			ZIndex = 21,
+			Modal = true, -- frees the mouse while the shop is open (camera is locked first-person)
+		}, function()
+			onSound("Click")
+			remotes.BuyUpgrade:FireServer(name)
+		end)
+		shopRows[name] = { title = title, button = button, def = def }
+	end
+end
+
+local function buildCards()
+	results = Theme.panel(root, {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.42),
+		Size = UDim2.fromOffset(520, 230),
+		BackgroundTransparency = 0.05,
+		Visible = false,
+		ZIndex = 30,
+	})
+	Theme.label(results, {
+		Name = "Title",
+		TextSize = 44,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		Position = UDim2.fromOffset(0, 26),
+		Size = UDim2.new(1, 0, 0, 50),
+		ZIndex = 31,
+	})
+	Theme.label(results, {
+		Name = "Body",
+		Font = Theme.Numbers,
+		TextSize = 17,
+		TextColor3 = Theme.Dim,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		TextYAlignment = Enum.TextYAlignment.Top,
+		Position = UDim2.fromOffset(0, 96),
+		Size = UDim2.new(1, 0, 0, 110),
+		ZIndex = 31,
+	})
+
+	death = Theme.new("Frame", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 50,
+	}, gui)
+	Theme.label(death, {
+		Name = "Line",
+		TextSize = 54,
+		TextColor3 = Theme.Blood,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.46),
+		Size = UDim2.new(0.9, 0, 0, 70),
+		ZIndex = 51,
+	})
+	Theme.label(death, {
+		Name = "Sub",
+		TextSize = 20,
+		TextColor3 = Theme.Dim,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.56),
+		Size = UDim2.new(0.9, 0, 0, 30),
+		ZIndex = 51,
+	})
+end
+
+function HUD.init(playerGui, stateFolder, remoteFolder, soundCallback)
+	state = stateFolder
+	remotes = remoteFolder
+	onSound = soundCallback or onSound
+
+	gui = Theme.new("ScreenGui", {
+		Name = "HeadcountHUD",
+		IgnoreGuiInset = true,
+		ResetOnSpawn = false,
+		DisplayOrder = 10,
+	}, playerGui)
+
+	buildVignette(gui)
+	setVignette(0)
+
+	root = Theme.new("Frame", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1 }, gui)
+	scale = Theme.new("UIScale", {}, root)
+
+	-- Top left: where we are in the night.
+	local status = Theme.panel(root, { Position = UDim2.fromOffset(24, 24), Size = UDim2.fromOffset(250, 76) })
+	Theme.new("UIPadding", { PaddingLeft = UDim.new(0, 14), PaddingTop = UDim.new(0, 10) }, status)
+	phaseLabel = Theme.label(status, { TextSize = 22, Size = UDim2.new(1, 0, 0, 26) })
+	timerLabel = Theme.label(status, {
+		Font = Theme.Numbers,
+		TextSize = 22,
+		TextColor3 = Theme.Dim,
+		Position = UDim2.fromOffset(0, 30),
+		Size = UDim2.new(1, 0, 0, 26),
+	})
+
+	-- Top right: the number that matters.
+	local crew = Theme.panel(root, {
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, -24, 0, 24),
+		Size = UDim2.fromOffset(230, 76),
+	})
+	Theme.new("UIPadding", { PaddingLeft = UDim.new(0, 14), PaddingTop = UDim.new(0, 10) }, crew)
+	Theme.label(crew, { Text = "CREW ALIVE", TextColor3 = Theme.Dim, TextSize = 15 })
+	crewLabel = Theme.label(crew, {
+		Font = Theme.Numbers,
+		TextSize = 30,
+		Position = UDim2.fromOffset(0, 22),
+		Size = UDim2.new(1, 0, 0, 36),
+	})
+
+	-- Bottom left: light, lungs, counter.
+	local vitals = Theme.panel(root, {
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.new(0, 24, 1, -24),
+		Size = UDim2.fromOffset(250, 112),
+	})
+	Theme.new("UIPadding", {
+		PaddingLeft = UDim.new(0, 14),
+		PaddingRight = UDim.new(0, 14),
+		PaddingTop = UDim.new(0, 10),
+	}, vitals)
+	local function row(text, y, color)
+		Theme.label(vitals, { Text = text, TextSize = 14, TextColor3 = Theme.Dim, Position = UDim2.fromOffset(0, y) })
+		return Theme.meter(vitals, { Position = UDim2.fromOffset(0, y + 22) }, color)
+	end
+	batteryFill = row("LIGHT  [F]", 0, Theme.Bone)
+	staminaFill = row("LUNGS  [SHIFT]", 32, Theme.Bone)
+	countFill = row("HEADCOUNT  [Q]", 64, Theme.Amber)
+
+	-- Bottom right: the job.
+	local job = Theme.panel(root, {
+		AnchorPoint = Vector2.new(1, 1),
+		Position = UDim2.new(1, -24, 1, -24),
+		Size = UDim2.fromOffset(230, 92),
+	})
+	Theme.new("UIPadding", { PaddingLeft = UDim.new(0, 14), PaddingTop = UDim.new(0, 10) }, job)
+	sampleLabel = Theme.label(job, { Font = Theme.Numbers, TextSize = 17 })
+	creditLabel = Theme.label(job, {
+		Font = Theme.Numbers,
+		TextSize = 17,
+		TextColor3 = Theme.Dim,
+		Position = UDim2.fromOffset(0, 26),
+	})
+	hintLabel = Theme.label(job, { TextSize = 14, TextColor3 = Theme.Dim, Position = UDim2.fromOffset(0, 52) })
+
+	-- Toasts, top centre.
+	toastHolder = Theme.new("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0),
+		Position = UDim2.new(0.5, 0, 0, 30),
+		Size = UDim2.fromOffset(620, 200),
+		BackgroundTransparency = 1,
+	}, root)
+	Theme.new("UIListLayout", {
+		HorizontalAlignment = Enum.HorizontalAlignment.Center,
+		Padding = UDim.new(0, 4),
+		SortOrder = Enum.SortOrder.LayoutOrder,
+	}, toastHolder)
+
+	-- The headcount readout, dead centre.
+	bigLabel = Theme.label(root, {
+		Font = Theme.Numbers,
+		TextSize = 64,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.36),
+		Size = UDim2.new(1, 0, 0, 80),
+		TextTransparency = 1,
+	})
+	bigSub = Theme.label(root, {
+		TextSize = 20,
+		TextColor3 = Theme.Dim,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.44),
+		Size = UDim2.new(1, 0, 0, 30),
+		TextTransparency = 1,
+	})
+
+	buildShop()
+	buildCards()
+end
+
+local toastOrder = 0
+function HUD.toast(text, kind)
+	toastOrder = toastOrder + 1
+	local color = Theme.Bone
+	if kind == "bad" then
+		color = Theme.Blood
+	elseif kind == "good" then
+		color = Theme.Sick
+	end
+	local label = Theme.label(toastHolder, {
+		Text = text,
+		TextSize = 20,
+		TextColor3 = color,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		TextTransparency = 1,
+		TextStrokeTransparency = 0.6,
+		LayoutOrder = toastOrder,
+		Size = UDim2.new(1, 0, 0, 26),
+	})
+	TweenService:Create(label, TweenInfo.new(0.25), { TextTransparency = 0 }):Play()
+	task.delay(4.5, function()
+		local out = TweenService:Create(label, TweenInfo.new(0.8), { TextTransparency = 1, TextStrokeTransparency = 1 })
+		out:Play()
+		out.Completed:Wait()
+		label:Destroy()
+	end)
+end
+
+function HUD.showHeadcount(bodies, caller)
+	local crewAlive = state:GetAttribute("CrewAlive") or 0
+	bigLabel.Text = "BODIES NEARBY: " .. bodies
+	bigLabel.TextColor3 = (bodies > crewAlive) and Theme.Blood or Theme.Bone
+	bigSub.Text = caller .. " called a headcount.  Crew alive: " .. crewAlive
+	bigLabel.TextTransparency = 0
+	bigSub.TextTransparency = 0
+	local fade = TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false, 2.6)
+	TweenService:Create(bigLabel, fade, { TextTransparency = 1 }):Play()
+	TweenService:Create(bigSub, fade, { TextTransparency = 1 }):Play()
+end
+
+function HUD.showResults(data)
+	local title = results:FindFirstChild("Title")
+	local body = results:FindFirstChild("Body")
+	if data.success and data.escaped then
+		title.Text = "ALL COUNTED"
+		title.TextColor3 = Theme.Bone
+	elseif data.success then
+		title.Text = "THEY LEFT WITHOUT YOU"
+		title.TextColor3 = Theme.Amber
+	else
+		title.Text = "NOBODY CAME BACK UP"
+		title.TextColor3 = Theme.Blood
+	end
+	body.Text = "NIGHT " .. data.night
+		.. "\nSAMPLES " .. data.deposited .. " / " .. data.quota
+		.. "\nCREDITS +" .. data.earned
+	results.Visible = true
+	task.delay(Config.ResultsTime, function()
+		results.Visible = false
+	end)
+end
+
+-- The last thing a victim sees.
+function HUD.jumpscare(name)
+	local line = death:FindFirstChild("Line")
+	local sub = death:FindFirstChild("Sub")
+	line.Text = "YOU WERE COUNTED TWICE"
+	sub.Text = "The crew will not notice. " .. string.upper(name) .. " is still walking with them."
+	line.TextTransparency = 0
+	sub.TextTransparency = 1
+	death.BackgroundTransparency = 0
+	death.Visible = true
+	-- Three hard black flashes, then hold.
+	task.spawn(function()
+		for _ = 1, 3 do
+			death.BackgroundTransparency = 0
+			task.wait(0.07)
+			death.BackgroundTransparency = 0.7
+			task.wait(0.05)
+		end
+		death.BackgroundTransparency = 0
+		TweenService:Create(sub, TweenInfo.new(1.5), { TextTransparency = 0 }):Play()
+		task.wait(4)
+		local fade = TweenInfo.new(2)
+		TweenService:Create(death, fade, { BackgroundTransparency = 1 }):Play()
+		TweenService:Create(line, fade, { TextTransparency = 1 }):Play()
+		TweenService:Create(sub, fade, { TextTransparency = 1 }):Play()
+		task.wait(2.1)
+		death.Visible = false
+	end)
+end
+
+function HUD.toggleShop()
+	if state:GetAttribute("Phase") ~= "Intermission" then
+		shop.Visible = false
+		return
+	end
+	shop.Visible = not shop.Visible
+end
+
+-- Call every frame.
+function HUD.update(dread, stamina)
+	local camera = workspace.CurrentCamera
+	if camera then
+		scale.Scale = math.clamp(camera.ViewportSize.Y / 900, 0.55, 1.3)
+	end
+	setVignette(dread)
+
+	local phase = state:GetAttribute("Phase")
+	local night = state:GetAttribute("Night") or 1
+	local timeLeft = state:GetAttribute("TimeLeft") or 0
+	local inRun = player:GetAttribute("InRun")
+	local alive = player:GetAttribute("Alive")
+
+	if phase == "Intermission" then
+		phaseLabel.Text = "STAGING"
+		timerLabel.Text = (timeLeft > 0) and ("DESCENT IN " .. formatTime(timeLeft)) or "WAITING FOR CREW"
+	elseif phase == "Descent" then
+		phaseLabel.Text = "GOING DOWN"
+		timerLabel.Text = formatTime(timeLeft)
+	elseif phase == "Expedition" then
+		phaseLabel.Text = "NIGHT " .. string.format("%02d", night)
+		timerLabel.Text = "LIFT LEAVES " .. formatTime(timeLeft)
+		timerLabel.TextColor3 = (timeLeft <= 60) and Theme.Blood or Theme.Dim
+	else
+		phaseLabel.Text = "COUNTING"
+		timerLabel.Text = ""
+	end
+	if phase ~= "Expedition" then
+		timerLabel.TextColor3 = Theme.Dim
+		shop.Visible = shop.Visible and phase == "Intermission"
+	end
+
+	crewLabel.Text = (state:GetAttribute("CrewAlive") or 0) .. " / " .. (state:GetAttribute("CrewTotal") or 0)
+
+	batteryFill.Size = UDim2.fromScale(math.clamp((player:GetAttribute("Battery") or 0) / 100, 0, 1), 1)
+	batteryFill.BackgroundColor3 = ((player:GetAttribute("Battery") or 0) < 20) and Theme.Blood or Theme.Bone
+	staminaFill.Size = UDim2.fromScale(math.clamp(stamina / 100, 0, 1), 1)
+
+	local now = workspace:GetServerTimeNow()
+	local readyAt = player:GetAttribute("HeadcountReadyAt") or 0
+	local cooldown = math.max(4, Config.Headcount.Cooldown - (player:GetAttribute("UpScanner") or 0) * Config.Headcount.CooldownPerUpgrade)
+	countFill.Size = UDim2.fromScale(math.clamp(1 - (readyAt - now) / cooldown, 0, 1), 1)
+
+	sampleLabel.Text = "SAMPLES  " .. (state:GetAttribute("Deposited") or 0) .. " / " .. (state:GetAttribute("Quota") or 0)
+	creditLabel.Text = "CREDITS  " .. (player:GetAttribute("Credits") or 0)
+	if phase == "Expedition" and inRun and alive then
+		hintLabel.Text = "Carrying " .. (player:GetAttribute("Samples") or 0) .. " of " .. Config.Samples.CarryCap
+	elseif phase == "Expedition" and inRun then
+		hintLabel.Text = "You are no longer counted."
+	elseif phase == "Expedition" then
+		hintLabel.Text = "The crew is below. Wait."
+	elseif phase == "Intermission" then
+		hintLabel.Text = "[B] Requisitions"
+	else
+		hintLabel.Text = ""
+	end
+
+	if shop.Visible then
+		local credits = player:GetAttribute("Credits") or 0
+		for name, rowData in pairs(shopRows) do
+			local level = player:GetAttribute("Up" .. name) or 0
+			rowData.title.Text = rowData.def.Label .. "  " .. string.rep("|", level) .. string.rep(".", rowData.def.Max - level)
+			if level >= rowData.def.Max then
+				rowData.button.Text = "MAXED"
+				rowData.button.TextColor3 = Theme.Dim
+			else
+				local cost = rowData.def.Cost * (level + 1)
+				rowData.button.Text = cost .. " CR"
+				rowData.button.TextColor3 = (credits >= cost) and Theme.Bone or Theme.Dim
+			end
+		end
+	end
+end
+
+return HUD
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX8"><Properties><string name="Name">Theme</string><ProtectedString name="Source"><![CDATA[-- One visual language for every screen: near-black panels, bone-white text,
+-- a typewriter face for words and a monospace face for numbers, and exactly
+-- one alarm colour. Change the look of the whole UI here.
+local Theme = {}
+
+Theme.Ink = Color3.fromRGB(6, 7, 8)
+Theme.Panel = Color3.fromRGB(13, 15, 16)
+Theme.Line = Color3.fromRGB(58, 56, 52)
+Theme.Bone = Color3.fromRGB(222, 214, 196)
+Theme.Dim = Color3.fromRGB(122, 118, 108)
+Theme.Blood = Color3.fromRGB(190, 34, 34)
+Theme.Amber = Color3.fromRGB(232, 168, 56)
+Theme.Sick = Color3.fromRGB(140, 255, 170)
+
+Theme.Words = Enum.Font.SpecialElite
+Theme.Numbers = Enum.Font.RobotoMono
+
+function Theme.new(className, props, parent)
+	local inst = Instance.new(className)
+	for key, value in pairs(props) do
+		inst[key] = value
+	end
+	inst.Parent = parent
+	return inst
+end
+
+function Theme.label(parent, props)
+	local base = {
+		BackgroundTransparency = 1,
+		Font = Theme.Words,
+		TextSize = 18,
+		TextColor3 = Theme.Bone,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		Text = "",
+		Size = UDim2.new(1, 0, 0, 22),
+	}
+	for key, value in pairs(props) do
+		base[key] = value
+	end
+	return Theme.new("TextLabel", base, parent)
+end
+
+-- A flat dark panel with a hairline border.
+function Theme.panel(parent, props)
+	local base = {
+		BackgroundColor3 = Theme.Panel,
+		BackgroundTransparency = 0.2,
+		BorderSizePixel = 0,
+	}
+	for key, value in pairs(props) do
+		base[key] = value
+	end
+	local frame = Theme.new("Frame", base, parent)
+	Theme.new("UIStroke", { Color = Theme.Line, Thickness = 1, Transparency = 0.3 }, frame)
+	return frame
+end
+
+-- A thin meter: returns the fill frame; set fill.Size = UDim2.fromScale(x, 1).
+function Theme.meter(parent, props, color)
+	local base = {
+		BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+		BorderSizePixel = 0,
+		Size = UDim2.new(1, 0, 0, 4),
+	}
+	for key, value in pairs(props) do
+		base[key] = value
+	end
+	local back = Theme.new("Frame", base, parent)
+	local fill = Theme.new("Frame", {
+		BackgroundColor3 = color,
+		BorderSizePixel = 0,
+		Size = UDim2.fromScale(1, 1),
+	}, back)
+	return fill
+end
+
+function Theme.button(parent, props, onClick)
+	local base = {
+		BackgroundColor3 = Theme.Ink,
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+		Font = Theme.Numbers,
+		TextSize = 15,
+		TextColor3 = Theme.Bone,
+		Text = "",
+	}
+	for key, value in pairs(props) do
+		base[key] = value
+	end
+	local button = Theme.new("TextButton", base, parent)
+	local stroke = Theme.new("UIStroke", {
+		Color = Theme.Line,
+		Thickness = 1,
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+	}, button)
+	button.MouseEnter:Connect(function()
+		stroke.Color = Theme.Bone
+	end)
+	button.MouseLeave:Connect(function()
+		stroke.Color = Theme.Line
+	end)
+	button.Activated:Connect(onClick)
+	return button
+end
+
+return Theme
+]]></ProtectedString></Properties></Item>
+</Item>
+<Item class="Folder" referent="RBX11"><Properties><string name="Name">Shared</string></Properties><Item class="ModuleScript" referent="RBX10"><Properties><string name="Name">Config</string><ProtectedString name="Source"><![CDATA[-- Every tuning knob lives here. Change numbers, not code.
+local Config = {}
+
+Config.Intermission = 20 -- seconds in the staging room between runs
+Config.DescentTime = 6
+Config.ExpeditionTime = 420
+Config.ResultsTime = 12
+
+Config.WalkSpeed = 12
+Config.SprintSpeed = 20
+Config.StaminaDrain = 24 -- per second while sprinting
+Config.StaminaRegen = 12
+Config.StaminaRegenPerUpgrade = 3
+
+Config.Map = {
+	Cols = 5,
+	Rows = 5,
+	Cell = 44,
+	Height = 14,
+	Wall = 2,
+	DoorWidth = 9,
+	DoorHeight = 9,
+	ExtraLoops = 0.28, -- chance to knock an extra doorway through, so the maze has loops
+	LightAlive = 0.55, -- chance a room's ceiling light works at all
+	LightFlicker = 0.4, -- of working lights, chance it flickers
+}
+
+Config.Mimic = {
+	FirstSpawn = 50, -- seconds into the run on night 1
+	FirstSpawnPerNight = 5, -- sooner each night
+	MinFirstSpawn = 15,
+	RespawnDelay = 40, -- after a banish or a kill
+	BaseLag = 24, -- how many seconds behind its target it walks on night 1
+	LagPerNight = 2,
+	MinLag = 8,
+	HuntRate = 1.3, -- playback speed while hunting (1 = same speed as the target)
+	HuntRatePerNight = 0.05,
+	MaxHuntRate = 1.8,
+	IsolateGrace = 6, -- seconds a target must be alone before it starts closing in
+	SafeRadius = 30, -- another living crew member within this radius = not alone
+	HoverDistance = 6, -- when not hunting it stops this far behind its target
+	KillDistance = 4,
+	WatchRange = 60, -- a lit flashlight pointed at it within this range freezes it
+	WatchDot = 0.75,
+	DreadRange = 60,
+	MaxCount = 3,
+	NightsPerExtra = 3, -- one more copy every N nights
+}
+
+Config.Samples = {
+	CarryCap = 3,
+	CreditEach = 10,
+	NightBonus = 0.25, -- +25% credits per night survived
+	QuotaBase = 3,
+	QuotaPerPlayer = 2,
+	QuotaPerNight = 1,
+	SpawnMultiplier = 1.7, -- samples on the map = quota * this
+}
+
+Config.Flashlight = {
+	BaseLife = 150, -- seconds of light on a full battery
+	LifePerUpgrade = 30,
+	Recharge = 12, -- percent per second while standing on the lift
+}
+
+Config.Headcount = {
+	Radius = 45,
+	Cooldown = 22,
+	CooldownPerUpgrade = 3,
+}
+
+Config.Accuse = {
+	Cooldown = 20,
+	HoldTime = 1.5,
+	Distance = 14,
+	LightsOut = 18, -- seconds your flashlight is dead after accusing a real person
+	LagPenalty = 5, -- and every copy gets this much closer
+	BanishBonus = 15, -- credits to the whole crew for a correct call
+}
+
+Config.Upgrades = {
+	Battery = { Max = 5, Cost = 40, Label = "BATTERY", Blurb = "+30s of light per level" },
+	Stamina = { Max = 5, Cost = 40, Label = "LUNGS", Blurb = "Stamina recovers faster" },
+	Scanner = { Max = 5, Cost = 60, Label = "COUNTER", Blurb = "Headcount recharges 3s sooner" },
+}
+
+-- PLACEHOLDER AUDIO. These are sounds that ship inside the Roblox client, slowed
+-- down and run through reverb so the game is not silent on first launch.
+-- Replace each id with a real asset ("rbxassetid://123") from the Creator Store.
+Config.Sounds = {
+	Ambience = { Id = "rbxasset://sounds/action_falling.mp3", Speed = 0.28, Volume = 0.55 },
+	Dread = { Id = "rbxasset://sounds/HalloweenGhost.wav", Speed = 0.35, Volume = 0.6 },
+	Heartbeat = { Id = "rbxasset://sounds/bass.wav", Speed = 0.55, Volume = 0.9 },
+	Sting = { Id = "rbxasset://sounds/uuhhh.mp3", Speed = 0.3, Volume = 1.4 },
+	Banish = { Id = "rbxasset://sounds/glassbreak.wav", Speed = 0.45, Volume = 0.9 },
+	Ping = { Id = "rbxasset://sounds/electronicpingshort.wav", Speed = 0.7, Volume = 0.6 },
+	Click = { Id = "rbxasset://sounds/clickfast.wav", Speed = 1, Volume = 0.5 },
+	Switch = { Id = "rbxasset://sounds/switch.wav", Speed = 0.9, Volume = 0.6 },
+	Collect = { Id = "rbxasset://sounds/snap.mp3", Speed = 0.6, Volume = 0.6 },
+	Bad = { Id = "rbxasset://sounds/collide.wav", Speed = 0.4, Volume = 0.8 },
+	Lift = { Id = "rbxasset://sounds/Rocket whoosh 01.wav", Speed = 0.25, Volume = 0.7 },
+}
+
+return Config
+]]></ProtectedString></Properties></Item>
+</Item>
+</Item>
+<Item class="ServerScriptService" referent="RBX20"><Properties><string name="Name">ServerScriptService</string></Properties><Item class="Script" referent="RBX13"><Properties><string name="Name">Main</string><ProtectedString name="Source"><![CDATA[-- HEADCOUNT server. Runs the loop:
+--   Intermission (staging room) -> Descent -> Expedition -> Results -> repeat
+-- and owns everything that must not be trusted to a client: the copies,
+-- samples, credits, battery, headcounts and accusations.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+local Modules = script.Parent.Modules
+local Atmosphere = require(Modules.Atmosphere)
+local MapGenerator = require(Modules.MapGenerator)
+local Recorder = require(Modules.Recorder)
+local Mimic = require(Modules.Mimic)
+local PlayerData = require(Modules.PlayerData)
+
+local STAGING_ORIGIN = Vector3.new(0, 300, 0)
+local MAP_ORIGIN = Vector3.new(-110, 0, -110)
+
+---------------------------------------------------------------------------
+-- Shared state the clients read
+---------------------------------------------------------------------------
+local remotes = Instance.new("Folder")
+remotes.Name = "Remotes"
+local function remote(name)
+	local r = Instance.new("RemoteEvent")
+	r.Name = name
+	r.Parent = remotes
+	return r
+end
+local ToggleFlashlight = remote("ToggleFlashlight")
+local HeadcountRequest = remote("Headcount")
+local HeadcountResult = remote("HeadcountResult")
+local Notify = remote("Notify")
+local Jumpscare = remote("Jumpscare")
+local BuyUpgrade = remote("BuyUpgrade")
+local Results = remote("Results")
+remotes.Parent = ReplicatedStorage
+
+local state = Instance.new("Folder")
+state.Name = "GameState"
+state:SetAttribute("Phase", "Intermission")
+state:SetAttribute("Night", 1)
+state:SetAttribute("TimeLeft", 0)
+state:SetAttribute("Quota", 0)
+state:SetAttribute("Deposited", 0)
+state:SetAttribute("CrewAlive", 0)
+state:SetAttribute("CrewTotal", 0)
+state.Parent = ReplicatedStorage
+
+Atmosphere.apply()
+local staging = MapGenerator.buildStaging(STAGING_ORIGIN)
+staging.model.Parent = workspace
+
+local mimicFolder = Instance.new("Folder")
+mimicFolder.Name = "Others"
+mimicFolder.Parent = workspace
+
+local night = 1
+local run = nil -- the expedition in progress, or nil
+
+---------------------------------------------------------------------------
+-- Helpers
+---------------------------------------------------------------------------
+local function charOf(player)
+	local character = player.Character
+	if not character then
+		return nil
+	end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	local root = character:FindFirstChild("HumanoidRootPart")
+	if humanoid and root and humanoid.Health > 0 then
+		return character, humanoid, root
+	end
+	return nil
+end
+
+local function aliveCrew()
+	local list = {}
+	if not run then
+		return list
+	end
+	for player in pairs(run.crew) do
+		if player.Parent and player:GetAttribute("Alive") and charOf(player) then
+			list[#list + 1] = player
+		end
+	end
+	return list
+end
+
+local function notifyAll(text, kind, sound)
+	Notify:FireAllClients({ text = text, kind = kind or "info", sound = sound })
+end
+
+local function notify(player, text, kind, sound)
+	Notify:FireClient(player, { text = text, kind = kind or "info", sound = sound })
+end
+
+local function setFlashlight(player, on)
+	local character = player.Character
+	if not character then
+		return
+	end
+	character:SetAttribute("Flashlight", on)
+	local head = character:FindFirstChild("Head")
+	local light = head and head:FindFirstChild("CrewLight")
+	if light then
+		light.Enabled = on
+	end
+end
+
+local function horizontalDistance(a, b)
+	return (Vector3.new(a.X, 0, a.Z) - Vector3.new(b.X, 0, b.Z)).Magnitude
+end
+
+---------------------------------------------------------------------------
+-- Accusations
+---------------------------------------------------------------------------
+local function attachAccusePrompt(model, mimic)
+	local root = model:FindFirstChild("HumanoidRootPart")
+	if not root then
+		return
+	end
+	local old = root:FindFirstChild("Accuse")
+	if old then
+		old:Destroy()
+	end
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "Accuse"
+	prompt.ActionText = "ACCUSE"
+	prompt.ObjectText = "This is not one of us"
+	prompt.HoldDuration = Config.Accuse.HoldTime
+	prompt.MaxActivationDistance = Config.Accuse.Distance
+	prompt.RequiresLineOfSight = false
+	prompt.Style = Enum.ProximityPromptStyle.Custom
+	prompt.Parent = root
+
+	prompt.Triggered:Connect(function(accuser)
+		if not run or not run.crew[accuser] or not accuser:GetAttribute("Alive") then
+			return
+		end
+		if accuser.Character == model then
+			return
+		end
+		local now = workspace:GetServerTimeNow()
+		if now < (accuser:GetAttribute("AccuseReadyAt") or 0) then
+			notify(accuser, "You are not sure enough yet.", "info")
+			return
+		end
+		accuser:SetAttribute("AccuseReadyAt", now + Config.Accuse.Cooldown)
+
+		if mimic and mimic.alive then
+			local wornName = mimic.target.DisplayName
+			mimic:banish()
+			run.nextMimicAt = os.clock() + Config.Mimic.RespawnDelay
+			run.bonus = run.bonus + Config.Accuse.BanishBonus
+			notifyAll(accuser.DisplayName .. " counted right. That was not " .. wornName .. ".", "good", "Banish")
+		elseif not mimic then
+			-- They accused a real person.
+			accuser:SetAttribute("LightsOutUntil", now + Config.Accuse.LightsOut)
+			setFlashlight(accuser, false)
+			for _, other in ipairs(run.mimics) do
+				other:closeIn(Config.Accuse.LagPenalty)
+			end
+			notifyAll(accuser.DisplayName .. " miscounted. Something is closer now.", "bad", "Bad")
+		end
+	end)
+end
+
+---------------------------------------------------------------------------
+-- Players
+---------------------------------------------------------------------------
+local function onCharacter(player, character)
+	local humanoid = character:WaitForChild("Humanoid", 10)
+	local head = character:WaitForChild("Head", 10)
+	if not humanoid or not head then
+		return
+	end
+	humanoid.WalkSpeed = Config.WalkSpeed
+	humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOff
+	humanoid.NameDisplayDistance = 45
+	humanoid.NameOcclusion = Enum.NameOcclusion.OccludeAll
+	character:SetAttribute("Flashlight", false)
+
+	local light = Instance.new("SpotLight")
+	light.Name = "CrewLight"
+	light.Face = Enum.NormalId.Front
+	light.Angle = 55
+	light.Range = 55
+	light.Brightness = 2.4
+	light.Color = Color3.fromRGB(255, 244, 224)
+	light.Shadows = true
+	light.Enabled = false
+	light.Parent = head
+
+	humanoid.Died:Connect(function()
+		if run and run.crew[player] and player:GetAttribute("Alive") then
+			player:SetAttribute("Alive", false)
+			player:SetAttribute("Samples", 0)
+			notifyAll(player.DisplayName .. " is no longer counted.", "bad")
+		end
+	end)
+end
+
+local function onPlayer(player)
+	player.CameraMode = Enum.CameraMode.LockFirstPerson
+	player:SetAttribute("InRun", false)
+	player:SetAttribute("Alive", false)
+	player:SetAttribute("Samples", 0)
+	player:SetAttribute("Battery", 100)
+	player:SetAttribute("Dread", 0)
+	player:SetAttribute("HeadcountReadyAt", 0)
+	player:SetAttribute("AccuseReadyAt", 0)
+	player:SetAttribute("LightsOutUntil", 0)
+	player.CharacterAdded:Connect(function(character)
+		onCharacter(player, character)
+	end)
+	if player.Character then
+		task.spawn(onCharacter, player, player.Character)
+	end
+	PlayerData.load(player)
+end
+
+Players.PlayerAdded:Connect(onPlayer)
+for _, player in ipairs(Players:GetPlayers()) do
+	task.spawn(onPlayer, player)
+end
+
+Players.PlayerRemoving:Connect(function(player)
+	PlayerData.save(player)
+	if run then
+		run.crew[player] = nil
+		run.recorder:forget(player)
+	end
+end)
+
+game:BindToClose(function()
+	for _, player in ipairs(Players:GetPlayers()) do
+		PlayerData.save(player)
+	end
+end)
+
+---------------------------------------------------------------------------
+-- Client requests
+---------------------------------------------------------------------------
+ToggleFlashlight.OnServerEvent:Connect(function(player)
+	local character = charOf(player)
+	if not character then
+		return
+	end
+	local on = not character:GetAttribute("Flashlight")
+	if on then
+		if (player:GetAttribute("Battery") or 0) <= 0 then
+			notify(player, "Battery dead. Get back to the lift.", "bad")
+			return
+		end
+		if workspace:GetServerTimeNow() < (player:GetAttribute("LightsOutUntil") or 0) then
+			notify(player, "Your light will not come on.", "bad")
+			return
+		end
+	end
+	setFlashlight(player, on)
+end)
+
+HeadcountRequest.OnServerEvent:Connect(function(player)
+	if not run or not run.crew[player] or not player:GetAttribute("Alive") then
+		return
+	end
+	local _, _, root = charOf(player)
+	if not root then
+		return
+	end
+	local now = workspace:GetServerTimeNow()
+	if now < (player:GetAttribute("HeadcountReadyAt") or 0) then
+		return
+	end
+	local cooldown = Config.Headcount.Cooldown - (player:GetAttribute("UpScanner") or 0) * Config.Headcount.CooldownPerUpgrade
+	player:SetAttribute("HeadcountReadyAt", now + math.max(4, cooldown))
+
+	local radius = Config.Headcount.Radius
+	local bodies = 0
+	local listeners = {}
+	for _, other in ipairs(aliveCrew()) do
+		local _, _, otherRoot = charOf(other)
+		if otherRoot and (otherRoot.Position - root.Position).Magnitude <= radius then
+			bodies = bodies + 1
+			listeners[#listeners + 1] = other
+		end
+	end
+	for _, mimic in ipairs(run.mimics) do
+		if mimic.alive and (mimic.root.Position - root.Position).Magnitude <= radius then
+			bodies = bodies + 1
+		end
+	end
+	for _, listener in ipairs(listeners) do
+		HeadcountResult:FireClient(listener, { bodies = bodies, caller = player.DisplayName })
+	end
+end)
+
+BuyUpgrade.OnServerEvent:Connect(function(player, name)
+	if type(name) ~= "string" then
+		return
+	end
+	local def = Config.Upgrades[name]
+	if not def or state:GetAttribute("Phase") ~= "Intermission" then
+		return
+	end
+	local field = "Up" .. name
+	local level = player:GetAttribute(field) or 0
+	local cost = def.Cost * (level + 1)
+	local credits = player:GetAttribute("Credits") or 0
+	if level >= def.Max then
+		notify(player, def.Label .. " is fully upgraded.", "info")
+	elseif credits < cost then
+		notify(player, "Not enough credits.", "bad", "Bad")
+	else
+		player:SetAttribute("Credits", credits - cost)
+		player:SetAttribute(field, level + 1)
+		notify(player, def.Label .. " upgraded to level " .. (level + 1) .. ".", "good", "Collect")
+	end
+end)
+
+---------------------------------------------------------------------------
+-- Expedition pieces
+---------------------------------------------------------------------------
+local function spawnSamples(spots, count, parent)
+	local rng = Random.new()
+	local pool = table.clone(spots)
+	for _ = 1, math.min(count, #pool) do
+		local index = rng:NextInteger(1, #pool)
+		local position = pool[index]
+		table.remove(pool, index)
+
+		local canister = Instance.new("Part")
+		canister.Name = "Sample"
+		canister.Shape = Enum.PartType.Cylinder
+		canister.Size = Vector3.new(2, 1.1, 1.1)
+		canister.CFrame = CFrame.new(position) * CFrame.Angles(0, 0, math.pi / 2)
+		canister.Anchored = true
+		canister.CanCollide = false
+		canister.Material = Enum.Material.Neon
+		canister.Color = Color3.fromRGB(140, 255, 170)
+		canister.Parent = parent
+
+		local glow = Instance.new("PointLight")
+		glow.Color = canister.Color
+		glow.Range = 9
+		glow.Brightness = 0.7
+		glow.Parent = canister
+
+		local prompt = Instance.new("ProximityPrompt")
+		prompt.Name = "Collect"
+		prompt.ActionText = "COLLECT"
+		prompt.ObjectText = "Sample"
+		prompt.HoldDuration = 0.6
+		prompt.MaxActivationDistance = 9
+		prompt.RequiresLineOfSight = false
+		prompt.Style = Enum.ProximityPromptStyle.Custom
+		prompt.Parent = canister
+		prompt.Triggered:Connect(function(player)
+			if not run or not run.crew[player] or not player:GetAttribute("Alive") then
+				return
+			end
+			local carrying = player:GetAttribute("Samples") or 0
+			if carrying >= Config.Samples.CarryCap then
+				notify(player, "Hands full. Take them to the lift.", "info")
+				return
+			end
+			player:SetAttribute("Samples", carrying + 1)
+			notify(player, "Sample secured.", "good", "Collect")
+			canister:Destroy()
+		end)
+	end
+end
+
+local function makeMimicContext()
+	local wallParams = RaycastParams.new()
+	wallParams.FilterType = Enum.RaycastFilterType.Include
+	wallParams.FilterDescendantsInstances = { run.map.model }
+
+	return {
+		recorder = run.recorder,
+		folder = mimicFolder,
+		charOf = charOf,
+		attachPrompt = attachAccusePrompt,
+
+		-- Alone = no other living crew member close by. A solo player is always alone.
+		isIsolated = function(player)
+			local _, _, root = charOf(player)
+			if not root then
+				return false
+			end
+			for _, other in ipairs(aliveCrew()) do
+				if other ~= player then
+					local _, _, otherRoot = charOf(other)
+					if otherRoot and (otherRoot.Position - root.Position).Magnitude < Config.Mimic.SafeRadius then
+						return false
+					end
+				end
+			end
+			return true
+		end,
+
+		-- Watched = someone is pointing a lit flashlight at it with no wall between.
+		isWatched = function(position)
+			for _, player in ipairs(aliveCrew()) do
+				local character, _, root = charOf(player)
+				if character and character:GetAttribute("Flashlight") then
+					local offset = position - root.Position
+					local distance = offset.Magnitude
+					if distance < Config.Mimic.WatchRange and distance > 0.5 then
+						if root.CFrame.LookVector:Dot(offset.Unit) > Config.Mimic.WatchDot then
+							if not workspace:Raycast(root.Position, offset, wallParams) then
+								return true
+							end
+						end
+					end
+				end
+			end
+			return false
+		end,
+
+		onKill = function(mimic, victim)
+			local _, humanoid = charOf(victim)
+			Jumpscare:FireClient(victim, { name = victim.DisplayName })
+			if humanoid then
+				humanoid.Health = 0
+			end
+			mimic:destroy()
+			run.nextMimicAt = os.clock() + Config.Mimic.RespawnDelay
+		end,
+	}
+end
+
+local function updateMimics(now)
+	-- Clear out copies that are gone.
+	for index = #run.mimics, 1, -1 do
+		if not run.mimics[index].alive then
+			table.remove(run.mimics, index)
+		end
+	end
+	local wanted = math.min(Config.Mimic.MaxCount, 1 + math.floor((night - 1) / Config.Mimic.NightsPerExtra))
+	if #run.mimics >= wanted or os.clock() < run.nextMimicAt then
+		return
+	end
+	local crew = aliveCrew()
+	if #crew == 0 then
+		return
+	end
+	-- Prefer someone who is not already being copied.
+	local copied = {}
+	for _, mimic in ipairs(run.mimics) do
+		copied[mimic.target] = true
+	end
+	local candidates = {}
+	for _, player in ipairs(crew) do
+		if not copied[player] then
+			candidates[#candidates + 1] = player
+		end
+	end
+	if #candidates == 0 then
+		return
+	end
+	local target = candidates[math.random(1, #candidates)]
+	local mimic = Mimic.new(run.context, target, night)
+	if mimic:spawn(now) then
+		run.mimics[#run.mimics + 1] = mimic
+		run.nextMimicAt = os.clock() + 12
+	else
+		run.nextMimicAt = os.clock() + 3
+	end
+end
+
+local function updateDread()
+	for _, player in ipairs(Players:GetPlayers()) do
+		local dread = 0
+		local _, _, root = charOf(player)
+		if run and root and run.crew[player] and player:GetAttribute("Alive") then
+			for _, mimic in ipairs(run.mimics) do
+				if mimic.alive then
+					local distance = (mimic.root.Position - root.Position).Magnitude
+					local value = math.clamp(1 - distance / Config.Mimic.DreadRange, 0, 1)
+					if mimic.target == player and mimic.state == "hunt" then
+						value = math.min(1, value * 1.5 + 0.15)
+					end
+					dread = math.max(dread, value)
+				end
+			end
+		end
+		player:SetAttribute("Dread", math.floor(dread * 100) / 100)
+	end
+end
+
+local function updateCrew(dt)
+	local onPad = 0
+	local crew = aliveCrew()
+	for _, player in ipairs(crew) do
+		local character, _, root = charOf(player)
+		local battery = player:GetAttribute("Battery") or 0
+		local atLift = horizontalDistance(root.Position, run.map.padPosition) < 8.5
+		if atLift then
+			onPad = onPad + 1
+			battery = math.min(100, battery + Config.Flashlight.Recharge * dt)
+			local carrying = player:GetAttribute("Samples") or 0
+			if carrying > 0 then
+				player:SetAttribute("Samples", 0)
+				run.deposited = run.deposited + carrying
+				state:SetAttribute("Deposited", run.deposited)
+				notifyAll(player.DisplayName .. " loaded " .. carrying .. " onto the lift.", "good", "Collect")
+			end
+		elseif character:GetAttribute("Flashlight") then
+			local life = Config.Flashlight.BaseLife + (player:GetAttribute("UpBattery") or 0) * Config.Flashlight.LifePerUpgrade
+			battery = math.max(0, battery - 100 / life * dt)
+			if battery <= 0 then
+				setFlashlight(player, false)
+				notify(player, "Your light is dead.", "bad", "Switch")
+			end
+		end
+		player:SetAttribute("Battery", battery)
+	end
+	state:SetAttribute("CrewAlive", #crew)
+	return #crew, onPad
+end
+
+---------------------------------------------------------------------------
+-- The loop
+---------------------------------------------------------------------------
+local function countdown(phase, seconds)
+	state:SetAttribute("Phase", phase)
+	for remaining = seconds, 1, -1 do
+		state:SetAttribute("TimeLeft", remaining)
+		task.wait(1)
+	end
+	state:SetAttribute("TimeLeft", 0)
+end
+
+local function readyPlayers()
+	local list = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		if charOf(player) and player:GetAttribute("DataLoaded") then
+			list[#list + 1] = player
+		end
+	end
+	return list
+end
+
+local function runExpedition()
+	local crewList = readyPlayers()
+	if #crewList == 0 then
+		return
+	end
+
+	local map = MapGenerator.build(MAP_ORIGIN, math.random(1, 1e6))
+	map.model.Parent = workspace
+
+	local quota = Config.Samples.QuotaBase + Config.Samples.QuotaPerPlayer * #crewList + Config.Samples.QuotaPerNight * (night - 1)
+	quota = math.min(quota, #map.sampleSpots)
+	run = {
+		map = map,
+		crew = {},
+		mimics = {},
+		recorder = Recorder.new(90),
+		deposited = 0,
+		bonus = 0,
+		quota = quota,
+		nextMimicAt = 0,
+	}
+	run.context = makeMimicContext()
+	spawnSamples(map.sampleSpots, math.ceil(quota * Config.Samples.SpawnMultiplier), map.model)
+
+	state:SetAttribute("Night", night)
+	state:SetAttribute("Quota", quota)
+	state:SetAttribute("Deposited", 0)
+	state:SetAttribute("CrewTotal", #crewList)
+	state:SetAttribute("CrewAlive", #crewList)
+
+	notifyAll("The lift is going down.", "info", "Lift")
+	countdown("Descent", Config.DescentTime)
+
+	for index, player in ipairs(crewList) do
+		local character, _, root = charOf(player)
+		if character and player.Parent then
+			run.crew[player] = true
+			player:SetAttribute("InRun", true)
+			player:SetAttribute("Alive", true)
+			player:SetAttribute("Samples", 0)
+			player:SetAttribute("Battery", 100)
+			player:SetAttribute("LightsOutUntil", 0)
+			local angle = (index / #crewList) * math.pi * 2
+			root.CFrame = map.startCFrame * CFrame.new(math.cos(angle) * 4, 0, math.sin(angle) * 4)
+			attachAccusePrompt(character, nil)
+		end
+	end
+
+	local firstSpawn = math.max(Config.Mimic.MinFirstSpawn, Config.Mimic.FirstSpawn - (night - 1) * Config.Mimic.FirstSpawnPerNight)
+	run.nextMimicAt = os.clock() + firstSpawn
+
+	state:SetAttribute("Phase", "Expedition")
+	notifyAll("Night " .. night .. ". Bring back " .. quota .. " samples. Stay counted.", "info")
+
+	local recordTimer, slowTimer = 0, 0
+	local heartbeat = RunService.Heartbeat:Connect(function(dt)
+		if not run then
+			return
+		end
+		local now = os.clock()
+		recordTimer = recordTimer + dt
+		if recordTimer >= 0.1 then
+			recordTimer = 0
+			for _, player in ipairs(aliveCrew()) do
+				local character, _, root = charOf(player)
+				run.recorder:sample(player, now, root.CFrame, character:GetAttribute("Flashlight") == true)
+			end
+		end
+		for _, mimic in ipairs(run.mimics) do
+			mimic:step(dt, now)
+		end
+		slowTimer = slowTimer + dt
+		if slowTimer >= 0.2 then
+			slowTimer = 0
+			updateMimics(now)
+			updateDread()
+		end
+	end)
+
+	local deadline = os.clock() + Config.ExpeditionTime
+	local success = false
+	local warned = false
+	while true do
+		task.wait(0.25)
+		local alive, onPad = updateCrew(0.25)
+		local left = math.max(0, math.ceil(deadline - os.clock()))
+		state:SetAttribute("TimeLeft", left)
+		if left <= 60 and not warned then
+			warned = true
+			notifyAll("The lift leaves in one minute.", "bad", "Bad")
+		end
+		if alive == 0 then
+			break
+		end
+		if run.deposited >= run.quota and onPad == alive then
+			success = true
+			break
+		end
+		if left <= 0 then
+			success = run.deposited >= run.quota and onPad > 0
+			break
+		end
+	end
+	heartbeat:Disconnect()
+
+	-- Pay out. Anyone not on the lift when it leaves is left behind.
+	local multiplier = 1 + Config.Samples.NightBonus * (night - 1)
+	local pot = math.floor(run.deposited * Config.Samples.CreditEach * multiplier) + run.bonus
+	local survivors = 0
+	for player in pairs(run.crew) do
+		if player.Parent then
+			local _, humanoid, root = charOf(player)
+			local escaped = player:GetAttribute("Alive")
+				and root ~= nil
+				and horizontalDistance(root.Position, run.map.padPosition) < 8.5
+			local earned = 0
+			if success and escaped then
+				survivors = survivors + 1
+				earned = pot
+				if night > (player:GetAttribute("BestNight") or 0) then
+					player:SetAttribute("BestNight", night)
+				end
+			elseif success then
+				earned = math.floor(pot / 2)
+			end
+			player:SetAttribute("Credits", (player:GetAttribute("Credits") or 0) + earned)
+			Results:FireClient(player, {
+				success = success,
+				escaped = escaped == true,
+				night = night,
+				deposited = run.deposited,
+				quota = run.quota,
+				earned = earned,
+			})
+			if humanoid and not (success and escaped) then
+				humanoid.Health = 0
+			end
+		end
+	end
+
+	state:SetAttribute("Phase", "Results")
+	task.wait(1.5)
+
+	-- Tear down and send the survivors back up.
+	for _, mimic in ipairs(run.mimics) do
+		mimic:destroy()
+	end
+	mimicFolder:ClearAllChildren()
+	for player in pairs(run.crew) do
+		if player.Parent then
+			player:SetAttribute("InRun", false)
+			player:SetAttribute("Alive", false)
+			player:SetAttribute("Samples", 0)
+			player:SetAttribute("Dread", 0)
+			setFlashlight(player, false)
+			local character, _, root = charOf(player)
+			if character then
+				local prompt = root:FindFirstChild("Accuse")
+				if prompt then
+					prompt:Destroy()
+				end
+				root.CFrame = staging.spawnCFrame
+			end
+			task.spawn(PlayerData.save, player)
+		end
+	end
+	map.model:Destroy()
+	run = nil
+
+	if success and survivors > 0 then
+		night = night + 1
+	else
+		night = 1
+	end
+	state:SetAttribute("Night", night)
+	countdown("Results", Config.ResultsTime)
+end
+
+while true do
+	state:SetAttribute("Phase", "Intermission")
+	state:SetAttribute("TimeLeft", 0)
+	while #readyPlayers() == 0 do
+		task.wait(1)
+	end
+	countdown("Intermission", Config.Intermission)
+	local ok, err = pcall(runExpedition)
+	if not ok then
+		warn("[Headcount] expedition failed: " .. tostring(err))
+		if run then
+			if run.map and run.map.model then
+				run.map.model:Destroy()
+			end
+			run = nil
+		end
+		mimicFolder:ClearAllChildren()
+		task.wait(3)
+	end
+end
+]]></ProtectedString></Properties></Item>
+<Item class="Folder" referent="RBX19"><Properties><string name="Name">Modules</string></Properties><Item class="ModuleScript" referent="RBX14"><Properties><string name="Name">Atmosphere</string><ProtectedString name="Source"><![CDATA[-- The whole look of the game is set here: near-total darkness, thick air,
+-- desaturated colour, and bloom so the few lights that work feel harsh.
+-- Lighting.Technology cannot be set from a script; it is set to Future in the
+-- place file / Rojo project. Check it in Studio: Lighting > Technology.
+local Lighting = game:GetService("Lighting")
+local SoundService = game:GetService("SoundService")
+
+local Atmosphere = {}
+
+local function ensure(className, name)
+	local inst = Lighting:FindFirstChild(name)
+	if not inst then
+		inst = Instance.new(className)
+		inst.Name = name
+		inst.Parent = Lighting
+	end
+	return inst
+end
+
+function Atmosphere.apply()
+	Lighting.Brightness = 0
+	Lighting.Ambient = Color3.fromRGB(5, 6, 8)
+	Lighting.OutdoorAmbient = Color3.fromRGB(0, 0, 0)
+	Lighting.ClockTime = 0
+	Lighting.GlobalShadows = true
+	Lighting.EnvironmentDiffuseScale = 0
+	Lighting.EnvironmentSpecularScale = 0.3
+	Lighting.ExposureCompensation = -0.15
+	Lighting.FogEnd = 100000
+
+	for _, child in ipairs(Lighting:GetChildren()) do
+		if child:IsA("Sky") or child:IsA("SunRaysEffect") then
+			child:Destroy()
+		end
+	end
+
+	local air = ensure("Atmosphere", "Air")
+	air.Density = 0.44
+	air.Offset = 0
+	air.Color = Color3.fromRGB(22, 26, 28)
+	air.Decay = Color3.fromRGB(8, 10, 10)
+	air.Glare = 0
+	air.Haze = 1.6
+
+	local grade = ensure("ColorCorrectionEffect", "Grade")
+	grade.Saturation = -0.3
+	grade.Contrast = 0.18
+	grade.Brightness = -0.02
+	grade.TintColor = Color3.fromRGB(226, 240, 232)
+
+	local bloom = ensure("BloomEffect", "Bloom")
+	bloom.Intensity = 0.7
+	bloom.Size = 32
+	bloom.Threshold = 1.05
+
+	local dof = ensure("DepthOfFieldEffect", "Lens")
+	dof.FocusDistance = 18
+	dof.InFocusRadius = 28
+	dof.NearIntensity = 0
+	dof.FarIntensity = 0.22
+
+	-- Every 3D sound in the facility echoes like bare concrete.
+	SoundService.AmbientReverb = Enum.ReverbType.StoneCorridor
+	SoundService.DistanceFactor = 3.33
+	SoundService.RolloffScale = 1.2
+end
+
+return Atmosphere
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX15"><Properties><string name="Name">MapGenerator</string><ProtectedString name="Source"><![CDATA[-- Builds a different underground facility every run: a grid of concrete rooms
+-- joined by doorways (a maze with a few loops), with pipes, clutter, puddles
+-- and ceiling lights that are mostly dead or flickering.
+-- Also builds the lit staging room where the crew waits between runs.
+local CollectionService = game:GetService("CollectionService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+
+local MapGenerator = {}
+
+local CONCRETE = Color3.fromRGB(62, 64, 62)
+local CONCRETE_DARK = Color3.fromRGB(44, 46, 45)
+local FLOOR = Color3.fromRGB(38, 39, 38)
+local RUST = Color3.fromRGB(84, 52, 38)
+local STEEL = Color3.fromRGB(52, 56, 60)
+local AMBER = Color3.fromRGB(255, 170, 60)
+local WARM = Color3.fromRGB(255, 232, 196)
+local COLD = Color3.fromRGB(196, 224, 255)
+
+local function part(parent, props)
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.TopSurface = Enum.SurfaceType.Smooth
+	p.BottomSurface = Enum.SurfaceType.Smooth
+	p.Material = Enum.Material.Concrete
+	p.Color = CONCRETE
+	for key, value in pairs(props) do
+		p[key] = value
+	end
+	p.Parent = parent
+	return p
+end
+
+-- A wall along the X or Z axis, optionally with a doorway cut in the middle.
+local function wall(parent, center, axis, length, hasDoor, rng)
+	local cfg = Config.Map
+	local height = cfg.Height
+	local thick = cfg.Wall
+	local color = (rng:NextNumber() < 0.3) and CONCRETE_DARK or CONCRETE
+
+	local function segment(offset, segLength, segHeight, y, material, segColor)
+		local size, position
+		if axis == "x" then
+			size = Vector3.new(segLength, segHeight, thick)
+			position = center + Vector3.new(offset, y, 0)
+		else
+			size = Vector3.new(thick, segHeight, segLength)
+			position = center + Vector3.new(0, y, offset)
+		end
+		return part(parent, {
+			Name = "Wall",
+			Size = size,
+			Position = position,
+			Color = segColor or color,
+			Material = material or Enum.Material.Concrete,
+		})
+	end
+
+	if not hasDoor then
+		segment(0, length, height, height / 2)
+		return
+	end
+
+	local side = (length - cfg.DoorWidth) / 2
+	local sideOffset = cfg.DoorWidth / 2 + side / 2
+	segment(-sideOffset, side, height, height / 2)
+	segment(sideOffset, side, height, height / 2)
+	local lintel = height - cfg.DoorHeight
+	segment(0, cfg.DoorWidth, lintel, cfg.DoorHeight + lintel / 2, Enum.Material.CorrodedMetal, RUST)
+	-- Steel door frame posts.
+	segment(-cfg.DoorWidth / 2 + 0.25, 0.5, cfg.DoorHeight, cfg.DoorHeight / 2, Enum.Material.Metal, STEEL).Size =
+		(axis == "x") and Vector3.new(0.5, cfg.DoorHeight, thick + 0.4) or Vector3.new(thick + 0.4, cfg.DoorHeight, 0.5)
+	segment(cfg.DoorWidth / 2 - 0.25, 0.5, cfg.DoorHeight, cfg.DoorHeight / 2, Enum.Material.Metal, STEEL).Size =
+		(axis == "x") and Vector3.new(0.5, cfg.DoorHeight, thick + 0.4) or Vector3.new(thick + 0.4, cfg.DoorHeight, 0.5)
+end
+
+local function ceilingLight(parent, position, rng, forceOn, color)
+	local cfg = Config.Map
+	local alive = forceOn or rng:NextNumber() < cfg.LightAlive
+	local housing = part(parent, {
+		Name = "LightHousing",
+		Size = Vector3.new(5, 0.5, 1.6),
+		Position = position + Vector3.new(0, -0.25, 0),
+		Material = Enum.Material.Metal,
+		Color = STEEL,
+		CastShadow = false,
+	})
+	local tube = part(parent, {
+		Name = "LightTube",
+		Size = Vector3.new(4.4, 0.25, 1),
+		Position = position + Vector3.new(0, -0.6, 0),
+		Material = alive and Enum.Material.Neon or Enum.Material.SmoothPlastic,
+		Color = alive and (color or ((rng:NextNumber() < 0.5) and WARM or COLD)) or Color3.fromRGB(40, 40, 40),
+		CastShadow = false,
+	})
+	if alive then
+		local lamp = Instance.new("SpotLight")
+		lamp.Name = "Lamp"
+		lamp.Face = Enum.NormalId.Bottom
+		lamp.Angle = 130
+		lamp.Range = 42
+		lamp.Brightness = 1.6
+		lamp.Color = tube.Color
+		lamp.Shadows = true
+		lamp.Parent = tube
+		if not forceOn and rng:NextNumber() < cfg.LightFlicker then
+			CollectionService:AddTag(tube, "FlickerLight")
+		end
+	end
+	return housing
+end
+
+local function clutter(parent, center, rng)
+	local cfg = Config.Map
+	local reach = cfg.Cell / 2 - 6
+	local kind = rng:NextInteger(1, 4)
+	local spot = center + Vector3.new(rng:NextNumber(-reach, reach), 0, rng:NextNumber(-reach, reach))
+	if kind == 1 then
+		-- A stack of crates.
+		for i = 1, rng:NextInteger(2, 4) do
+			local s = rng:NextNumber(2.5, 4)
+			part(parent, {
+				Name = "Crate",
+				Size = Vector3.new(s, s, s),
+				CFrame = CFrame.new(spot + Vector3.new(rng:NextNumber(-3, 3), s / 2, rng:NextNumber(-3, 3)))
+					* CFrame.Angles(0, rng:NextNumber(0, math.pi), 0),
+				Material = Enum.Material.WoodPlanks,
+				Color = Color3.fromRGB(70, 56, 40),
+			})
+		end
+	elseif kind == 2 then
+		-- A steel shelving unit: something person-shaped to hide behind.
+		local turn = CFrame.new(spot) * CFrame.Angles(0, rng:NextInteger(0, 1) * math.pi / 2, 0)
+		for level = 0, 3 do
+			part(parent, {
+				Name = "Shelf",
+				Size = Vector3.new(10, 0.3, 3),
+				CFrame = turn * CFrame.new(0, 0.6 + level * 2.6, 0),
+				Material = Enum.Material.Metal,
+				Color = STEEL,
+			})
+		end
+		for _, x in ipairs({ -4.8, 4.8 }) do
+			part(parent, {
+				Name = "ShelfPost",
+				Size = Vector3.new(0.4, 9, 3),
+				CFrame = turn * CFrame.new(x, 4.5, 0),
+				Material = Enum.Material.Metal,
+				Color = STEEL,
+			})
+		end
+	elseif kind == 3 then
+		part(parent, {
+			Name = "Pillar",
+			Size = Vector3.new(3.5, cfg.Height, 3.5),
+			Position = spot + Vector3.new(0, cfg.Height / 2, 0),
+			Color = CONCRETE_DARK,
+		})
+	else
+		-- An overturned drum.
+		part(parent, {
+			Name = "Drum",
+			Shape = Enum.PartType.Cylinder,
+			Size = Vector3.new(4, 2.6, 2.6),
+			CFrame = CFrame.new(spot + Vector3.new(0, 1.3, 0)) * CFrame.Angles(0, rng:NextNumber(0, math.pi), 0),
+			Material = Enum.Material.CorrodedMetal,
+			Color = RUST,
+		})
+	end
+	if rng:NextNumber() < 0.5 then
+		part(parent, {
+			Name = "Puddle",
+			Size = Vector3.new(rng:NextNumber(6, 13), 0.06, rng:NextNumber(6, 13)),
+			Position = center + Vector3.new(rng:NextNumber(-reach, reach), 0.03, rng:NextNumber(-reach, reach)),
+			Material = Enum.Material.SmoothPlastic,
+			Color = Color3.fromRGB(10, 12, 12),
+			Reflectance = 0.4,
+			Transparency = 0.25,
+			CanCollide = false,
+			CastShadow = false,
+		})
+	end
+end
+
+-- Returns { model, startCFrame, padPosition, sampleSpots }.
+function MapGenerator.build(origin, seed)
+	local cfg = Config.Map
+	local rng = Random.new(seed)
+	local cols, rows, cell, height = cfg.Cols, cfg.Rows, cfg.Cell, cfg.Height
+	local width, depth = cols * cell, rows * cell
+
+	local model = Instance.new("Model")
+	model.Name = "Facility"
+
+	local function cellCenter(c, r)
+		return origin + Vector3.new((c - 0.5) * cell, 0, (r - 0.5) * cell)
+	end
+
+	part(model, {
+		Name = "Floor",
+		Size = Vector3.new(width + 8, 2, depth + 8),
+		Position = origin + Vector3.new(width / 2, -1, depth / 2),
+		Color = FLOOR,
+	})
+	part(model, {
+		Name = "Ceiling",
+		Size = Vector3.new(width + 8, 2, depth + 8),
+		Position = origin + Vector3.new(width / 2, height + 1, depth / 2),
+		Color = CONCRETE_DARK,
+	})
+
+	-- Outer shell.
+	wall(model, origin + Vector3.new(width / 2, 0, 0), "x", width + 4, false, rng)
+	wall(model, origin + Vector3.new(width / 2, 0, depth), "x", width + 4, false, rng)
+	wall(model, origin + Vector3.new(0, 0, depth / 2), "z", depth + 4, false, rng)
+	wall(model, origin + Vector3.new(width, 0, depth / 2), "z", depth + 4, false, rng)
+
+	-- Carve a maze with a depth-first walk, then knock through a few extra doors.
+	local visited = {}
+	local open = {}
+	local function key(c, r)
+		return c .. "," .. r
+	end
+	local function link(c1, r1, c2, r2)
+		open[key(c1, r1) .. "|" .. key(c2, r2)] = true
+		open[key(c2, r2) .. "|" .. key(c1, r1)] = true
+	end
+	local startC, startR = 1, math.ceil(rows / 2)
+	local stack = { { startC, startR } }
+	visited[key(startC, startR)] = true
+	while #stack > 0 do
+		local c, r = stack[#stack][1], stack[#stack][2]
+		local options = {}
+		for _, d in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
+			local nc, nr = c + d[1], r + d[2]
+			if nc >= 1 and nc <= cols and nr >= 1 and nr <= rows and not visited[key(nc, nr)] then
+				options[#options + 1] = { nc, nr }
+			end
+		end
+		if #options == 0 then
+			table.remove(stack)
+		else
+			local pick = options[rng:NextInteger(1, #options)]
+			link(c, r, pick[1], pick[2])
+			visited[key(pick[1], pick[2])] = true
+			stack[#stack + 1] = pick
+		end
+	end
+
+	for c = 1, cols do
+		for r = 1, rows do
+			local center = cellCenter(c, r)
+			if c < cols then
+				local connected = open[key(c, r) .. "|" .. key(c + 1, r)] or rng:NextNumber() < cfg.ExtraLoops
+				wall(model, center + Vector3.new(cell / 2, 0, 0), "z", cell, connected, rng)
+			end
+			if r < rows then
+				local connected = open[key(c, r) .. "|" .. key(c, r + 1)] or rng:NextNumber() < cfg.ExtraLoops
+				wall(model, center + Vector3.new(0, 0, cell / 2), "x", cell, connected, rng)
+			end
+		end
+	end
+
+	-- Pipes running the length of the facility, just under the ceiling.
+	for r = 1, rows do
+		for _, offset in ipairs({ -9, -7.4 }) do
+			part(model, {
+				Name = "Pipe",
+				Shape = Enum.PartType.Cylinder,
+				Size = Vector3.new(width, 1.1, 1.1),
+				Position = origin + Vector3.new(width / 2, height - 1.2, (r - 0.5) * cell + offset),
+				Material = Enum.Material.CorrodedMetal,
+				Color = RUST,
+				CanCollide = false,
+			})
+		end
+	end
+
+	-- Rooms.
+	local sampleSpots = {}
+	local startCenter = cellCenter(startC, startR)
+	for c = 1, cols do
+		for r = 1, rows do
+			local center = cellCenter(c, r)
+			local isStart = (c == startC and r == startR)
+			if isStart then
+				ceilingLight(model, center + Vector3.new(0, height, 0), rng, true, AMBER)
+			else
+				ceilingLight(model, center + Vector3.new(0, height, 0), rng, false, nil)
+				for _ = 1, rng:NextInteger(1, 3) do
+					clutter(model, center, rng)
+				end
+				local reach = cell / 2 - 5
+				for _ = 1, 2 do
+					sampleSpots[#sampleSpots + 1] = center
+						+ Vector3.new(rng:NextNumber(-reach, reach), 1.2, rng:NextNumber(-reach, reach))
+				end
+			end
+		end
+	end
+
+	-- The lift pad: the only way out, and the only place to recharge.
+	local pad = part(model, {
+		Name = "LiftPad",
+		Size = Vector3.new(16, 0.4, 16),
+		Position = startCenter + Vector3.new(0, 0.2, 0),
+		Material = Enum.Material.DiamondPlate,
+		Color = STEEL,
+	})
+	for _, offset in ipairs({ Vector3.new(0, 0.25, 8.2), Vector3.new(0, 0.25, -8.2) }) do
+		part(model, {
+			Name = "PadTrim",
+			Size = Vector3.new(16.8, 0.3, 0.4),
+			Position = pad.Position + offset,
+			Material = Enum.Material.Neon,
+			Color = AMBER,
+			CanCollide = false,
+			CastShadow = false,
+		})
+	end
+	for _, offset in ipairs({ Vector3.new(8.2, 0.25, 0), Vector3.new(-8.2, 0.25, 0) }) do
+		part(model, {
+			Name = "PadTrim",
+			Size = Vector3.new(0.4, 0.3, 16.8),
+			Position = pad.Position + offset,
+			Material = Enum.Material.Neon,
+			Color = AMBER,
+			CanCollide = false,
+			CastShadow = false,
+		})
+	end
+
+	return {
+		model = model,
+		startCFrame = CFrame.new(startCenter + Vector3.new(0, 4, 0)),
+		padPosition = pad.Position,
+		sampleSpots = sampleSpots,
+	}
+end
+
+-- The staging room: bright, metal, safe. The contrast makes the dark worse.
+function MapGenerator.buildStaging(origin)
+	local model = Instance.new("Model")
+	model.Name = "Staging"
+	local size, height = 44, 14
+
+	part(model, {
+		Name = "Floor",
+		Size = Vector3.new(size, 2, size),
+		Position = origin + Vector3.new(0, -1, 0),
+		Material = Enum.Material.DiamondPlate,
+		Color = STEEL,
+	})
+	part(model, {
+		Name = "Ceiling",
+		Size = Vector3.new(size, 2, size),
+		Position = origin + Vector3.new(0, height + 1, 0),
+		Material = Enum.Material.Metal,
+		Color = Color3.fromRGB(36, 38, 40),
+	})
+	local sign = nil
+	for i, d in ipairs({ Vector3.new(1, 0, 0), Vector3.new(-1, 0, 0), Vector3.new(0, 0, 1), Vector3.new(0, 0, -1) }) do
+		local w = part(model, {
+			Name = "Wall",
+			Size = (d.X ~= 0) and Vector3.new(2, height, size) or Vector3.new(size, height, 2),
+			Position = origin + d * (size / 2) + Vector3.new(0, height / 2, 0),
+			Material = Enum.Material.CorrodedMetal,
+			Color = Color3.fromRGB(58, 60, 62),
+		})
+		if i == 4 then
+			sign = w
+		end
+	end
+
+	local rng = Random.new(7)
+	ceilingLight(model, origin + Vector3.new(-9, height, 0), rng, true, COLD)
+	ceilingLight(model, origin + Vector3.new(9, height, 0), rng, true, COLD)
+
+	local spawn = Instance.new("SpawnLocation")
+	spawn.Name = "StagingSpawn"
+	spawn.Anchored = true
+	spawn.Neutral = true
+	spawn.Duration = 0
+	spawn.Transparency = 1
+	spawn.CanCollide = false
+	spawn.Size = Vector3.new(12, 1, 12)
+	spawn.Position = origin + Vector3.new(0, 0.5, 0)
+	spawn.Parent = model
+	for _, child in ipairs(spawn:GetChildren()) do
+		child:Destroy() -- remove the default spawn decal
+	end
+
+	-- Stencilled manifest on the wall.
+	local gui = Instance.new("SurfaceGui")
+	gui.Face = Enum.NormalId.Back
+	gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	gui.PixelsPerStud = 30
+	gui.LightInfluence = 1
+	gui.Parent = sign
+	local text = Instance.new("TextLabel")
+	text.Size = UDim2.fromScale(1, 1)
+	text.BackgroundTransparency = 1
+	text.Font = Enum.Font.SpecialElite
+	text.TextColor3 = Color3.fromRGB(214, 204, 180)
+	text.TextTransparency = 0.25
+	text.TextSize = 54
+	text.TextWrapped = true
+	text.Text = "COUNT YOURSELVES BEFORE DESCENT.\nCOUNT AGAIN ON THE WAY UP.\n\nIF THE NUMBERS DIFFER, DO NOT BRING IT WITH YOU."
+	text.Parent = gui
+
+	return {
+		model = model,
+		spawnCFrame = CFrame.new(origin + Vector3.new(0, 4, 0)),
+	}
+end
+
+return MapGenerator
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX16"><Properties><string name="Name">Mimic</string><ProtectedString name="Source"><![CDATA[-- The copy. It wears one crew member's avatar and name, and walks the exact
+-- path that crew member walked a few seconds ago.
+--
+--   echo  : trails its target by `lag` seconds and stops just behind them.
+--   hunt  : its target has been alone too long, so it replays the path faster
+--           than the target walked it, and the gap closes.
+--   A lit flashlight pointed at it freezes it. It makes no footsteps.
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+
+local Mimic = {}
+Mimic.__index = Mimic
+
+local FALLBACK_RUN = "rbxassetid://507767714"
+local FALLBACK_IDLE = "rbxassetid://507766388"
+
+local function findAnimation(model, group, fallback)
+	local animate = model:FindFirstChild("Animate")
+	if animate then
+		local folder = animate:FindFirstChild(group)
+		if folder then
+			local anim = folder:FindFirstChildOfClass("Animation")
+			if anim and anim.AnimationId ~= "" then
+				return anim.AnimationId
+			end
+		end
+	end
+	return fallback
+end
+
+-- ctx = { recorder, folder, charOf(player), isIsolated(player), isWatched(position), onKill(mimic, player), attachPrompt(model, mimic) }
+function Mimic.new(ctx, target, night)
+	local cfg = Config.Mimic
+	local self = setmetatable({}, Mimic)
+	self.ctx = ctx
+	self.target = target
+	self.baseLag = math.max(cfg.MinLag, cfg.BaseLag - (night - 1) * cfg.LagPerNight)
+	self.lag = self.baseLag
+	self.rate = math.min(cfg.MaxHuntRate, cfg.HuntRate + (night - 1) * cfg.HuntRatePerNight)
+	self.state = "echo"
+	self.isolatedFor = 0
+	self.alive = false
+	self.moving = false
+	return self
+end
+
+function Mimic:spawn(now)
+	local ctx = self.ctx
+	local character = self.target.Character
+	if not character or ctx.recorder:span(self.target) < self.lag then
+		return false
+	end
+	local startCf = ctx.recorder:get(self.target, now - self.lag)
+	if not startCf then
+		return false
+	end
+
+	character.Archivable = true
+	local ok, clone = pcall(function()
+		return character:Clone()
+	end)
+	character.Archivable = false
+	if not ok or not clone then
+		return false
+	end
+
+	local humanoid = clone:FindFirstChildOfClass("Humanoid")
+	local root = clone:FindFirstChild("HumanoidRootPart")
+	if not humanoid or not root then
+		clone:Destroy()
+		return false
+	end
+
+	local runId = findAnimation(clone, "run", FALLBACK_RUN)
+	local idleId = findAnimation(clone, "idle", FALLBACK_IDLE)
+
+	for _, inst in ipairs(clone:GetDescendants()) do
+		if inst:IsA("LuaSourceContainer") or inst:IsA("ProximityPrompt") or inst:IsA("ForceField") then
+			inst:Destroy()
+		elseif inst:IsA("BasePart") then
+			inst.CanCollide = false
+			inst.CanTouch = false
+			inst.Anchored = false
+		end
+	end
+
+	clone.Name = self.target.Name
+	humanoid.DisplayName = self.target.DisplayName
+	humanoid.MaxHealth = 100
+	humanoid.Health = 100
+	humanoid.BreakJointsOnDeath = false
+	pcall(function()
+		humanoid.EvaluateStateMachine = false
+	end)
+
+	-- Physics constraints (not anchoring) so other players see smooth motion.
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "Drive"
+	attachment.Parent = root
+
+	local alignPosition = Instance.new("AlignPosition")
+	alignPosition.Mode = Enum.PositionAlignmentMode.OneAttachment
+	alignPosition.Attachment0 = attachment
+	alignPosition.MaxForce = 1e7
+	alignPosition.MaxVelocity = 300
+	alignPosition.Responsiveness = 90
+	alignPosition.Position = startCf.Position
+	alignPosition.Parent = root
+
+	local alignOrientation = Instance.new("AlignOrientation")
+	alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
+	alignOrientation.Attachment0 = attachment
+	alignOrientation.MaxTorque = 1e7
+	alignOrientation.Responsiveness = 90
+	alignOrientation.CFrame = startCf
+	alignOrientation.Parent = root
+
+	root.CFrame = startCf
+	clone.Parent = ctx.folder
+	pcall(function()
+		root:SetNetworkOwner(nil)
+	end)
+
+	local animator = humanoid:FindFirstChildOfClass("Animator")
+	if not animator then
+		animator = Instance.new("Animator")
+		animator.Parent = humanoid
+	end
+	local runAnim = Instance.new("Animation")
+	runAnim.AnimationId = runId
+	local idleAnim = Instance.new("Animation")
+	idleAnim.AnimationId = idleId
+	local okTracks = pcall(function()
+		self.runTrack = animator:LoadAnimation(runAnim)
+		self.idleTrack = animator:LoadAnimation(idleAnim)
+		self.runTrack.Looped = true
+		self.idleTrack.Looped = true
+		self.idleTrack:Play(0.2)
+	end)
+	if not okTracks then
+		self.runTrack = nil
+		self.idleTrack = nil
+	end
+
+	local head = clone:FindFirstChild("Head")
+	self.light = head and head:FindFirstChild("CrewLight") or nil
+	self.model = clone
+	self.root = root
+	self.alignPosition = alignPosition
+	self.alignOrientation = alignOrientation
+	self.lastPosition = startCf.Position
+	self.alive = true
+
+	ctx.attachPrompt(clone, self)
+	return true
+end
+
+function Mimic:setMoving(moving, speed)
+	if not self.runTrack or not self.idleTrack then
+		return
+	end
+	if moving ~= self.moving then
+		self.moving = moving
+		if moving then
+			self.idleTrack:Stop(0.2)
+			self.runTrack:Play(0.2)
+		else
+			self.runTrack:Stop(0.2)
+			self.idleTrack:Play(0.2)
+		end
+	end
+	if moving then
+		self.runTrack:AdjustSpeed(math.clamp(speed / 16, 0.5, 2))
+	end
+end
+
+function Mimic:step(dt, now)
+	if not self.alive then
+		return
+	end
+	local cfg = Config.Mimic
+	local ctx = self.ctx
+	local target = self.target
+	local _, _, targetRoot = ctx.charOf(target)
+	if not targetRoot or not target:GetAttribute("Alive") then
+		self:destroy()
+		return
+	end
+
+	local position = self.root.Position
+	local distance = (targetRoot.Position - position).Magnitude
+	local watched = ctx.isWatched(position)
+
+	if ctx.isIsolated(target) then
+		self.isolatedFor = self.isolatedFor + dt
+	else
+		self.isolatedFor = 0
+	end
+	local hunting = self.isolatedFor > cfg.IsolateGrace
+	self.state = hunting and "hunt" or "echo"
+
+	-- How many seconds of the recording to play this frame.
+	local advance
+	if watched then
+		advance = 0
+	elseif hunting then
+		advance = dt * self.rate
+	elseif distance < cfg.HoverDistance then
+		advance = 0
+	elseif self.lag < self.baseLag then
+		advance = dt * 0.5
+	else
+		advance = dt
+	end
+	self.lag = math.clamp(self.lag + dt - advance, 0, ctx.recorder.window - 5)
+
+	local cf, lightOn = ctx.recorder:get(target, now - self.lag)
+	if cf then
+		self.alignPosition.Position = cf.Position
+		self.alignOrientation.CFrame = cf
+		local speed = (cf.Position - self.lastPosition).Magnitude / math.max(dt, 0.001)
+		self.lastPosition = cf.Position
+		self:setMoving(speed > 1.5, speed)
+		if self.light then
+			self.light.Enabled = lightOn
+		end
+	end
+
+	if hunting and not watched and distance < cfg.KillDistance then
+		ctx.onKill(self, target)
+	end
+end
+
+-- Pull every copy closer (the penalty for a wrong accusation).
+function Mimic:closeIn(seconds)
+	self.lag = math.max(0, self.lag - seconds)
+end
+
+function Mimic:banish()
+	if not self.alive then
+		return
+	end
+	self.alive = false
+	local model = self.model
+	self.model = nil
+	if not model then
+		return
+	end
+	for _, inst in ipairs(model:GetDescendants()) do
+		if inst:IsA("BasePart") or inst:IsA("Decal") then
+			TweenService:Create(inst, TweenInfo.new(0.7), { Transparency = 1 }):Play()
+		elseif inst:IsA("ProximityPrompt") or inst:IsA("Light") then
+			inst:Destroy()
+		end
+	end
+	task.delay(0.8, function()
+		model:Destroy()
+	end)
+end
+
+function Mimic:destroy()
+	self.alive = false
+	if self.model then
+		self.model:Destroy()
+		self.model = nil
+	end
+end
+
+return Mimic
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX17"><Properties><string name="Name">PlayerData</string><ProtectedString name="Source"><![CDATA[-- Saves credits, upgrades and best night. Saving only works in a published
+-- game, or in Studio with "Enable Studio Access to API Services" switched on.
+-- If saving is unavailable the game still runs; progress just is not kept.
+local DataStoreService = game:GetService("DataStoreService")
+
+local PlayerData = {}
+
+local DEFAULTS = { Credits = 0, BestNight = 0, UpBattery = 0, UpStamina = 0, UpScanner = 0 }
+local FIELDS = { "Credits", "BestNight", "UpBattery", "UpStamina", "UpScanner" }
+
+local store = nil
+pcall(function()
+	store = DataStoreService:GetDataStore("HeadcountV1")
+end)
+
+function PlayerData.load(player)
+	local data = nil
+	if store then
+		pcall(function()
+			data = store:GetAsync("p_" .. player.UserId)
+		end)
+	end
+	if type(data) ~= "table" then
+		data = {}
+	end
+	for _, field in ipairs(FIELDS) do
+		local value = data[field]
+		if type(value) ~= "number" then
+			value = DEFAULTS[field]
+		end
+		player:SetAttribute(field, value)
+	end
+	player:SetAttribute("DataLoaded", true)
+end
+
+function PlayerData.save(player)
+	if not store or not player:GetAttribute("DataLoaded") then
+		return
+	end
+	local data = {}
+	for _, field in ipairs(FIELDS) do
+		data[field] = player:GetAttribute(field) or DEFAULTS[field]
+	end
+	pcall(function()
+		store:SetAsync("p_" .. player.UserId, data)
+	end)
+end
+
+return PlayerData
+]]></ProtectedString></Properties></Item>
+<Item class="ModuleScript" referent="RBX18"><Properties><string name="Name">Recorder</string><ProtectedString name="Source"><![CDATA[-- Records where every crew member has been, ten times a second.
+-- The copy replays these recordings, which is why it moves like a real player.
+local Recorder = {}
+Recorder.__index = Recorder
+
+function Recorder.new(windowSeconds)
+	local self = setmetatable({}, Recorder)
+	self.window = windowSeconds
+	self.buffers = {}
+	return self
+end
+
+function Recorder:sample(player, t, cf, light)
+	local buf = self.buffers[player]
+	if not buf then
+		buf = {}
+		self.buffers[player] = buf
+	end
+	buf[#buf + 1] = { t = t, cf = cf, light = light }
+	while #buf > 2 and buf[1].t < t - self.window do
+		table.remove(buf, 1)
+	end
+end
+
+-- Seconds of history held for this player.
+function Recorder:span(player)
+	local buf = self.buffers[player]
+	if not buf or #buf < 2 then
+		return 0
+	end
+	return buf[#buf].t - buf[1].t
+end
+
+-- Where the player was at time t (interpolated), and whether their light was on.
+function Recorder:get(player, t)
+	local buf = self.buffers[player]
+	if not buf or #buf == 0 then
+		return nil, false
+	end
+	local n = #buf
+	if t <= buf[1].t then
+		return buf[1].cf, buf[1].light
+	end
+	if t >= buf[n].t then
+		return buf[n].cf, buf[n].light
+	end
+	local lo, hi = 1, n
+	while hi - lo > 1 do
+		local mid = math.floor((lo + hi) / 2)
+		if buf[mid].t <= t then
+			lo = mid
+		else
+			hi = mid
+		end
+	end
+	local a, b = buf[lo], buf[hi]
+	local alpha = (t - a.t) / math.max(b.t - a.t, 0.0001)
+	return a.cf:Lerp(b.cf, alpha), a.light
+end
+
+function Recorder:forget(player)
+	self.buffers[player] = nil
+end
+
+return Recorder
+]]></ProtectedString></Properties></Item>
+</Item>
+</Item>
+<Item class="StarterPlayer" referent="RBX23"><Properties><string name="Name">StarterPlayer</string></Properties><Item class="StarterPlayerScripts" referent="RBX22"><Properties><string name="Name">StarterPlayerScripts</string></Properties><Item class="LocalScript" referent="RBX21"><Properties><string name="Name">Client</string><ProtectedString name="Source"><![CDATA[-- HEADCOUNT client. Wires input to the server and drives the HUD, audio and
+-- screen effects every frame from one replicated number: Dread.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local ContextActionService = game:GetService("ContextActionService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local StarterGui = game:GetService("StarterGui")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
+local ClientModules = ReplicatedStorage:WaitForChild("Client")
+local Theme = require(ClientModules:WaitForChild("Theme"))
+local HUD = require(ClientModules:WaitForChild("HUD"))
+local AudioDirector = require(ClientModules:WaitForChild("AudioDirector"))
+local Effects = require(ClientModules:WaitForChild("Effects"))
+
+local remotes = ReplicatedStorage:WaitForChild("Remotes")
+local state = ReplicatedStorage:WaitForChild("GameState")
+
+-- Hide the default Roblox HUD pieces that break the mood. Chat stays.
+pcall(function()
+	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Health, false)
+	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
+	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
+	StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.EmotesMenu, false)
+end)
+
+AudioDirector.init()
+Effects.init()
+HUD.init(playerGui, state, remotes, AudioDirector.play)
+
+---------------------------------------------------------------------------
+-- Input (keyboard, gamepad, and on-screen buttons on touch devices)
+---------------------------------------------------------------------------
+local sprinting = false
+local exhausted = false -- ran dry; must recover before sprinting again
+local stamina = 100
+
+local function began(inputState)
+	return inputState == Enum.UserInputState.Begin
+end
+
+ContextActionService:BindAction("Flashlight", function(_, inputState)
+	if began(inputState) then
+		AudioDirector.play("Switch")
+		remotes.ToggleFlashlight:FireServer()
+	end
+	return Enum.ContextActionResult.Sink
+end, true, Enum.KeyCode.F, Enum.KeyCode.ButtonY)
+ContextActionService:SetTitle("Flashlight", "Light")
+ContextActionService:SetPosition("Flashlight", UDim2.new(1, -150, 1, -210))
+
+ContextActionService:BindAction("Headcount", function(_, inputState)
+	if began(inputState) then
+		local ready = workspace:GetServerTimeNow() >= (player:GetAttribute("HeadcountReadyAt") or 0)
+		if ready and player:GetAttribute("Alive") then
+			remotes.Headcount:FireServer()
+		else
+			AudioDirector.play("Click")
+		end
+	end
+	return Enum.ContextActionResult.Sink
+end, true, Enum.KeyCode.Q, Enum.KeyCode.ButtonX)
+ContextActionService:SetTitle("Headcount", "Count")
+ContextActionService:SetPosition("Headcount", UDim2.new(1, -220, 1, -150))
+
+ContextActionService:BindAction("Sprint", function(_, inputState)
+	sprinting = began(inputState)
+	return Enum.ContextActionResult.Pass
+end, true, Enum.KeyCode.LeftShift, Enum.KeyCode.ButtonL3)
+ContextActionService:SetTitle("Sprint", "Run")
+ContextActionService:SetPosition("Sprint", UDim2.new(1, -80, 1, -250))
+
+ContextActionService:BindAction("Shop", function(_, inputState)
+	if began(inputState) then
+		AudioDirector.play("Click")
+		HUD.toggleShop()
+	end
+	return Enum.ContextActionResult.Sink
+end, false, Enum.KeyCode.B, Enum.KeyCode.ButtonSelect)
+
+---------------------------------------------------------------------------
+-- Server messages
+---------------------------------------------------------------------------
+remotes.Notify.OnClientEvent:Connect(function(data)
+	HUD.toast(data.text, data.kind)
+	if data.sound then
+		AudioDirector.play(data.sound)
+	end
+	if data.kind == "bad" then
+		Effects.punch(0.25)
+	end
+end)
+
+remotes.HeadcountResult.OnClientEvent:Connect(function(data)
+	AudioDirector.play("Ping")
+	HUD.showHeadcount(data.bodies, data.caller)
+	if data.bodies > (state:GetAttribute("CrewAlive") or 0) then
+		task.delay(0.5, function()
+			AudioDirector.play("Bad")
+			Effects.punch(0.4)
+		end)
+	end
+end)
+
+remotes.Jumpscare.OnClientEvent:Connect(function(data)
+	AudioDirector.play("Sting")
+	Effects.punch(1)
+	Effects.deathBlur()
+	HUD.jumpscare(data.name)
+end)
+
+remotes.Results.OnClientEvent:Connect(function(data)
+	HUD.showResults(data)
+end)
+
+---------------------------------------------------------------------------
+-- Custom prompts (ACCUSE / COLLECT), drawn in the game's own style
+---------------------------------------------------------------------------
+ProximityPromptService.PromptShown:Connect(function(prompt)
+	if prompt.Style ~= Enum.ProximityPromptStyle.Custom then
+		return
+	end
+	local character = player.Character
+	if character and prompt:IsDescendantOf(character) then
+		return -- never offer to accuse yourself
+	end
+
+	local board = Theme.new("BillboardGui", {
+		Name = "Prompt",
+		Adornee = prompt.Parent,
+		Size = UDim2.fromOffset(190, 54),
+		StudsOffset = Vector3.new(0, 1.5, 0),
+		AlwaysOnTop = true,
+		ResetOnSpawn = false,
+	}, playerGui)
+	local button = Theme.new("TextButton", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Theme.Ink,
+		BackgroundTransparency = 0.25,
+		BorderSizePixel = 0,
+		AutoButtonColor = false,
+		Text = "",
+	}, board)
+	Theme.new("UIStroke", {
+		Color = (prompt.Name == "Accuse") and Theme.Blood or Theme.Line,
+		Thickness = 1,
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+	}, button)
+	Theme.label(button, {
+		Text = "[E]  " .. prompt.ActionText,
+		Font = Theme.Numbers,
+		TextSize = 17,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		Position = UDim2.fromOffset(0, 6),
+	})
+	Theme.label(button, {
+		Text = prompt.ObjectText,
+		TextSize = 13,
+		TextColor3 = Theme.Dim,
+		TextXAlignment = Enum.TextXAlignment.Center,
+		Position = UDim2.fromOffset(0, 27),
+	})
+	local fill = Theme.new("Frame", {
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.fromScale(0, 1),
+		Size = UDim2.new(0, 0, 0, 3),
+		BackgroundColor3 = (prompt.Name == "Accuse") and Theme.Blood or Theme.Sick,
+		BorderSizePixel = 0,
+	}, button)
+
+	local tween = nil
+	local connections = {}
+	connections[#connections + 1] = prompt.PromptButtonHoldBegan:Connect(function()
+		tween = TweenService:Create(fill, TweenInfo.new(prompt.HoldDuration, Enum.EasingStyle.Linear), {
+			Size = UDim2.new(1, 0, 0, 3),
+		})
+		tween:Play()
+	end)
+	connections[#connections + 1] = prompt.PromptButtonHoldEnded:Connect(function()
+		if tween then
+			tween:Cancel()
+		end
+		fill.Size = UDim2.new(0, 0, 0, 3)
+	end)
+	-- Touch and mouse: hold the card itself.
+	connections[#connections + 1] = button.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+			prompt:InputHoldBegin()
+		end
+	end)
+	connections[#connections + 1] = button.InputEnded:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+			prompt:InputHoldEnd()
+		end
+	end)
+
+	prompt.PromptHidden:Wait()
+	for _, connection in ipairs(connections) do
+		connection:Disconnect()
+	end
+	board:Destroy()
+end)
+
+---------------------------------------------------------------------------
+-- Every frame
+---------------------------------------------------------------------------
+RunService.RenderStepped:Connect(function(dt)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local inFacility = player:GetAttribute("InRun") == true and player:GetAttribute("Alive") == true
+	local dread = inFacility and (player:GetAttribute("Dread") or 0) or 0
+	local flashlightOn = character ~= nil and character:GetAttribute("Flashlight") == true
+
+	-- Other players see the light on our head. We use the hand-held beam instead.
+	if character then
+		local head = character:FindFirstChild("Head")
+		local crewLight = head and head:FindFirstChild("CrewLight")
+		if crewLight and crewLight.Enabled then
+			crewLight.Enabled = false
+		end
+	end
+
+	-- Sprint and stamina.
+	if humanoid and humanoid.Health > 0 then
+		local moving = humanoid.MoveDirection.Magnitude > 0.1
+		if stamina > 25 then
+			exhausted = false
+		end
+		if sprinting and moving and not exhausted then
+			stamina = math.max(0, stamina - Config.StaminaDrain * dt)
+			humanoid.WalkSpeed = Config.SprintSpeed
+			if stamina <= 0 then
+				exhausted = true
+			end
+		else
+			local regen = Config.StaminaRegen + (player:GetAttribute("UpStamina") or 0) * Config.StaminaRegenPerUpgrade
+			stamina = math.min(100, stamina + regen * dt)
+			humanoid.WalkSpeed = Config.WalkSpeed
+		end
+	end
+
+	Effects.update(dt, dread, humanoid, flashlightOn, player:GetAttribute("Battery") or 0)
+	AudioDirector.update(dt, dread, inFacility)
+	HUD.update(dread, stamina)
+end)
+]]></ProtectedString></Properties></Item>
+</Item>
+</Item>
+<Item class="SoundService" referent="RBX24"><Properties><string name="Name">SoundService</string></Properties></Item>
+</roblox>
